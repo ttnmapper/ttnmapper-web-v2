@@ -1,0 +1,95 @@
+html {
+	height:100%;
+}
+
+body { 
+    min-height:100%;
+}
+
+#navbar {
+	background-color:#242F45;
+	-webkit-box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
+	-moz-box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
+	box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
+	z-index: 10;
+}
+
+#main-map {
+	z-index: 5;
+	height:800px;
+ }
+
+ .user-nav {
+ 	margin: 3em auto 2em auto;
+ }
+
+.user-tab-options {
+ 	/*border-bottom: 5px solid #ccc;
+ 	transition: border-color 0.1s linear;*/
+ }
+
+ .user-nav > .nav-item > .nav-link{
+ 	border-bottom: 4px solid #ccc;
+ }
+
+ .user-tab-centering {
+ 	width: auto;
+ }
+
+.user-nav > .nav-item > .user-tab-selected{
+ 	border-bottom: 4px solid #242F45;
+ }
+
+.user-nav > .nav-item > :hover,
+.user-nav > .nav-item > :active {
+	border-bottom: 4px solid #8C5353;
+}
+
+
+.device-card {
+	margin-top: 0.5em;
+	margin-bottom:0.5em;
+}
+
+.device-card-text {
+	float:left;
+	width:auto;
+}
+
+.device-card-image {
+	margin-right:1em;
+	float:right;
+}
+
+.loading-div {
+	height:auto;
+	margin-top:20%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 2em 10em;
+}
+
+#loading {
+	-webkit-animation: rotation 2s infinite linear;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@-webkit-keyframes rotation {
+	from {
+			-webkit-transform: rotate(0deg);
+	}
+	to {
+			-webkit-transform: rotate(359deg);
+	}
+}
+
+.loading-div > span {
+	padding: 0.8em 0;
+	text-align: center;
+}
+
+.icon {
+  width: 2em;
+  height: 2em;
+}
