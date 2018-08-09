@@ -23,7 +23,7 @@ export const demoApplications = [
   }
 ]
 
-export const demoDevices = [
+export const demoDevicesS8hYqYUOxdz7h2HoCQ = [
   {
     "devices": {
       "altitude": 0,
@@ -83,7 +83,11 @@ export const demoDevices = [
         "uses32_bit_f_cnt": true
       }
     }
-  }, {
+  }
+]
+
+export const demoDevicesoH3BWEmZLRony8B9iJ = [
+  {
     "devices": {
       "altitude": 0,
       "app_id": "demo-app-oH3BWEmZLRony8B9iJ",

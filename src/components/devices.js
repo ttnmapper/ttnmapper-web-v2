@@ -14,6 +14,9 @@ class _Devices extends React.Component {
 		super(props)
 	}
 
+  /**
+   * Render all the component for a specific application ID
+   */
 	renderApplication(application) {
 		let device_panel = application.devices.map(device =>
 			(<DeviceCard devID={device} key={device}/>))
@@ -27,6 +30,10 @@ class _Devices extends React.Component {
 			</div>)
 	}
 
+  /**
+   * Render the Applications, Error or Loading display
+   * @param {*} displayCase
+   */
 	correctDisplayCase(displayCase) {
 		if (displayCase === "loading") {
 			return (<UserDataLoading appName="User"/>)
@@ -38,6 +45,7 @@ class _Devices extends React.Component {
 	}
 
 	componentDidMount(){
+    // Always fetch new data - The fetch logic can decide if that is really required
 		this.props.fetchApplications()
 	}
 
@@ -62,7 +70,7 @@ _Devices.propTypes = {
   fetchApplications: PropTypes.func.isRequired
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	displayCase: state.userData.applications.general.state,
 	applications: state.userData.applications.details
 })
