@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux'
 import { REQUEST_APPLICATIONS, RECEIVE_APPLICATIONS, RECEIVE_APPLICATIONS_FAILED} from '../constants'
 
-function applicationsDetails(state=[], action) {
+export function applicationsDetails(state=[], action) {
 	switch (action.type) {
 		case RECEIVE_APPLICATIONS: {
 			return action.data
@@ -12,7 +12,7 @@ function applicationsDetails(state=[], action) {
 	return state;
 }
 
-function applicationsGeneral(state, action) {
+export function applicationsGeneral(state, action) {
 	if (typeof state == 'undefined') {
 		return {last_updated: null, state: "none"}
 	}

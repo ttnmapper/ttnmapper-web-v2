@@ -25,7 +25,7 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js  --history-api-fallback",
     "build": "webpack",
-    "test": "react-scripts test --env=jsdom",
+    "test": "jest",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
@@ -46,5 +46,8 @@
     "plugins": [
       "transform-object-rest-spread"
     ]
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
