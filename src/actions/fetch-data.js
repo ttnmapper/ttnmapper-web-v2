@@ -18,7 +18,6 @@ export function receiveApplications(listOfApplications){
 }
 
 export function receiveApplicationsFailed(error_message){
-	console.log(error_message)
 	return {
 		type: RECEIVE_APPLICATIONS_FAILED,
 		data: {}
