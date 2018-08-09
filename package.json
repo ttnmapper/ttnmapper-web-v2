@@ -11,11 +11,14 @@
     "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
     "react-scripts": "1.1.4",
     "react-storybook": "^1.0.0",
+    "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-logic": "^0.15.1",
+    "storybook-react-router": "^1.0.1",
     "webpack": "^4.16.4"
   },
   "scripts": {

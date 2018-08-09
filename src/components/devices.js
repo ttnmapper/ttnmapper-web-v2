@@ -3,15 +3,19 @@ import DeviceCard from '../components/device-card.js'
 import PropTypes from 'prop-types'
 import { UserDataLoading, UserDataError } from './small-components'
 import { fetchApplications } from '../actions/fetch-data'
+import { connect } from 'react-redux'
 
-class Devices extends React.Component {
+/**
+ * This component renders a list of all the devices, sorted by their application
+ */
+class _Devices extends React.Component {
 
 	constructor(props) {
 		super(props)
 	}
 
 	renderApplication(application) {
-		let device_panel = application.devices.map(device => 
+		let device_panel = application.devices.map(device =>
 			(<DeviceCard devID={device} key={device}/>))
 
 		return (
@@ -34,8 +38,7 @@ class Devices extends React.Component {
 	}
 
 	componentDidMount(){
-		const { dispatch } = this.props
-		dispatch(fetchApplications())
+		this.props.fetchApplications()
 	}
 
 	render() {
@@ -54,9 +57,19 @@ class Devices extends React.Component {
 
 }
 
-Devices.propTypes = {
-	dispatch: PropTypes.func.isRequired,
-	applications : PropTypes.array.isRequired
+_Devices.propTypes = {
+  applications : PropTypes.array.isRequired,
+  fetchApplications: PropTypes.func.isRequired
 }
 
-export default Devices;
+const mapStateToProps = state => ({
+	displayCase: state.userData.applications.general.state,
+	applications: state.userData.applications.details
+})
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  fetchApplications: () => fetchApplications(dispatch)
+})
+
+export {_Devices }
+export default connect(mapStateToProps, mapDispatchToProps)(_Devices)

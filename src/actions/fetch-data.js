@@ -25,8 +25,7 @@ export function receiveApplicationsFailed(error_message){
 	}
 }
 
-export function fetchApplications() {
-	return dispatch => {
+export function fetchApplications(dispatch) {
 		// Tell state we are requesting new data, show a spinner or something
 		dispatch(requestApplications())
 
@@ -34,7 +33,6 @@ export function fetchApplications() {
 		.then(response => response.json())
 		.then(json => dispatch(receiveApplications(json)))
 		.catch(error => dispatch(receiveApplicationsFailed(error)))
-	}
 }
 
 

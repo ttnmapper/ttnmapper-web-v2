@@ -7,8 +7,7 @@ class _MainContainer extends Component {
   render() {
     return (
       <div>
-        <HeaderBar />
-        Other Stuff
+        Main Container
       </div>
     )
   }
