@@ -5,7 +5,6 @@ import fetchMock from 'fetch-mock';
 
 import { Devices, DeviceCard } from '../components'
 import Provider from './provider'
-import '../../static/css/styles.css'
 import {demoApplications, demoDevicesS8hYqYUOxdz7h2HoCQ, demoDevicesoH3BWEmZLRony8B9iJ} from './demoData/data'
 
 const delayWith = (value, delay) => new Promise((resolve) => setTimeout(resolve, delay)).then(() => value);

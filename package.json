@@ -7,6 +7,7 @@
     "babel-loader": "^7.1.5",
     "bootstrap": "3",
     "connected-react-router": "^4.3.0",
+    "css-loader": "^1.0.0",
     "fetch-mock": "^6.5.2",
     "jquery": "^3.3.1",
     "react": "^16.4.2",
@@ -29,8 +30,8 @@
     "build": "webpack",
     "test": "jest",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "storybook": "start-storybook -p 9009 -s static",
+    "build-storybook": "build-storybook -s static"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.10",

@@ -1,0 +1,67 @@
+html {
+	height:100%;
+}
+
+body {
+    min-height:100%;
+    background-color: #eee;
+}
+
+#main-map {
+	z-index: 5;
+	height:800px;
+}
+
+
+
+.user-tab-centering {
+  width: auto;
+}
+
+.device-card {
+	margin-top: 0.5em;
+	margin-bottom:0.5em;
+}
+
+.device-card-text {
+	float:left;
+	width:auto;
+}
+
+.device-card-image {
+	margin-right:1em;
+	float:right;
+}
+
+.loading-div {
+	height:auto;
+	margin-top:20%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 2em 10em;
+}
+
+#loading {
+	-webkit-animation: rotation 2s infinite linear;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@-webkit-keyframes rotation {
+	from {
+			-webkit-transform: rotate(0deg);
+	}
+	to {
+			-webkit-transform: rotate(359deg);
+	}
+}
+
+.loading-div > span {
+	padding: 0.8em 0;
+	text-align: center;
+}
+
+.icon {
+  width: 2em;
+  height: 2em;
+}

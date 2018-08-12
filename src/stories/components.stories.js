@@ -6,9 +6,6 @@ import {About,User,Home, HeaderBar, LeaderBoard} from '../components'
 
 import Provider from './provider'
 
-import '../../static/css/styles.css'
-
-
 storiesOf('Pages', module)
   .addDecorator(StoryRouter())
   .addDecorator(story => <Provider story={story()} />)

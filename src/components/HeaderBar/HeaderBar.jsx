@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
+import './headerbar.css'
+
 class _HeaderBar extends Component {
 
   /**

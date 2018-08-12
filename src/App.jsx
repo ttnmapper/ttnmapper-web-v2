@@ -1,34 +1,16 @@
+//Library JS files
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux'
-// import { BrowserRouter as Router, Route } from 'react-router-dom'
-import logger from 'redux-logger'
-import { createBrowserHistory } from 'history'
-import { Route, Switch } from 'react-router' // react-router v4
-import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router'
+import { Route, Switch } from 'react-router'
+import { ConnectedRouter } from 'connected-react-router'
 
-import * as reducers from './reducers'
+// Our JS files
 import { About, User, Home, HeaderBar, LeaderBoard } from './components'
+import {store, history} from './helpers/store'
 
-const rootReducer = combineReducers({
-  ...reducers,
-})
-
-const history = createBrowserHistory()
-
-const store = createStore(
-  connectRouter(history)(rootReducer),
-  compose(
-    applyMiddleware(
-      routerMiddleware(history),
-      thunk,
-      logger
-    )
-  )
-)
-
+//Required CSS files
+import './app.css'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -40,8 +22,6 @@ ReactDOM.render(
           <Route exact path="/about" component={About} />
           <Route exact path="/user" component={User} />
           <Route exact path="/leaderboard" component={LeaderBoard} />
-
-
           <Route exact path="/user/devices" component={User} />
           <Route exact path="/user/gateways" component={User} />
           <Route exact path="/user/experiments" component={User} />
@@ -53,6 +33,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('maps-app')
 )
-
-// <Route path="/about" component={About} />
-// <Route path="/user" component={User} />
