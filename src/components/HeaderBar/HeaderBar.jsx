@@ -4,6 +4,9 @@ import { NavLink } from 'react-router-dom'
 
 import './headerbar.css'
 
+import unknownUser from'./unknownUser.png';
+import mainLogo from'./logo.png';
+
 class _HeaderBar extends Component {
 
   /**
@@ -13,7 +16,7 @@ class _HeaderBar extends Component {
     if (this.props.userState.loggedIn) {
       return (
         <nav className="" id="">
-          <img id="user-icon" src="/images/unknowUser.png" width="30" height="30" className="d-inline-block align-middle" alt="" />
+          <img id="user-icon" src={unknownUser} width="30" height="30" className="d-inline-block align-middle" alt="" />
           <div className="nav-item" id="navbar-username">
             Hi, Kolijn
         </div>
@@ -47,7 +50,7 @@ class _HeaderBar extends Component {
         <nav id="navbar-brand">
           <div className="nav-item">
             <NavLink className="nav-link" to="/">
-              <img id="branding-icon" src="/images/logo.png" width="30" height="30" className="d-inline-block align-middle" alt="" />
+              <img id="branding-icon" src={mainLogo} width="30" height="30" className="d-inline-block align-middle" alt="" />
               TTN Mapper
           </NavLink>
           </div>
