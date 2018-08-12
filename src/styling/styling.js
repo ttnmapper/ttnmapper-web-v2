@@ -1,7 +1,2 @@
-// import 'jquery'
-// import 'bootstrap/dist/js/bootstrap.min.js'
-// import 'bootstrap/dist/css/bootstrap.min.css'
-
-window.jQuery = window.$ = require('jquery/dist/jquery.min.js');
-require('bootstrap/dist/js/bootstrap.min.js');
-import 'bootstrap/dist/css/bootstrap.min.css'
+// Import this styling file for css files that should be available though the entire project
+import './styles.css'

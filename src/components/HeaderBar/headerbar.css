@@ -7,15 +7,6 @@ The following component are present:
 
   class: nav-item: A link item
 **/
-
-:root {
-  --dark-blue-bg-color: #242F45;
-  --header-link-active-color: #ccc;
-  --header-link-hover-color: #8C5353;
-  --header-border-thickness: 4px;
-  --header-border-height: 70px;
-}
-
 #navbar-brand{
   margin-left:20px;
   margin-right:20px;
