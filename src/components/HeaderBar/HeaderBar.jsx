@@ -43,7 +43,7 @@ class _HeaderBar extends Component {
     return (
       <nav id="navbar" className="navbar navbar-dark navbar-expand-xl">
         <nav id="navbar-brand">
-          <div class="nav-item">
+          <div className="nav-item">
             <NavLink className="nav-link" to="/">
               <img id="branding-icon" src="/images/logo.png" width="30" height="30" className="d-inline-block align-middle" alt="" />
               TTN Mapper
@@ -56,6 +56,9 @@ class _HeaderBar extends Component {
           </ul>
         </nav>
         {optionalUserDetails}
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapsable" aria-controls="navbarCollapsable" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
       </nav>
     )
   }
@@ -69,9 +72,7 @@ class _HeaderBar extends Component {
 
 }
 
-{/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapsable" aria-controls="navbarCollapsable" aria-expanded="false" aria-label="Toggle navigation">
-  <span className="navbar-toggler-icon"></span>
-</button> */}
+
 
 const mapStateToProps = state => ({
   userState: state.userData.userState

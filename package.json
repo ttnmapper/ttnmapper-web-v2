@@ -5,8 +5,10 @@
   "dependencies": {
     "@storybook/cli": "^3.4.10",
     "babel-loader": "^7.1.5",
+    "bootstrap": "3",
     "connected-react-router": "^4.3.0",
     "fetch-mock": "^6.5.2",
+    "jquery": "^3.3.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
