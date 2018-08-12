@@ -2,9 +2,33 @@ html {
 	height:100%;
 }
 
-body { 
+body {
     min-height:100%;
     background-color: #eee;
+}
+
+#main-map {
+	z-index: 5;
+	height:800px;
+}
+
+/**
+The following component are present:
+  id: navbar: The entire bar at the top
+  id: navbar-brand: The block on the left with the icon and the text
+  id: user-nav: A ul, with all the navigation options in it
+  id: navbarLoginPanel: A Login button, shown when not logged in
+
+  class: nav-item: A link item
+**/
+
+#navbar-brand{
+  margin-left:20px;
+  margin-right:20px;
+}
+
+#branding-icon {
+  margin-right:1em
 }
 
 #navbar {
@@ -12,37 +36,41 @@ body {
 	-webkit-box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
 	-moz-box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
 	box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
-	z-index: 10;
+  z-index: 10;
+  padding:0;
+  margin:0;
+  height:80px;
 }
 
-#main-map {
-	z-index: 5;
-	height:800px;
- }
+#navbar-navigation,
+#navbar-brand,
+#navbar-brand > .nav-link,
+.user-nav,
+.nav-item {
+  height:inherit;
+}
 
- .user-nav {
- 	margin: 3em auto 2em auto;
- }
-
-.user-tab-options {
- 	/*border-bottom: 5px solid #ccc;
- 	transition: border-color 0.1s linear;*/
- }
-
- .user-nav > .nav-item > .nav-link{
- 	border-bottom: 4px solid #ccc;
- }
+.user-nav > .nav-item > .nav-link,
+#navbar-brand > .nav-item > .nav-link,
+.nav-item > .nav-link{
+  border-bottom: 4px solid #242F45;
+  vertical-align: middle;
+  margin:0;
+  padding:0 40px 0 40px;
+  height:inherit;
+  display: table-cell;
+}
 
  .user-tab-centering {
  	width: auto;
  }
 
-.user-nav > .nav-item > .user-tab-selected{
- 	border-bottom: 4px solid #242F45;
+.nav-item > .nav-link.active{
+ 	border-bottom: 4px solid #ccc;
  }
 
-.user-nav > .nav-item > :hover,
-.user-nav > .nav-item > :active {
+.nav-item > .nav-link:hover,
+.nav-item > .nav-link:active{
 	border-bottom: 4px solid #8C5353;
 }
 

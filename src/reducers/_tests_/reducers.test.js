@@ -9,4 +9,8 @@ describe('Application Reducer', () => {
     expect(applicationsGeneral(undefined, {}))
     .toEqual({last_updated: null, state: "none"})
   })
+
+  it ('should clear data on logout', () => {
+    // expect(applicationsDetails(state, action)
+  })
 })
