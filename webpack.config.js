@@ -37,5 +37,12 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery'
+  })
+  ]
 	devtool: 'source-map'
 }

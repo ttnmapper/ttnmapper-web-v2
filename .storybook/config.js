@@ -1,4 +1,5 @@
 import { configure } from '@storybook/react';
+import '../src/styling/styling'
 
 const req = require.context('../src/stories', true, /\.stories\.js$/)
 

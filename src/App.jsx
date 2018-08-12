@@ -10,6 +10,7 @@ import { About, User, Home, HeaderBar, LeaderBoard } from './components'
 import {store, history} from './helpers/store'
 
 //Required CSS files
+import './styling/styling'
 import './app.css'
 
 ReactDOM.render(
