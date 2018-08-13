@@ -5,3 +5,18 @@
   --header-border-thickness: 4px;
   --header-border-height: 70px;
 }
+
+/* Used for long paragraphs of justified text */
+.big-text-field {
+  text-align: justify;
+  line-height: 1.7em;
+}
+
+.big-text-field >p {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.big-text-field > div > img {
+  margin: 20px;
+}
