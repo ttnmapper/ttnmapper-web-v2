@@ -7,9 +7,12 @@ class _About extends Component {
   render() {
     return (
       <div className="container">
-        <div className="row">
-          <div className="col" />
-          <div className="col-8 big-text-field" id="about-text">
+        <div className="col" />
+        <div className="col-8" >
+          <div className="row header-row">
+            <h1 class="display-4">About</h1>
+          </div>
+          <div className="row big-text-field" id="about-text">
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vulputate leo est, eget congue
               lacus bibendum nec. Aenean turpis arcu, semper in molestie eget, faucibus a purus. Vestibulum
@@ -21,25 +24,25 @@ class _About extends Component {
               Donec laoreet placerat sem ac euismod. Quisque sit amet mollis massa. In vel vulputate dolor,
               nec fermentum massa.
         </p>
-        <div>
-            <img src={mapperImage} width="200px" alt="" style={{float:"right"}} />
-            <p>
-              Vestibulum at justo metus. Curabitur libero magna, viverra a tellus ac, ultrices faucibus
-              neque. Quisque ac leo porttitor diam porta cursus a id tellus. Cras volutpat lacus in turpis
-              porttitor posuere sed ac felis. Morbi fermentum quis sapien a malesuada. Aenean ut ex urna.
-              Maecenas et elit ante.
+            <div>
+              <img src={mapperImage} width="200px" alt="" style={{ float: "right" }} />
+              <p>
+                Vestibulum at justo metus. Curabitur libero magna, viverra a tellus ac, ultrices faucibus
+                neque. Quisque ac leo porttitor diam porta cursus a id tellus. Cras volutpat lacus in turpis
+                porttitor posuere sed ac felis. Morbi fermentum quis sapien a malesuada. Aenean ut ex urna.
+                Maecenas et elit ante.
         </p>
-            <p>
-              Vestibulum quis augue eget lectus consectetur feugiat vel ut odio. Praesent ante magna,
-              facilisis in odio venenatis, congue venenatis urna. Mauris condimentum odio eget molestie
-              semper. Cras in lacus turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              purus ligula, dapibus aliquet elementum quis, semper id nulla. Vivamus quis facilisis massa.
-              Suspendisse potenti. Sed vestibulum auctor quam ac bibendum. Phasellus interdum tellus ut elit
-              lobortis, eu malesuada lorem pellentesque. Fusce iaculis nisi aliquam consectetur interdum.
-              Suspendisse facilisis augue at metus fermentum imperdiet. Proin vulputate semper commodo.
-              Phasellus a aliquam nunc.
+              <p>
+                Vestibulum quis augue eget lectus consectetur feugiat vel ut odio. Praesent ante magna,
+                facilisis in odio venenatis, congue venenatis urna. Mauris condimentum odio eget molestie
+                semper. Cras in lacus turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+                purus ligula, dapibus aliquet elementum quis, semper id nulla. Vivamus quis facilisis massa.
+                Suspendisse potenti. Sed vestibulum auctor quam ac bibendum. Phasellus interdum tellus ut elit
+                lobortis, eu malesuada lorem pellentesque. Fusce iaculis nisi aliquam consectetur interdum.
+                Suspendisse facilisis augue at metus fermentum imperdiet. Proin vulputate semper commodo.
+                Phasellus a aliquam nunc.
           </p>
-        </div>
+            </div>
 
             <p>
               Donec maximus felis a nisi interdum, a tempor tortor consectetur. Quisque viverra eros sed
@@ -80,8 +83,8 @@ class _About extends Component {
               tortor eget egestas. Phasellus eget finibus dui.
         </p>
           </div>
-          <div className="col" />
         </div>
+        <div className="col" />
       </div>
     )
   }

@@ -20,3 +20,9 @@
 .big-text-field > div > img {
   margin: 20px;
 }
+
+
+/* Used on a page with lots of text*/
+.header-row {
+  padding-top:4em;
+}

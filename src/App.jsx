@@ -17,8 +17,8 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <div>
+        <HeaderBar />
         <Switch>
-          <Route path="/" component={HeaderBar} />
           <Route exact path="/" component={Home} />
           <Route exact path="/about" component={About} />
           <Route exact path="/user" component={User} />
