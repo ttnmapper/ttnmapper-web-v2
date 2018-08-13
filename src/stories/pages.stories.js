@@ -9,7 +9,10 @@ import Provider from './provider'
 storiesOf('Pages', module)
   .addDecorator(StoryRouter())
   .addDecorator(story => <Provider story={story()} />)
-  .add('HeaderBar', () => <HeaderBar />)
+  .add('HeaderBar (logged out)', () =><HeaderBar />)
+  .add('HeaderBar (logged in)', () => {
+    return (<HeaderBar />)
+  })
   .add('About', () => <About />)
   .add('User', () => <User />)
   .add('Home', () => <Home />)

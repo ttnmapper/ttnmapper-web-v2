@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom'
 
 import './headerbar.css'
 
-import unknownUser from'./unknownUser.png';
-import mainLogo from'./logo.png';
+import unknownUser from './unknownUser.png';
+import mainLogo from './logo.png';
 
 class _HeaderBar extends Component {
 
@@ -15,11 +15,15 @@ class _HeaderBar extends Component {
   renderLoginOptions() {
     if (this.props.userState.loggedIn) {
       return (
-        <nav className="" id="">
-          <img id="user-icon" src={unknownUser} width="30" height="30" className="d-inline-block align-middle" alt="" />
+        <nav className="navbar-nav user-nav" id="navbarUserPanel">
           <div className="nav-item" id="navbar-username">
-            Hi, Kolijn
-        </div>
+            <div className="nav-link">
+              <img id="user-icon" src={unknownUser} width="30" height="30" className="d-inline-block align-middle" alt="" />
+              <span>
+                Hi, Kolijn
+              </span>
+            </div>
+          </div>
         </nav>
       )
     }
@@ -82,6 +86,10 @@ class _HeaderBar extends Component {
 const mapStateToProps = state => ({
   userState: state.userData.userState
 })
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {}
+}
 
 const HeaderBar = connect(
   mapStateToProps

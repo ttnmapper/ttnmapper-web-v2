@@ -1,0 +1,10 @@
+
+#nav-user-tab > .nav-item{
+  width:auto;
+}
+
+#nav-user-tab {
+  padding-top: 4em;
+  width:inherit;
+  margin:0 auto;
+}

@@ -28,4 +28,4 @@ storiesOf('Components', module)
       .get('http://localhost:8080/api/v1/application/demo-app-oH3BWEmZLRony8B9iJ/device/', delayWith(demoDevicesoH3BWEmZLRony8B9iJ, 1500))
     return <Devices />
   })
-  .add('device-card', () => <DeviceCard devID="AAABC" />)
+  .add('device-card', () => <DeviceCard devID="AAABC" hasData={true}/>)

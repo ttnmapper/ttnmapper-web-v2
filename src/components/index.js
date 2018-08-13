@@ -4,9 +4,9 @@ export { default as Home }  from './Home/Home';
 export { default as User } from './User/User';
 export { default as LeaderBoard } from './LeaderBoard/LeaderBoard';
 
-// // These are under /user
-export { default as Devices } from './devices'
-export { default as DeviceCard } from './device-card'
-// export {Gateways} from './gateways'
+// // These are under /Devices
+export { default as Devices } from './Devices/Devices'
+export { default as DeviceCard } from './Devices/DeviceCard'
+export { default as Gateways} from './Gateways/gateways'
 // export {Experiments} from './experiments'
 // export {Settings} from './settings'

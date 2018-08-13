@@ -21,13 +21,8 @@ ReactDOM.render(
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/about" component={About} />
-          <Route exact path="/user" component={User} />
           <Route exact path="/leaderboard" component={LeaderBoard} />
-          <Route exact path="/user/devices" component={User} />
-          <Route exact path="/user/gateways" component={User} />
-          <Route exact path="/user/experiments" component={User} />
-          <Route exact path="/user/settings" component={User} />
-
+          <Route path="/user" component={User} />
         </Switch>
       </div>
     </ConnectedRouter>

@@ -46,7 +46,6 @@ The following component are present:
   display: table-cell;
 }
 
-
 .nav-item > .nav-link.active{
  	border-bottom: var(--header-border-thickness) solid var(--header-link-active-color);
  }
@@ -54,4 +53,15 @@ The following component are present:
 .nav-item > .nav-link:hover,
 .nav-item > .nav-link:active{
 	border-bottom: var(--header-border-thickness) solid var(--header-link-hover-color);
+}
+
+/* The navbar UserPanel is shown when the user is logged in */
+#navbarUserPanel {
+  width:200px;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+#user-icon {
+  margin-right:15px;
 }

@@ -1,9 +1,12 @@
+// Libraries
 import React from 'react'
-import DeviceCard from '../components/device-card.js'
+import DeviceCard from './DeviceCard'
 import PropTypes from 'prop-types'
-import { UserDataLoading, UserDataError } from './small-components'
-import { fetchApplications } from '../actions/fetch-data'
 import { connect } from 'react-redux'
+
+// Our own code
+import { UserDataLoading, UserDataError } from '../small-components'
+import { fetchApplications } from '../../actions/fetch-data'
 
 /**
  * This component renders a list of all the devices, sorted by their application
