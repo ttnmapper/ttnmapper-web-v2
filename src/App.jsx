@@ -7,7 +7,7 @@ import { ConnectedRouter } from 'connected-react-router'
 
 // Our JS files
 import { About, User, Home, HeaderBar, LeaderBoard } from './components'
-import {store, history} from './helpers/store'
+import { store, history } from './helpers/store'
 
 //Required CSS files
 import './styling/styling'
@@ -20,9 +20,10 @@ ReactDOM.render(
         <HeaderBar />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/about" component={About} />
-          <Route exact path="/leaderboard" component={LeaderBoard} />
-          <Route path="/user" component={User} />
+          <Route path="/about" component={About} />
+          <Route path="/leaderboard" component={LeaderBoard} />
+          <Route path="/user" component={User}>
+          </Route>
         </Switch>
       </div>
     </ConnectedRouter>
