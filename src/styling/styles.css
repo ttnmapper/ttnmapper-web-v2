@@ -1,9 +1,14 @@
 :root {
   --dark-blue-bg-color: #242F45;
-  --header-link-active-color: #ccc;
-  --header-link-hover-color: #8C5353;
+  --header-link-inactive-color: #C2C2C2;
+  --header-link-active-color: #BABCC5;
+  --header-link-hover-color: #FFFFFF;
+  --header-border-hover-color: #8C5353;
   --header-border-thickness: 4px;
-  --header-border-height: 70px;
+}
+
+body {
+  font-family: Trebuchet
 }
 
 /* Used for long paragraphs of justified text */

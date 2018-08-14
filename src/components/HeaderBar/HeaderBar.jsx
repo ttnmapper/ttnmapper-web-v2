@@ -9,74 +9,86 @@ import mainLogo from './logo.png';
 
 class _HeaderBar extends Component {
 
+  renderBrand() {
+    return (
+      <nav id="navbar-brand">
+        <div className="nav-item">
+          <NavLink className="nav-link" to="/">
+            <img id="branding-icon" src={mainLogo} width="30" height="30" className="d-inline-block align-middle" alt="" />
+            <span>TTN Mapper</span>
+          </NavLink>
+        </div>
+      </nav>)
+  }
+
+  renderNavigation() {
+    let menuOptions = [
+      (<li key="aboutlink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/about">About</NavLink></li>),
+      (<li key="leaderboardlink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/leaderboard">Leader Board</NavLink></li>)
+    ]
+    if (this.props.userState.loggedIn) {
+      menuOptions.push(<li key="myDataLink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/user">My Data</NavLink></li>)
+    }
+
+    const dividor = (<li key="dividorlink" className="nav-item" id="dividor"/>)
+
+    const navbarUser = this.renderLoginOptions()
+    return (
+      <nav id="navbar-navigation" className="collapse navbar-collapse">
+        <ul className="navbar-nav">
+          {menuOptions}
+          {dividor}
+          {navbarUser}
+        </ul>
+      </nav>)
+  }
+
   /**
    * Render and return the login tab on the right on the navbar
    */
   renderLoginOptions() {
     if (this.props.userState.loggedIn) {
       return (
-        <nav className="navbar-nav user-nav" id="navbarUserPanel">
-          <div className="nav-item" id="navbar-username">
-            <div className="nav-link">
-              <img id="user-icon" src={unknownUser} width="30" height="30" className="d-inline-block align-middle" alt="" />
-              <span>
-                Hi, Kolijn
-              </span>
-            </div>
+        <div className="nav-item navbar-highlight">
+          <div className="nav-link">
+            <img id="user-icon" src={unknownUser} width="30" height="30" className="d-inline-block align-middle" alt="" />
+            <span>
+              Hi, {this.props.userState.userName}
+            </span>
           </div>
-        </nav>
+        </div>
       )
     }
     else {
       return (
-        <nav className="navbar-nav user-nav" id="navbarLoginPanel">
-          <div className="nav-item" id="navbar-username">
-            <a href="" className="nav-link" >Login</a>
-          </div>
-        </nav>
+        <li id="user-nav-item" key="aboutlink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/login">Login</NavLink></li>
       )
     }
-    return ""
   }
 
   render() {
-    let menuOptions = [
-      (<li key="aboutlink" className="nav-item"><NavLink className="nav-link" to="/about">About</NavLink></li>),
-      (<li key="leaderboardlink" className="nav-item"><NavLink className="nav-link" to="/leaderboard">Leader Board</NavLink></li>)
-    ]
-    let optionalUserDetails = this.renderLoginOptions()
-    if (this.props.userState.loggedIn) {
-      menuOptions.push(<li className="nav-item"><NavLink className="nav-link" to="/user">My Data</NavLink></li>)
-    }
+    const navbarBrand = this.renderBrand()
+    const navbarNavigation = this.renderNavigation()
+    const navbarButton = (
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-navigation" aria-controls="navbar-navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>)
 
     return (
-      <nav id="navbar" className="navbar navbar-dark navbar-expand-xl">
-        <nav id="navbar-brand">
-          <div className="nav-item">
-            <NavLink className="nav-link" to="/">
-              <img id="branding-icon" src={mainLogo} width="30" height="30" className="d-inline-block align-middle" alt="" />
-              TTN Mapper
-          </NavLink>
-          </div>
-        </nav>
-        <nav id="navbar-navigation" className="collapse navbar-collapse">
-          <ul className="navbar-nav user-nav">
-            {menuOptions}
-          </ul>
-        </nav>
-        {optionalUserDetails}
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapsable" aria-controls="navbarCollapsable" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+      <nav id="navbar" className="navbar navbar-expand-sm">
+        {navbarBrand}
+        {navbarButton}
+        {navbarNavigation}
       </nav>
     )
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.location.pathname !== nextProps.location.pathname) {
-      return true
-    }
-    return false
+    // if (this.props.location.pathname !== nextProps.location.pathname) {
+    //   return true
+    // }
+    // return false
+    return true
   }
 
 }

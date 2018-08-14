@@ -2,62 +2,104 @@
 The following component are present:
   id: navbar: The entire bar at the top
   id: navbar-brand: The block on the left with the icon and the text
-  id: user-nav: A ul, with all the navigation options in it
-  id: navbarLoginPanel: A Login button, shown when not logged in
+  id: navbar-navigation: A ul, with all the navigation options in it
+  id: navbar-user: A Login button, shown when not logged in
 
-  class: nav-item: A link item
+  Inside these compoents are nested:
+  class: nav-item: The entire link item
+  class: nav-link: The link itself
+
+  Additionally, these classes:
+  class: navbar-highlight For specifying an item need the underline highlight
 **/
-#navbar-brand{
-  margin-left:20px;
-  margin-right:20px;
-}
+:root {
+  --heading-item-padding: 20px 16px 20px 16px;
+  --heading-item-height: 4.5em;
 
-#branding-icon {
-  margin-right:1em
+  --brand-text-color: #fff;
+  --brand-text-shadow: #007bff;
 }
 
 #navbar {
-	background-color:var(--dark-blue-bg-color);
-	-webkit-box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
-	-moz-box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
-	box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
-  z-index: 10;
+  background-color:var(--dark-blue-bg-color);
   padding:0;
-  margin:0;
-  height:var(--header-border-height);
+  -webkit-box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
+	-moz-box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
+  box-shadow: 0px 3px 16px 0px rgba(105,105,105,1);
+  z-index: 10;
+  font-weight: 500;
+  font-size: 13pt;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
-#navbar-navigation,
-#navbar-brand,
-#navbar-brand > .nav-link,
-.user-nav,
-.nav-item {
-  height:inherit;
+/* The highlighting class*/
+.navbar-highlight a{
+  color: inherit
 }
 
-.user-nav > .nav-item > .nav-link,
-#navbar-brand > .nav-item > .nav-link,
-.nav-item > .nav-link{
+.navbar-highlight {
   border-bottom: var(--header-border-thickness) solid var(--dark-blue-bg-color);
-  vertical-align: middle;
-  margin:0;
-  padding:0 40px 0 40px;
-  height:inherit;
+  color: var(--header-link-inactive-color);
+}
+
+.navbar-highlight.active{
+  border-bottom: var(--header-border-thickness) solid var(--header-link-active-color);
+  color: var(--header-link-active-color);
+}
+
+.navbar-highlight:hover,
+.navbar-highlight:active {
+  border-bottom: var(--header-border-thickness) solid var(--header-border-hover-color);
+  color: var(--header-link-hover-color);
+}
+
+/* Item on the navigation bar*/
+#navbar-navigation .nav-link {
+  padding: var(--heading-item-padding);
+  height: var(--heading-item-height);
+
+}
+
+#navbar-navigation ul {
+  width: 100%;
+}
+
+#navbar-navigation #user-nav-item {
+  float: right;
+}
+
+#navbar #dividor {
+  width:200px;
+  /* background-color: #33B */
+}
+
+/* Settings involved with the branding box, on the left*/
+#navbar-brand{
+  margin-left:20px;
+  margin-right:20px;
+  padding: auto 0 auto 0;
+  border-bottom: var(--header-border-thickness) solid var(--dark-blue-bg-color);
+  height: var(--heading-item-height);
+  width:200px;
+}
+
+#navbar-brand span{
+  color: var(--brand-text-color);
+}
+
+#navbar-brand .nav-link{
+  padding: var(--heading-item-padding);
+  height: var(--heading-item-height);
   display: table-cell;
 }
 
-.nav-item > .nav-link.active{
- 	border-bottom: var(--header-border-thickness) solid var(--header-link-active-color);
- }
-
-.nav-item > .nav-link:hover,
-.nav-item > .nav-link:active{
-	border-bottom: var(--header-border-thickness) solid var(--header-link-hover-color);
+#navbar-brand .nav-link span {
+  vertical-align: top;
 }
 
 /* The navbar UserPanel is shown when the user is logged in */
 #navbarUserPanel {
-  width:200px;
+  width:300px;
   vertical-align: middle;
   display: table-cell;
 }

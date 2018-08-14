@@ -10,7 +10,7 @@ class _About extends Component {
         <div className="col" />
         <div className="col-8" >
           <div className="row header-row">
-            <h1 class="display-4">About</h1>
+            <h1 className="display-4">About</h1>
           </div>
           <div className="row big-text-field" id="about-text">
             <p>
