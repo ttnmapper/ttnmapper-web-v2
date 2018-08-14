@@ -3,7 +3,7 @@ The following component are present:
   id: navbar: The entire bar at the top
   id: navbar-brand: The block on the left with the icon and the text
   id: navbar-navigation: A ul, with all the navigation options in it
-  id: navbar-user: A Login button, shown when not logged in
+  id: user-nav-item: A Login button, shown when not logged in
 
   Inside these compoents are nested:
   class: nav-item: The entire link item
@@ -30,6 +30,8 @@ The following component are present:
   font-weight: 500;
   font-size: 13pt;
   font-family: Helvetica, Arial, sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /* The highlighting class*/
@@ -39,38 +41,35 @@ The following component are present:
 
 .navbar-highlight {
   border-bottom: var(--header-border-thickness) solid var(--dark-blue-bg-color);
-  color: var(--header-link-inactive-color);
+  color: var(--header-link-inactive-color) !important;
 }
 
 .navbar-highlight.active{
   border-bottom: var(--header-border-thickness) solid var(--header-link-active-color);
-  color: var(--header-link-active-color);
+  color: var(--header-link-active-color) !important;
 }
 
 .navbar-highlight:hover,
 .navbar-highlight:active {
   border-bottom: var(--header-border-thickness) solid var(--header-border-hover-color);
-  color: var(--header-link-hover-color);
+  color: var(--header-link-hover-color) !important;
 }
 
 /* Item on the navigation bar*/
 #navbar-navigation .nav-link {
   padding: var(--heading-item-padding);
   height: var(--heading-item-height);
+  color: var(--header-link-inactive-color);
 
 }
 
-#navbar-navigation ul {
-  width: 100%;
+#navbar-navigation > #leftnav {
+  width:70%
 }
 
-#navbar-navigation #user-nav-item {
-  float: right;
-}
-
-#navbar #dividor {
-  width:200px;
-  /* background-color: #33B */
+#navbar-navigation > #rightnav {
+  width:30%;
+  justify-content: flex-end;
 }
 
 /* Settings involved with the branding box, on the left*/
@@ -106,4 +105,15 @@ The following component are present:
 
 #user-icon {
   margin-right:15px;
+}
+
+
+/* Settings for the button, stolen from bootstrap*/
+
+#navbar > .navbar-toggler {
+  background-color: #18243d !important;
+}
+
+#navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }

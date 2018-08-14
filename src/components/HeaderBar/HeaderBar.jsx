@@ -30,14 +30,14 @@ class _HeaderBar extends Component {
       menuOptions.push(<li key="myDataLink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/user">My Data</NavLink></li>)
     }
 
-    const dividor = (<li key="dividorlink" className="nav-item" id="dividor"/>)
-
     const navbarUser = this.renderLoginOptions()
     return (
       <nav id="navbar-navigation" className="collapse navbar-collapse">
-        <ul className="navbar-nav">
+        <ul className="navbar-nav" id="leftnav">
           {menuOptions}
-          {dividor}
+
+        </ul>
+        <ul className="navbar-nav" id="rightnav">
           {navbarUser}
         </ul>
       </nav>)
@@ -48,20 +48,32 @@ class _HeaderBar extends Component {
    */
   renderLoginOptions() {
     if (this.props.userState.loggedIn) {
-      return (
-        <div className="nav-item navbar-highlight">
-          <div className="nav-link">
-            <img id="user-icon" src={unknownUser} width="30" height="30" className="d-inline-block align-middle" alt="" />
-            <span>
-              Hi, {this.props.userState.userName}
-            </span>
-          </div>
-        </div>
-      )
+      return [
+        (
+          <li id="user-nav-item" className="nav-item" key="userlink">
+            <div className="nav-link">
+              <img id="user-icon" src={unknownUser} width="30" height="30" className="d-inline-block align-middle" alt="" />
+              <span>
+                Hi, {this.props.userState.userName}
+              </span>
+            </div>
+          </li>
+        ),
+        (
+          <li id="user-nav-item" className="nav-item" key="usersettingslink">
+            <div className="nav-link navbar-highlight">
+		          <span className="oi" data-glyph="cog" title="icon name" aria-hidden="true" style={{color: "inherit"}}></span>
+            </div>
+          </li>
+        )
+      ]
+
     }
     else {
       return (
-        <li id="user-nav-item" key="aboutlink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/login">Login</NavLink></li>
+        <li id="user-nav-item" key="loginlink" className="nav-item">
+          <NavLink className="nav-link navbar-highlight" to="/login">Login</NavLink>
+        </li>
       )
     }
   }
@@ -75,7 +87,7 @@ class _HeaderBar extends Component {
       </button>)
 
     return (
-      <nav id="navbar" className="navbar navbar-expand-sm">
+      <nav id="navbar" className="navbar navbar-expand-sm ">
         {navbarBrand}
         {navbarButton}
         {navbarNavigation}
