@@ -96,11 +96,10 @@ class _HeaderBar extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // if (this.props.location.pathname !== nextProps.location.pathname) {
-    //   return true
-    // }
-    // return false
-    return true
+    if (this.props.currentRoute !== nextProps.currentRoute) {
+      return true
+    }
+    return false
   }
 
 }
@@ -108,7 +107,8 @@ class _HeaderBar extends Component {
 
 
 const mapStateToProps = state => ({
-  userState: state.userData.userState
+  userState: state.userData.userState,
+  currentRoute: state.router.location.pathname,
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => {
