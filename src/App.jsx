@@ -16,7 +16,7 @@ import './app.css'
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <div>
+      <div id="app-container">
         <HeaderBar />
         <Switch>
           <Route exact path="/" component={Home} />

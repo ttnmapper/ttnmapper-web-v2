@@ -7,8 +7,11 @@
   --header-border-thickness: 4px;
 }
 
+html,
 body {
-  font-family: Trebuchet
+  font-family: Trebuchet;
+  height:100%;
+  width:100%
 }
 
 /* Used for long paragraphs of justified text */

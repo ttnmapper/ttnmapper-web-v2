@@ -5,6 +5,7 @@ import '../src/styling/styling'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'open-iconic/font/css/open-iconic.css'
+import 'leaflet/dist/leaflet.css'
 
 const req = require.context('../src/stories', true, /\.stories\.js$/)
 
