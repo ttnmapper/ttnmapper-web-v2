@@ -14,6 +14,11 @@ body {
   width:100%
 }
 
+.center-div {
+  width:800px;
+  margin: 0 auto
+}
+
 /* Used for long paragraphs of justified text */
 .big-text-field {
   text-align: justify;
