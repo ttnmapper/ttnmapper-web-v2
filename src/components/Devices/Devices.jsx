@@ -79,7 +79,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchApplications: () => fetchApplications(dispatch)
+  fetchApplications: () => dispatch(fetchApplications())
 })
 
 export {_Devices }
