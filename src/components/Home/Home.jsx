@@ -119,7 +119,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateMapPosition: (newPosition) => updateMapPosition(newPosition, dispatch)
+  updateMapPosition: (newPosition) => dispatch(updateMapPosition(newPosition))
 })
 
 const Home = connect(mapStateToProps, mapDispatchToProps)(_Home)

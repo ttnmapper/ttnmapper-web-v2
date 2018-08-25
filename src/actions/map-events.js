@@ -7,12 +7,11 @@ function createMapAction(newPosition) {
 	}
 }
 
-export function updateMapPosition(newPosition, dispatch){
+export function updateMapPosition(newPosition){
   // Store the new position in the state
 
   // Store the new position in the local store
 
   // Store the new position in the URL
-  console.log(newPosition)
-  dispatch(createMapAction(newPosition))
+  return dispatch => dispatch(createMapAction(newPosition))
 }
