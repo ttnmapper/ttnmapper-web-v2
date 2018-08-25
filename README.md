@@ -1,5 +1,7 @@
 # TTN Mapper V2
 
+[![Build Status](https://travis-ci.org/ttnmapper/ttnmapper-web-v2.svg?branch=master)](https://travis-ci.org/ttnmapper/ttnmapper-web-v2)
+
 This is the second version of the TTN Mapper frontend, re-written in react.
 
 ## Development
