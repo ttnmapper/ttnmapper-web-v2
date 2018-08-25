@@ -39,7 +39,7 @@ describe('Application data fetching', () => {
 
   it('fails gracefully when responses are invalid', () => {
     fetchMock
-      .get('http://localhost:8080/api/v1/application/', { body: malformedAnswer, headers: headers })
+      .getOnce('http://localhost:8080/api/v1/application/', { body: malformedAnswer, headers: headers })
 
     const expectedActions = [
       { type: REQUEST_APPLICATIONS },
@@ -52,7 +52,6 @@ describe('Application data fetching', () => {
     })
   })
 })
-
 
 describe('Device data fetching', () => {
   afterEach(() => {
@@ -97,24 +96,22 @@ describe('Device data fetching', () => {
   })
 })
 
-/*
-describe('async data fetching flow', () => {
+describe('Application and Device pipeline', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
   })
 
-  it('performs entire data flow', () => {
+  it.skip('performs entire data flow', () => {
     fetchMock
-      .getOnce('http://localhost:8080/api/v1/application/', { body: [{"app_id": "demo-app-S8hYqYUOxdz7h2HoCQ"}], headers: { 'content-type': 'application/json' } })
-      .getOnce('http://localhost:8080/api/v1/application/demo-app-S8hYqYUOxdz7h2HoCQ/device/', { body: {"empty": "data"}, headers: { 'content-type': 'application/json' } })
-
+    .getOnce('http://localhost:8080/api/v1/application/', { body: testApplications, headers: headers })
+    .getOnce('http://localhost:8080/api/v1/application/'+testAppID+'/device/', { body: testDevices, headers: headers})
 
     const expectedActions = [
       { type: REQUEST_APPLICATIONS },
-      { type: RECEIVE_APPLICATIONS, data: [{"app_id": "demo-app-S8hYqYUOxdz7h2HoCQ"}]},
-      { type: REQUEST_DEVICES, data: {"app_id": "demo-app-S8hYqYUOxdz7h2HoCQ"}},
-      { type: RECEIVE_DEVICES_FAILED}
+      { type: RECEIVE_APPLICATIONS, data: [{ "app_id": testAppID }] },
+      { type: REQUEST_DEVICES, data: { "app_id": testAppID } },
+      { type: RECEIVE_DEVICES, data: { "testDevice": testDevices[0] } }
     ]
     const store = mockStore({ todos: [] })
 
@@ -123,4 +120,4 @@ describe('async data fetching flow', () => {
       expect(store.getActions()).toEqual(expectedActions)
     })
   })
-})*/
+})
