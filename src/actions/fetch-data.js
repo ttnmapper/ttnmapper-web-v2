@@ -1,5 +1,5 @@
 import { getApplication, getDevices } from './api-calls'
-import { REQUEST_APPLICATIONS, RECEIVE_APPLICATIONS, RECEIVE_APPLICATIONS_FAILED, REQUEST_DEVICES, RECEIVE_DEVICES } from '../constants'
+import { REQUEST_APPLICATIONS, RECEIVE_APPLICATIONS, RECEIVE_APPLICATIONS_FAILED, REQUEST_DEVICES, RECEIVE_DEVICES, RECEIVE_DEVICES_FAILED } from '../constants'
 
 // Update all the devices of a specific app
 export function requestApplications() {
@@ -18,8 +18,7 @@ export function receiveApplications(listOfApplications) {
 
 export function receiveApplicationsFailed(error_message) {
   return {
-    type: RECEIVE_APPLICATIONS_FAILED,
-    data: {}
+    type: RECEIVE_APPLICATIONS_FAILED
   }
 }
 
@@ -34,10 +33,12 @@ export function fetchApplications() {
       .then((json) => {
         //Receive the applications into the state
         dispatch(receiveApplications(json))
-
+        return json
+      })
+      .then((json) => {
+        // For each of the applications, fetch the device info as well
         json.map((application) => {
-          // fetchApplicationdevices(application.app_id)
-          dispatch(fetchApplicationdevices(application.app_id))
+          dispatch(fetchApplicationDevices(application.app_id))
         })
       })
       .catch(error => dispatch(receiveApplicationsFailed(error)))
@@ -65,15 +66,20 @@ function receiveDevices(listOfDevices) {
 }
 
 export function receiveDevicesFailed(error) {
-  console.log("Receive devices failed")
+  return {
+    type: RECEIVE_DEVICES_FAILED
+  }
 }
 
-export function fetchApplicationdevices(app_id) {
+export function fetchApplicationDevices(app_id) {
   return dispatch => {
     dispatch(requestDevices(app_id))
 
     return fetch(getDevices(app_id))
       .then(response => response.json())
-      .then(json => dispatch(receiveDevices(json)))
+      .then((json) => {
+        dispatch(receiveDevices(json))
+      })
+      .catch(error => dispatch(receiveDevicesFailed(error)))
   }
 }
