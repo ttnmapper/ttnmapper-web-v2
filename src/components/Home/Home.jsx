@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Map, TileLayer, Marker, Popup, LayersControl } from 'react-leaflet'
-const { BaseLayer, Overlay } = LayersControl
+import { Map, TileLayer, Marker, LayersControl } from 'react-leaflet'
+const { BaseLayer } = LayersControl
 
-import {updateMapPosition} from '../../actions/map-events'
+import {parseCoordsFromQuery } from './query-utils'
+import { updateMapPosition } from '../../actions/map-events'
 
 import './home.css'
 
@@ -21,7 +22,19 @@ class _Home extends Component {
     first mounted, and hope they stay in sync.
     */
     this.copiedCoords = this.props.mapDetails.currentPosition
-	}
+
+    if ('location' in props && 'search' in props.location && props.location.search !== "") {
+      console.log("Location!")
+      const parsedCoords = parseCoordsFromQuery(props.location.search)
+      console.log(parsedCoords)
+
+      // Verify all the arguments were given, otherwise, just use previous position
+      if (parsedCoords.lat !== null && parsedCoords.long !== null && parsedCoords.zoom !== null) {
+        this.copiedCoords = parsedCoords
+      }
+    }
+  }
+
 
   mapMovedEventHandler(event) {
     // Dispatch an action handler to update the state
@@ -102,9 +115,6 @@ class _Home extends Component {
             {this.addBaseTileLayers()}
           </LayersControl>
           <Marker position={position}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
           </Marker>
         </Map>
       </div>

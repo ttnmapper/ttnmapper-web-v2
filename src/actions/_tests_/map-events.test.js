@@ -27,7 +27,7 @@ describe('Map events handler', () => {
     const store = mockStore({})
 
     store.dispatch(updateMapPosition(newMousePosition))
-    expect(store.getActions()).toEqual(expectedActions)
+    expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions))
 
   })
 
