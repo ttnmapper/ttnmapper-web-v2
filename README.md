@@ -4,6 +4,8 @@
 
 This is the second version of the TTN Mapper frontend, re-written in react.
 
+![Sample Screenshot](https://raw.githubusercontent.com/ttnmapper/ttnmapper-web-v2/develop/.images/sampleScreenshot.png)
+
 ## Development
 
 To work on developing the project you need to set up your environemnt, get the node packages and run the development server
