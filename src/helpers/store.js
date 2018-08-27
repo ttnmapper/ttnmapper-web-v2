@@ -2,6 +2,7 @@ import { connectRouter, routerMiddleware } from 'connected-react-router'
 import logger from 'redux-logger'
 import { createBrowserHistory } from 'history'
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import { batchDispatchMiddleware} from 'redux-batched-actions';
 import thunk from 'redux-thunk';
 
 import * as reducers from '../reducers'
@@ -18,7 +19,8 @@ export const store = createStore(
     applyMiddleware(
       routerMiddleware(history),
       thunk,
-      logger
+      logger,
+      batchDispatchMiddleware
     )
   )
 )
