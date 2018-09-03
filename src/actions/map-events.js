@@ -63,12 +63,20 @@ export function fetchNewMapData(mapExtent, dataToFetch, knownGateways) {
     knownGateways.forEach(function (item) {
       dictOfGateways[item] = true;
     });
-    fetchBoundingBoxUrl(mapExtent)
-      .then(response => response.json())
+    return fetchBoundingBoxUrl(mapExtent)
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          throw Error('Request rejected with status ${res.status}')
+        }
+      })
       .then(json => {
-        // if ('error' in json and json.error === false)
+        // Tell the state we are fetching data
         dispatch(receiveVisibleGateways(json.gateways))
 
+        // We only want to fetch data for gateways that we do not know yet.
+        // Filter the received visible gateways
         const missingGateways = json.gateways.reduce(function (prev, current) {
           if (dictOfGateways.hasOwnProperty(current) === false) {
             prev.push(current);
@@ -77,13 +85,20 @@ export function fetchNewMapData(mapExtent, dataToFetch, knownGateways) {
         }, [])
 
         console.info("Actions: Received " + json.gateways.length + " visible gateways, missing: " + missingGateways)
-        let missingGatewayRequests  = missingGateways.map((gatewayID, index) => { dispatch(fetchGatewayDetails(gatewayID)) })
-        missingGatewayRequests = missingGatewayRequests.filter(request => request !== undefined);
+
+        // Create a list of functions that can be batched
+        let missingGatewayRequests  = missingGateways.map((gatewayID, index) => {
+            return (dispatch) => dispatch(fetchGatewayDetails(gatewayID))
+          })
         console.log(missingGatewayRequests)
 
+        //Batch dispatch them, so we don't need to update the screen so much
         dispatch(batchActions(missingGatewayRequests))
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log(error)
+        dispatch({type:mapConstants.RECEIVE_MAP_GATEWAYS_FAILED})
+      })
   }
 }
 
@@ -94,8 +109,7 @@ export function fetchGatewayDetails(gatewayID) {
       .then(response => response.json())
       .then(json => {
         dispatch(receiveGWDetails(gatewayID, json))
-      }
-      )
+      })
       .catch(error => console.log(error))
   }
 }

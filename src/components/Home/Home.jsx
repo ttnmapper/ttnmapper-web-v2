@@ -1,48 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Map, Popup, TileLayer, Marker, LayersControl } from 'react-leaflet'
+import { Map, TileLayer, LayersControl } from 'react-leaflet'
 const { BaseLayer } = LayersControl
 
 import { parseCoordsFromQuery } from './query-utils'
 import { updateMapPosition, fetchNewMapData } from '../../actions/map-events'
+import GatewayRendering from './GatewayRendering/GatewayRendering'
 
 import 'leaflet/dist/leaflet.css';
 import './home.css'
-
-// Workaround for leaflet css?
-import L from 'leaflet';
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-});
-
-const gwMarkerIconRoundBlue = L.icon({
-  iconUrl: require("./images/gateway_dot.png"),
-  iconSize:     [20, 20], // size of the icon
-  iconAnchor:   [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor:  [10, 10] // point from which the popup should open relative to the iconAnchor
-});
-const gwMarkerIconRoundGreen = L.icon({
-  iconUrl: require("./images/gateway_dot_green.png"),
-  iconSize:     [20, 20], // size of the icon
-  iconAnchor:   [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor:  [10, 10] // point from which the popup should open relative to the iconAnchor
-});
-const gwMarkerIconRoundRed = L.icon({
-  iconUrl: require("./images/gateway_dot_red.png"),
-  iconSize:     [20, 20], // size of the icon
-  iconAnchor:   [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor:  [10, 10] // point from which the popup should open relative to the iconAnchor
-});
-const gwMarkerIconRoundYellow = L.icon({
-  iconUrl: require("./images/gateway_dot_yellow.png"),
-  iconSize:     [20, 20], // size of the icon
-  iconAnchor:   [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor:  [10, 10] // point from which the popup should open relative to the iconAnchor
-});
 
 class _Home extends Component {
 
@@ -66,80 +32,6 @@ class _Home extends Component {
         this.copiedCoords = parsedCoords
       }
     }
-  }
-
-  drawSingleMarker(gatewayID) {
-    if (gatewayID in this.props.mapDetails.gatewayDetails) {
-      const details = this.props.mapDetails.gatewayDetails[gatewayID]
-      let optionalSection = ""
-      let icon = gwMarkerIconRoundBlue
-
-      if (details.last_heard < (Date.now() / 1000) - (60 * 60 * 1)) {
-        optionalSection = (
-          <div>
-            <br />
-            <font color="red">Offline.</font>
-            Will be removed from the map in 5 days.
-            < br />
-          </div>
-        )
-        icon = gwMarkerIconRoundRed
-      } else if (details.channels < 3) {
-        optionalSection = (
-          <div>
-            <br />
-            Likely a < font color="orange" > Single Channel Gateway.</font >
-            <br />
-          </div>
-        )
-        icon=gwMarkerIconRoundYellow
-      }
-
-      return (
-        <Marker position={[details.lat, details.lon]} key={"marker_" + gatewayID} icon={icon}>
-          <Popup>
-            <b>{('description' in details ? details.description : details.gwaddr)}</b>
-            <br />
-            { details.gwaddr }
-            <br />
-            {optionalSection}
-            <br />Last heard at {details.last_heard}
-            <br />Channels heard on: {details.channels}
-            <br />Show only this gateway's coverage as:
-            <br />
-            <ul>
-              <li><a href="#">radar</a></li>
-              <li><a href="#">alpha shape</a></li>
-            </ul>
-          </Popup>
-        </Marker>
-      )
-    }
-    return ""
-  }
-
-  /**
-   * Above zoomThreshold1 only draw the markers of all gateways in view.
-   *
-   * This function returns a list of <Marker> components, that can be inserted into
-   * the map component
-   */
-  drawMarkersAboveZoom(listOfVisibleGateways) {
-    if (listOfVisibleGateways) {
-      const listOfMarkers = listOfVisibleGateways.map((gatewayID, index) => this.drawSingleMarker(gatewayID))
-      return listOfMarkers
-    }
-    else {
-      return ""
-    }
-  }
-
-  drawGatewayCircles() {
-    return []
-  }
-
-  drawGatewayRadars() {
-    return []
   }
 
   mapMovedEventHandler(event) {
@@ -225,17 +117,10 @@ class _Home extends Component {
           <LayersControl position="topright">
             {this.addBaseTileLayers()}
           </LayersControl>
-          {this.drawMarkersAboveZoom(this.props.mapDetails.visibleGateways) }
+          <GatewayRendering />
         </Map>
       </div>
     )
-  }
-
-  componentDidMount() {
-    if (this.map) {
-      const currentExtent = this.map.leafletElement.getBounds()
-      this.props.fetchNewMapData(currentExtent, {}, Object.keys(this.props.mapDetails.gatewayDetails))
-    }
   }
 }
 
