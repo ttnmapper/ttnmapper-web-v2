@@ -3,9 +3,8 @@ import configureMockStore from 'redux-mock-store'
 import { UPDATE_MAP_POSITION, mapConstants } from '../../constants'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
-import { batchDispatchMiddleware} from 'redux-batched-actions';
 
-const middlewares = [batchDispatchMiddleware, thunk]
+const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 const headers = { 'content-type': 'application/json' }
