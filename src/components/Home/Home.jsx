@@ -46,7 +46,12 @@ class _Home extends Component {
 
     if (this.map) {
       const currentExtent = this.map.leafletElement.getBounds()
-      this.props.fetchNewMapData(currentExtent, {}, Object.keys(this.props.mapDetails.gatewayDetails))
+      const currentZoom = newCoords.zoom
+      this.props.fetchNewMapData(currentExtent,
+        currentZoom,
+        Object.keys(this.props.mapDetails.gatewayDetails),
+        Object.keys(this.props.mapDetails.gatewayCircleCover),
+        Object.keys(this.props.mapDetails.gatewayRadarCover))
     }
   }
 
@@ -132,7 +137,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateMapPosition: (newPosition) => dispatch(updateMapPosition(newPosition)),
-  fetchNewMapData: (mapExtent, _, knownGateways) => dispatch(fetchNewMapData(mapExtent, {}, knownGateways))
+  fetchNewMapData: (mapExtent, zoomLevel,  knownGateways, knownCircles, knownRadar) => dispatch(fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar))
 })
 
 const Home = connect(mapStateToProps, mapDispatchToProps)(_Home)

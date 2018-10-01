@@ -1,4 +1,4 @@
-import { getApplication, getDevices } from './api-calls'
+import { getApplication, getDevices } from '../api-calls'
 import { REQUEST_APPLICATIONS, RECEIVE_APPLICATIONS, RECEIVE_APPLICATIONS_FAILED, REQUEST_DEVICES, RECEIVE_DEVICES, RECEIVE_DEVICES_FAILED } from '../constants'
 
 // Update all the devices of a specific app

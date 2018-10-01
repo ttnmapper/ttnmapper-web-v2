@@ -23,8 +23,43 @@ export function gatewayDetails(state, action) {
   }
 
   switch (action.type) {
+    // We might need to make a new entry in the list
     case mapConstants.RECEIVE_GATEWAY_DETAILS:
-      return Object.assign({}, state, {[action.gatewayID]: action.gatewayDetails})
+      return Object.assign({}, state, {
+        [action.payload.gatewayID]: action.payload.gatewayDetails
+      })
+    default:
+      return state;
+  }
+}
+
+export function gatewayCircleCover(state, action) {
+  if (typeof state == 'undefined') {
+		return {}
+  }
+
+  switch (action.type) {
+    // We might need to make a new entry in the list
+    case mapConstants.RECEIVE_MAP_GW_CIRCLES:
+      return Object.assign({}, state, {
+        [action.payload.gatewayID]: action.payload.circleCover
+      })
+    default:
+      return state;
+  }
+}
+
+export function gatewayRadarCover(state, action) {
+  if (typeof state == 'undefined') {
+		return {}
+  }
+
+  switch (action.type) {
+    // We might need to make a new entry in the list
+    case mapConstants.RECEIVE_MAP_GW_RADAR:
+      return Object.assign({}, state, {
+        [action.payload.gatewayID]: action.payload.radarCover
+      })
     default:
       return state;
   }
@@ -38,7 +73,7 @@ export function visibleGateways(state, action) {
   switch (action.type) {
     case mapConstants.RECEIVE_MAP_GATEWAYS:
       // Update the list of current gateways
-      return action.listOfGateways
+      return action.payload.listOfGateways
     default:
       return state;
   }
@@ -47,5 +82,7 @@ export function visibleGateways(state, action) {
 export const mapDetails = combineReducers({
   currentPosition: currentPosition,
   gatewayDetails: gatewayDetails,
-  visibleGateways: visibleGateways
+  visibleGateways: visibleGateways,
+  gatewayCircleCover: gatewayCircleCover,
+  gatewayRadarCover: gatewayRadarCover
 })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Popup, Marker } from 'react-leaflet'
+import { Popup, Marker, GeoJSON } from 'react-leaflet'
 
 import { fetchNewMapData } from '../../../actions/map-events'
 
@@ -113,6 +113,31 @@ class _GatewayRendering extends Component {
     }
   }
 
+  drawRadarCoverAboveZoom(listOfVisibleGateways) {
+    if (this.props.mapDetails.currentPosition.zoom <= 10) {
+      return ""
+    }
+    const radarStyle = {
+      stroke: false,
+      fillOpacity: 0.25,
+      fillColor: "#0000FF",
+      zIndex: 25
+    }
+
+    if (listOfVisibleGateways) {
+      const listOfRadarCover = listOfVisibleGateways.map((gatewayID, index) => {
+        if (gatewayID in this.props.mapDetails.gatewayRadarCover) {
+          return <GeoJSON data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle}/>
+        }
+        else {
+          return ""
+        }
+      })
+      return listOfRadarCover
+    }
+    return ""
+  }
+
   drawGatewayCircles() {
     return []
   }
@@ -124,6 +149,7 @@ class _GatewayRendering extends Component {
   render() {
     return ( <div>
       { this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails)) }
+      { this.drawRadarCoverAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
       </div>)
   }
 
