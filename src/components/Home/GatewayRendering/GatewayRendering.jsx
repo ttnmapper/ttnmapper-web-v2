@@ -104,6 +104,7 @@ class _GatewayRendering extends Component {
    * the map component
    */
   drawMarkersAboveZoom(listOfVisibleGateways) {
+
     if (listOfVisibleGateways) {
       const listOfMarkers = listOfVisibleGateways.map((gatewayID, index) => this.drawSingleMarker(gatewayID))
       return listOfMarkers
@@ -113,8 +114,8 @@ class _GatewayRendering extends Component {
     }
   }
 
-  drawRadarCoverAboveZoom(listOfVisibleGateways) {
-    if (this.props.mapDetails.currentPosition.zoom <= 10) {
+  drawGatewayRadars(listOfVisibleGateways) {
+    if (this.props.mapDetails.currentPosition.zoom < 10) {
       return ""
     }
     const radarStyle = {
@@ -123,11 +124,11 @@ class _GatewayRendering extends Component {
       fillColor: "#0000FF",
       zIndex: 25
     }
-
     if (listOfVisibleGateways) {
       const listOfRadarCover = listOfVisibleGateways.map((gatewayID, index) => {
         if (gatewayID in this.props.mapDetails.gatewayRadarCover) {
-          return <GeoJSON data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle}/>
+
+          return <GeoJSON key={"radar_cover_"+gatewayID} data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle}/>
         }
         else {
           return ""
@@ -138,18 +139,45 @@ class _GatewayRendering extends Component {
     return ""
   }
 
-  drawGatewayCircles() {
-    return []
+  pointToLayer(feature, latlng){
+    return L.circle(latlng, feature.properties.radius, {
+      stroke: false,
+      color: feature.style.color,
+      fillColor: feature.style.color,
+      fillOpacity: 0.25
+    })
   }
 
-  drawGatewayRadars() {
-    return []
+  drawGatewayCircles(listOfVisibleGateways) {
+    if (this.props.mapDetails.currentPosition.zoom >= 10) {
+      return ""
+    }
+    const circleStyle = {
+      stroke: false,
+      fillOpacity: 0.25,
+      fillColor: "#0000FF",
+      zIndex: 25
+    }
+
+    if (listOfVisibleGateways) {
+      const listOfCircles = listOfVisibleGateways.map((gatewayID, index) => {
+        if (gatewayID in this.props.mapDetails.gatewayCircleCover) {
+          return <GeoJSON key={"circle_cover_"+gatewayID} data={this.props.mapDetails.gatewayCircleCover[gatewayID]} pointToLayer={this.pointToLayer.bind(this)}/>
+        }
+        else {
+          return ""
+        }
+      })
+      return listOfCircles
+    }
+    return ""
   }
 
   render() {
     return ( <div>
       { this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails)) }
-      { this.drawRadarCoverAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
+      { this.drawGatewayRadars(Object.keys(this.props.mapDetails.gatewayDetails))}
+      { this.drawGatewayCircles(Object.keys(this.props.mapDetails.gatewayDetails))}
       </div>)
   }
 

@@ -25,9 +25,7 @@ export function gatewayDetails(state, action) {
   switch (action.type) {
     // We might need to make a new entry in the list
     case mapConstants.RECEIVE_GATEWAY_DETAILS:
-      return Object.assign({}, state, {
-        [action.payload.gatewayID]: action.payload.gatewayDetails
-      })
+      return Object.assign({}, state, action.payload.listOfGateways)
     default:
       return state;
   }
@@ -41,9 +39,7 @@ export function gatewayCircleCover(state, action) {
   switch (action.type) {
     // We might need to make a new entry in the list
     case mapConstants.RECEIVE_MAP_GW_CIRCLES:
-      return Object.assign({}, state, {
-        [action.payload.gatewayID]: action.payload.circleCover
-      })
+      return Object.assign({}, state, action.payload.listOfGateways)
     default:
       return state;
   }
@@ -57,9 +53,7 @@ export function gatewayRadarCover(state, action) {
   switch (action.type) {
     // We might need to make a new entry in the list
     case mapConstants.RECEIVE_MAP_GW_RADAR:
-      return Object.assign({}, state, {
-        [action.payload.gatewayID]: action.payload.radarCover
-      })
+      return Object.assign({}, state, action.payload.listOfGateways)
     default:
       return state;
   }
