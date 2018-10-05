@@ -17,27 +17,27 @@ L.Icon.Default.mergeOptions({
 
 const gwMarkerIconRoundBlue = L.icon({
   iconUrl: require("./images/gateway_dot.png"),
-  iconSize:     [20, 20], // size of the icon
-  iconAnchor:   [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor:  [10, 10] // point from which the popup should open relative to the iconAnchor
+  iconSize: [20, 20], // size of the icon
+  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
+  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
 });
 const gwMarkerIconRoundGreen = L.icon({
   iconUrl: require("./images/gateway_dot_green.png"),
-  iconSize:     [20, 20], // size of the icon
-  iconAnchor:   [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor:  [10, 10] // point from which the popup should open relative to the iconAnchor
+  iconSize: [20, 20], // size of the icon
+  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
+  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
 });
 const gwMarkerIconRoundRed = L.icon({
   iconUrl: require("./images/gateway_dot_red.png"),
-  iconSize:     [20, 20], // size of the icon
-  iconAnchor:   [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor:  [10, 10] // point from which the popup should open relative to the iconAnchor
+  iconSize: [20, 20], // size of the icon
+  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
+  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
 });
 const gwMarkerIconRoundYellow = L.icon({
   iconUrl: require("./images/gateway_dot_yellow.png"),
-  iconSize:     [20, 20], // size of the icon
-  iconAnchor:   [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor:  [10, 10] // point from which the popup should open relative to the iconAnchor
+  iconSize: [20, 20], // size of the icon
+  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
+  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
 });
 
 class _GatewayRendering extends Component {
@@ -58,7 +58,7 @@ class _GatewayRendering extends Component {
   }
 
   drawSingleMarker(gatewayID) {
-    if (gatewayID in this.props.mapDetails.gatewayDetails ) {
+    if (gatewayID in this.props.mapDetails.gatewayDetails) {
       const details = this.props.mapDetails.gatewayDetails[gatewayID]
       let optionalSection = ""
       let icon = gwMarkerIconRoundBlue
@@ -81,7 +81,7 @@ class _GatewayRendering extends Component {
             <br />
           </div>
         )
-        icon=gwMarkerIconRoundYellow
+        icon = gwMarkerIconRoundYellow
       }
 
       return (
@@ -89,7 +89,7 @@ class _GatewayRendering extends Component {
           <Popup>
             <b>{('description' in details ? details.description : details.gwaddr)}</b>
             <br />
-            { details.gwaddr }
+            {details.gwaddr}
             <br />
             {optionalSection}
             <br />Last heard at {details.last_heard}
@@ -97,9 +97,9 @@ class _GatewayRendering extends Component {
             <br />Show only this gateway's coverage as:
             <br />
             <ul>
-              <li><a href="#" onClick={this.props.setSingleGateway(gatewayID,'radar')}>radar</a></li>
-              <li><a href="#" onClick={this.props.setSingleGateway(gatewayID, 'alpha')}>alpha</a></li>
-              <li><a href="#" onClick={this.props.clearSingleGateway()}>clear</a></li>
+              <li><a href="#" onClick={this.props.setSingleGateway.bind(this, gatewayID, 'radar')}>radar</a></li>
+              <li><a href="#" onClick={this.props.setSingleGateway.bind(this, gatewayID, 'alpha')}>alpha</a></li>
+              <li><a href="#" onClick={this.props.clearSingleGateway.bind(this)}>clear</a></li>
             </ul>
           </Popup>
         </Marker>
@@ -143,7 +143,7 @@ class _GatewayRendering extends Component {
       const listOfRadarCover = listOfVisibleGateways.map((gatewayID, index) => {
         if (gatewayID in this.props.mapDetails.gatewayRadarCover) {
 
-          return <GeoJSON key={"radar_cover_"+gatewayID} data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle}/>
+          return <GeoJSON key={"radar_cover_" + gatewayID} data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle} />
         }
         else {
           return ""
@@ -154,7 +154,7 @@ class _GatewayRendering extends Component {
     return ""
   }
 
-  pointToLayer(feature, latlng){
+  pointToLayer(feature, latlng) {
     return L.circle(latlng, feature.properties.radius, {
       stroke: false,
       color: feature.style.color,
@@ -177,7 +177,7 @@ class _GatewayRendering extends Component {
     if (listOfVisibleGateways) {
       const listOfCircles = listOfVisibleGateways.map((gatewayID, index) => {
         if (gatewayID in this.props.mapDetails.gatewayCircleCover) {
-          return <GeoJSON key={"circle_cover_"+gatewayID} data={this.props.mapDetails.gatewayCircleCover[gatewayID]} pointToLayer={this.pointToLayer.bind(this)}/>
+          return <GeoJSON key={"circle_cover_" + gatewayID} data={this.props.mapDetails.gatewayCircleCover[gatewayID]} pointToLayer={this.pointToLayer.bind(this)} />
         }
         else {
           return ""
@@ -189,11 +189,28 @@ class _GatewayRendering extends Component {
   }
 
   render() {
-    return ( <div>
-      { this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails)) }
-      { this.drawGatewayRadars(Object.keys(this.props.mapDetails.gatewayDetails))}
-      { this.drawGatewayCircles(Object.keys(this.props.mapDetails.gatewayDetails))}
-      </div>)
+    if (this.props.mapDetails.renderSingle) {
+      // We only need to render a single gateway
+      if (this.props.mapDetails.renderSingle.mode === 'radar') {
+        return (<div>
+          {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
+          {this.drawGatewayRadars([this.props.mapDetails.renderSingle.gatewayID])}
+        </div>
+        )
+      }
+      else if (this.props.mapDetails.renderSingle.mode === 'alpha') {
+        return (<div>
+          {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
+          {this.drawGatewayCircles([this.props.mapDetails.renderSingle.gatewayID])}
+        </div>
+        )
+      }
+    }
+    return (<div>
+      {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails)) }
+      {this.drawGatewayRadars(Object.keys(this.props.mapDetails.gatewayDetails))}
+      {this.drawGatewayCircles(Object.keys(this.props.mapDetails.gatewayDetails))}
+    </div>)
   }
 
   componentDidMount() {
@@ -212,7 +229,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchNewMapData: (mapExtent, _, knownGateways) => dispatch(fetchNewMapData(mapExtent, {}, knownGateways)),
-  setSingleGateway: (gatewayId, mode) => dispatch(setSingleGateway(gatewayId, mode)),
+  setSingleGateway: (gatewayID, mode) => dispatch(setSingleGateway(gatewayID, mode)),
   clearSingleGateway: () => dispatch(clearSingleGateway()),
 })
 

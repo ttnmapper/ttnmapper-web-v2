@@ -79,7 +79,7 @@ function renderSingle(state, action) {
   }
   switch (action.type) {
     case mapConstants.SET_SINGLE_GATEWAY:
-      return {gatewayId: action.payload.gatewayId, mode: action.payload.mode}
+      return {gatewayID: action.payload.gatewayID, mode: action.payload.mode}
     case mapConstants.CLEAR_SINGLE_GATEWAY:
       return null;
     default:

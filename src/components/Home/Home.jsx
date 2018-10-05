@@ -6,6 +6,7 @@ const { BaseLayer } = LayersControl
 import { parseCoordsFromQuery } from './query-utils'
 import { updateMapPosition, fetchNewMapData } from '../../actions/map-events'
 import GatewayRendering from './GatewayRendering/GatewayRendering'
+import AlertPopup from '../AlertPopup'
 
 import 'leaflet/dist/leaflet.css';
 import './home.css'

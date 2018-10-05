@@ -42,14 +42,14 @@ export function fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircle
 
 /**
  * Set the display mode to only show a single gateway cover
- * @param {*} gatewayId
+ * @param {*} gatewayID
  * @param {*} mode 'radar', 'colorradar', 'alpha', 'heatmap'
  */
-export function setSingleGateway(gatewayId, mode) {
+export function setSingleGateway(gatewayID, mode) {
   return {
     type: mapConstants.SET_SINGLE_GATEWAY,
     payload: {
-      gatewayId: gatewayId,
+      gatewayID: gatewayID,
       mode: mode
     }
   }
