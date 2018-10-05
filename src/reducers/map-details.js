@@ -73,10 +73,25 @@ export function visibleGateways(state, action) {
   }
 }
 
+function renderSingle(state, action) {
+  if (typeof state == 'undefined') {
+		return []
+  }
+  switch (action.type) {
+    case mapConstants.SET_SINGLE_GATEWAY:
+      return {gatewayId: action.payload.gatewayId, mode: action.payload.mode}
+    case mapConstants.CLEAR_SINGLE_GATEWAY:
+      return null;
+    default:
+      return state;
+  }
+}
+
 export const mapDetails = combineReducers({
   currentPosition: currentPosition,
   gatewayDetails: gatewayDetails,
   visibleGateways: visibleGateways,
   gatewayCircleCover: gatewayCircleCover,
-  gatewayRadarCover: gatewayRadarCover
+  gatewayRadarCover: gatewayRadarCover,
+  renderSingle: renderSingle
 })

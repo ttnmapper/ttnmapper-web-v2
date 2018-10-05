@@ -8,9 +8,9 @@ import qs from 'query-string';
  * When the map is moved we need to store the new position, and update the url bar.
  * @param {Object} newPosition
 */
-export function updateMapPosition(newPosition) {
+export function updateMapPosition(newPosition, otherParams) {
   //This will need changing if we get more arguments, such as mode/selected gateway/layer
-  const searchString = qs.stringify(newPosition);
+  const searchString = qs.stringify(newPosition) + qs.stringify(otherParams);
 
   return dispatch => {
     // Store the new position in the state
@@ -36,5 +36,28 @@ export function fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircle
       knownCircles: knownCircles,
       knownRadar: knownRadar
     }
+  }
+}
+
+
+/**
+ * Set the display mode to only show a single gateway cover
+ * @param {*} gatewayId
+ * @param {*} mode 'radar', 'colorradar', 'alpha', 'heatmap'
+ */
+export function setSingleGateway(gatewayId, mode) {
+  return {
+    type: mapConstants.SET_SINGLE_GATEWAY,
+    payload: {
+      gatewayId: gatewayId,
+      mode: mode
+    }
+  }
+}
+
+export function clearSingleGateway(){
+  return {
+    type: mapConstants.CLEAR_SINGLE_GATEWAY,
+
   }
 }

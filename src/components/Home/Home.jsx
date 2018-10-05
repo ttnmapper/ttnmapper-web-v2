@@ -42,7 +42,7 @@ class _Home extends Component {
       long: coordsFromMap.lng,
       zoom: event.target.getZoom()
     }
-    this.props.updateMapPosition(newCoords)
+    this.props.updateMapPosition(newCoords, {other: "abcdef"})
 
     if (this.map) {
       const currentExtent = this.map.leafletElement.getBounds()

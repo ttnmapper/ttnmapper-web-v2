@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Popup, Marker, GeoJSON } from 'react-leaflet'
 
-import { fetchNewMapData } from '../../../actions/map-events'
+import { parseCoordsFromQuery } from '../query-utils'
+import { fetchNewMapData, setSingleGateway, clearSingleGateway } from '../../../actions/map-events'
 
 // Workaround for leaflet css?
 import L from 'leaflet';
@@ -44,11 +45,20 @@ class _GatewayRendering extends Component {
   constructor(props) {
     super(props)
 
+    this.singleGateway = null
+    if ('location' in props) {
+      const singleGateway = parseCoordsFromQuery(props.location.search)
+      console.log("Single gateway mode!")
+      console.log(singleGateway)
 
+      if (singleGateway.gateway !== null && singleGateway.type !== null) {
+        this.singleGateway = singleGateway
+      }
+    }
   }
 
   drawSingleMarker(gatewayID) {
-    if (gatewayID in this.props.mapDetails.gatewayDetails) {
+    if (gatewayID in this.props.mapDetails.gatewayDetails ) {
       const details = this.props.mapDetails.gatewayDetails[gatewayID]
       let optionalSection = ""
       let icon = gwMarkerIconRoundBlue
@@ -87,8 +97,9 @@ class _GatewayRendering extends Component {
             <br />Show only this gateway's coverage as:
             <br />
             <ul>
-              <li><a href="#">radar</a></li>
-              <li><a href="#">alpha shape</a></li>
+              <li><a href="#" onClick={this.props.setSingleGateway(gatewayID,'radar')}>radar</a></li>
+              <li><a href="#" onClick={this.props.setSingleGateway(gatewayID, 'alpha')}>alpha</a></li>
+              <li><a href="#" onClick={this.props.clearSingleGateway()}>clear</a></li>
             </ul>
           </Popup>
         </Marker>
@@ -106,8 +117,12 @@ class _GatewayRendering extends Component {
   drawMarkersAboveZoom(listOfVisibleGateways) {
 
     if (listOfVisibleGateways) {
-      const listOfMarkers = listOfVisibleGateways.map((gatewayID, index) => this.drawSingleMarker(gatewayID))
-      return listOfMarkers
+      if (this.singleGateway && this.singleGateway.hideothers === true) {
+        return this.drawSingleMarker(this.singleGateway.gateway)
+      } else {
+        const listOfMarkers = listOfVisibleGateways.map((gatewayID, index) => this.drawSingleMarker(gatewayID))
+        return listOfMarkers
+      }
     }
     else {
       return ""
@@ -196,7 +211,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchNewMapData: (mapExtent, _, knownGateways) => dispatch(fetchNewMapData(mapExtent, {}, knownGateways))
+  fetchNewMapData: (mapExtent, _, knownGateways) => dispatch(fetchNewMapData(mapExtent, {}, knownGateways)),
+  setSingleGateway: (gatewayId, mode) => dispatch(setSingleGateway(gatewayId, mode)),
+  clearSingleGateway: () => dispatch(clearSingleGateway()),
 })
 
 const GatewayRendering = connect(mapStateToProps, mapDispatchToProps)(_GatewayRendering)
