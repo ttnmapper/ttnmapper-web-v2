@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Popup, Marker, GeoJSON } from 'react-leaflet'
 
 import { parseCoordsFromQuery } from '../query-utils'
-import { fetchNewMapData, setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
+import { setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
 
 // Workaround for leaflet css?
 import L from 'leaflet';
@@ -110,12 +110,12 @@ class _GatewayRendering extends Component {
   }
 
   /**
-   * Above zoomThreshold1 only draw the markers of all gateways in view.
+   * Draw the markers. This assues the zoom level checking was already done
    *
    * This function returns a list of <Marker> components, that can be inserted into
    * the map component
    */
-  drawMarkersAboveZoom(listOfVisibleGateways) {
+  drawMarkers(listOfVisibleGateways) {
 
     if (listOfVisibleGateways) {
       if (this.singleGateway && this.singleGateway.hideothers === true) {
@@ -130,6 +130,9 @@ class _GatewayRendering extends Component {
     }
   }
 
+  /**
+   * Helper function for gateway circles
+   */
   pointToLayer(feature, latlng) {
     return L.circle(latlng, feature.properties.radius, {
       stroke: false,
@@ -139,35 +142,30 @@ class _GatewayRendering extends Component {
     })
   }
 
+  /**
+   * Draw rough coverage circles, for use with quite large zoom levels. Zoom level check done somewhere else.
+   *
+   * This function returns a list of <GeoJSON> components, that can be inserted into
+   * the map component
+   */
   drawGatewayCircles(listOfVisibleGateways) {
-    if (this.props.mapDetails.currentPosition.zoom >= 10) {
-      return ""
-    }
-    const circleStyle = {
-      stroke: false,
-      fillOpacity: 0.25,
-      fillColor: "#0000FF",
-      zIndex: 25
-    }
-
     if (listOfVisibleGateways) {
       const listOfCircles = listOfVisibleGateways.map((gatewayID, index) => {
         if (gatewayID in this.props.mapDetails.gatewayCircleCover) {
           return <GeoJSON key={"circle_cover_" + gatewayID} data={this.props.mapDetails.gatewayCircleCover[gatewayID]} pointToLayer={this.pointToLayer.bind(this)} />
         }
-        else {
-          return ""
-        }
       })
       return listOfCircles
     }
-    return ""
   }
 
+  /**
+   * Draw the radars for a list of gateways. Zoom level check done somewhere else.
+   *
+   * This function returns a list of <GeoJSON> components, that can be inserted into
+   * the map component
+   */
   drawGatewayRadars(listOfVisibleGateways) {
-    if (this.props.mapDetails.currentPosition.zoom < 10) {
-      return ""
-    }
     const radarStyle = {
       stroke: false,
       fillOpacity: 0.25,
@@ -180,17 +178,19 @@ class _GatewayRendering extends Component {
 
           return <GeoJSON key={"radar_cover_" + gatewayID} data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle} />
         }
-        else {
-          return ""
-        }
       })
       return listOfRadarCover
     }
-    return ""
   }
 
+  /**
+   * Draw the alpha shape for a list of gateways
+   *
+   * This function returns a list of <GeoJSON> components, that can be inserted into
+   * the map component
+   */
   drawGatewayAlpha(listOfVisibleGateways) {
-    const radarStyle = {
+    const alphaStyle = {
       stroke: false,
       fillOpacity: 0.25,
       fillColor: "#0000FF",
@@ -200,15 +200,11 @@ class _GatewayRendering extends Component {
       const listOfAlphaCover = listOfVisibleGateways.map((gatewayID, index) => {
         if (gatewayID in this.props.mapDetails.gatewayAlphaShapes) {
 
-          return <GeoJSON key={"alpha_cover_" + gatewayID} data={this.props.mapDetails.gatewayAlphaShapes[gatewayID]} />
-        }
-        else {
-          return ""
+          return <GeoJSON key={"alpha_cover_" + gatewayID} data={this.props.mapDetails.gatewayAlphaShapes[gatewayID]} style={alphaStyle} />
         }
       })
       return listOfAlphaCover
     }
-    return ""
   }
 
   render() {
@@ -217,7 +213,7 @@ class _GatewayRendering extends Component {
       const gatewayID = this.props.mapDetails.renderSingle.gatewayID;
       if (this.props.mapDetails.renderSingle.mode === 'radar') {
         return (<div>
-          {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
+          {this.drawMarkers(this.props.mapDetails.visibleGateways)}
           {this.drawGatewayRadars([gatewayID])}
         </div>
         )
@@ -226,7 +222,7 @@ class _GatewayRendering extends Component {
         // Check if we have data
         if (gatewayID in this.props.mapDetails.gatewayAlphaShapes) {
           return (<div>
-            {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
+            {this.drawMarkers(this.props.mapDetails.visibleGateways)}
             {this.drawGatewayAlpha([gatewayID])}
           </div>)
         }
@@ -234,23 +230,17 @@ class _GatewayRendering extends Component {
           // Fire off event to get the data
           this.props.fetchGWAlphaShape(gatewayID)
           return (<div>
-            {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
+            {this.drawMarkers(this.props.mapDetails.visibleGateways)}
             </div>)
         }
       }
     }
+    // No in single mode
     return (<div>
-      {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails)) }
-      {this.drawGatewayRadars(Object.keys(this.props.mapDetails.gatewayDetails))}
-      {this.drawGatewayCircles(Object.keys(this.props.mapDetails.gatewayDetails))}
+      {this.drawMarkers(this.props.mapDetails.visibleGateways)}
+      {this.props.mapDetails.currentPosition.zoom >= 10 && this.drawGatewayRadars(this.props.mapDetails.visibleGateways)}
+      {this.props.mapDetails.currentPosition.zoom < 10 && this.drawGatewayCircles(this.props.mapDetails.visibleGateways)}
     </div>)
-  }
-
-  componentDidMount() {
-    if (this.map) {
-      const currentExtent = this.map.leafletElement.getBounds()
-      this.props.fetchNewMapData(currentExtent, {}, Object.keys(this.props.mapDetails.gatewayDetails))
-    }
   }
 }
 
@@ -261,7 +251,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchNewMapData: (mapExtent, _, knownGateways) => dispatch(fetchNewMapData(mapExtent, {}, knownGateways)),
   setSingleGateway: (gatewayID, mode) => dispatch(setSingleGateway(gatewayID, mode)),
   clearSingleGateway: () => dispatch(clearSingleGateway()),
   fetchGWAlphaShape: (gatewayID) => dispatch(fetchGatewayAlphaShape(gatewayID)),
