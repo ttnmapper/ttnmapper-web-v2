@@ -61,3 +61,16 @@ export function clearSingleGateway(){
 
   }
 }
+
+/**
+ * Fetch the data for a single gateway alpha shape
+ * @param {*} gatewayID
+ */
+export function fetchGatewayAlphaShape(gatewayID) {
+  return {
+    type: mapConstants.REQUEST_MAP_GW_ALPHA,
+    payload: {
+      gatewayID: gatewayID
+    }
+  }
+}

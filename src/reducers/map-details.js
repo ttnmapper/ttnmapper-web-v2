@@ -87,11 +87,26 @@ function renderSingle(state, action) {
   }
 }
 
+function gatewayAlphaShapes(state, action) {
+  if (typeof state == 'undefined') {
+		return {}
+  }
+
+  switch (action.type) {
+    // We might need to make a new entry in the list
+    case mapConstants.RECEIVE_MAP_GW_ALPHA:
+      return Object.assign({}, state, {[action.payload.gatewayID]: action.payload.geoJson})
+    default:
+      return state;
+  }
+}
+
 export const mapDetails = combineReducers({
   currentPosition: currentPosition,
   gatewayDetails: gatewayDetails,
   visibleGateways: visibleGateways,
   gatewayCircleCover: gatewayCircleCover,
   gatewayRadarCover: gatewayRadarCover,
+  gatewayAlphaShapes: gatewayAlphaShapes,
   renderSingle: renderSingle
 })

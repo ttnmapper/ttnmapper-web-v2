@@ -125,6 +125,7 @@ class _Home extends Component {
           </LayersControl>
           <GatewayRendering />
         </Map>
+        <AlertPopup />
       </div>
     )
   }

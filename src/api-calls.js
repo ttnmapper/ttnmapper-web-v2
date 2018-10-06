@@ -62,3 +62,9 @@ export const fetchGWRadarsList = (listOfGateways) => {
     body: JSON.stringify({"gateways": listOfGateways})
   })
 }
+
+export const fetchGWAlphaShape = (gatewayID) => {
+  return fetch(host +"/old_api/geojson/"+gatewayID+"/alphashape.geojson", {
+    method: "GET"
+  })
+}

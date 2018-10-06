@@ -130,6 +130,29 @@ function* requestGatewayRadar(action) {
   }
 }
 
+function* requestGatewayAlpha(action) {
+  try {
+    const response = yield call(Api.fetchGWAlphaShape, action.payload.gatewayID);
+    const json = yield response.json();
+    console.log(json)
+
+    yield put({
+      type: mapConstants.RECEIVE_MAP_GW_ALPHA,
+      payload: {
+        gatewayID: action.payload.gatewayID,
+        geoJson: json
+      }
+    });
+  } catch (e) {
+    yield put({
+      type: mapConstants.RECEIVE_MAP_GW_ALPHA_FAILED,
+      message: e.message,
+      payload: {
+      }
+    });
+  }
+}
+
 
 function* mapDataSagas() {
   // Take only the latest one, in cae two move events occur
@@ -138,6 +161,7 @@ function* mapDataSagas() {
   yield takeEvery(mapConstants.REQUEST_GATEWAY_DETAILS, requestGatewayDetails);
   yield takeEvery(mapConstants.REQUEST_MAP_GW_CIRCLES, requestGatewayCircles);
   yield takeEvery(mapConstants.REQUEST_MAP_GW_RADAR, requestGatewayRadar);
+  yield takeEvery(mapConstants.REQUEST_MAP_GW_ALPHA, requestGatewayAlpha);
 }
 
 export { mapDataSagas };

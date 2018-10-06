@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import { Popup, Marker, GeoJSON } from 'react-leaflet'
 
 import { parseCoordsFromQuery } from '../query-utils'
-import { fetchNewMapData, setSingleGateway, clearSingleGateway } from '../../../actions/map-events'
+import { fetchNewMapData, setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
 
 // Workaround for leaflet css?
 import L from 'leaflet';
+import { fetchGWAlphaShape } from '../../../api-calls';
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -86,7 +87,7 @@ class _GatewayRendering extends Component {
 
       return (
         <Marker position={[details.lat, details.lon]} key={"marker_" + gatewayID} icon={icon}>
-          <Popup>
+          <Popup offset={[-11,0]}>
             <b>{('description' in details ? details.description : details.gwaddr)}</b>
             <br />
             {details.gwaddr}
@@ -129,31 +130,6 @@ class _GatewayRendering extends Component {
     }
   }
 
-  drawGatewayRadars(listOfVisibleGateways) {
-    if (this.props.mapDetails.currentPosition.zoom < 10) {
-      return ""
-    }
-    const radarStyle = {
-      stroke: false,
-      fillOpacity: 0.25,
-      fillColor: "#0000FF",
-      zIndex: 25
-    }
-    if (listOfVisibleGateways) {
-      const listOfRadarCover = listOfVisibleGateways.map((gatewayID, index) => {
-        if (gatewayID in this.props.mapDetails.gatewayRadarCover) {
-
-          return <GeoJSON key={"radar_cover_" + gatewayID} data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle} />
-        }
-        else {
-          return ""
-        }
-      })
-      return listOfRadarCover
-    }
-    return ""
-  }
-
   pointToLayer(feature, latlng) {
     return L.circle(latlng, feature.properties.radius, {
       stroke: false,
@@ -188,22 +164,79 @@ class _GatewayRendering extends Component {
     return ""
   }
 
+  drawGatewayRadars(listOfVisibleGateways) {
+    if (this.props.mapDetails.currentPosition.zoom < 10) {
+      return ""
+    }
+    const radarStyle = {
+      stroke: false,
+      fillOpacity: 0.25,
+      fillColor: "#0000FF",
+      zIndex: 25
+    }
+    if (listOfVisibleGateways) {
+      const listOfRadarCover = listOfVisibleGateways.map((gatewayID, index) => {
+        if (gatewayID in this.props.mapDetails.gatewayRadarCover) {
+
+          return <GeoJSON key={"radar_cover_" + gatewayID} data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle} />
+        }
+        else {
+          return ""
+        }
+      })
+      return listOfRadarCover
+    }
+    return ""
+  }
+
+  drawGatewayAlpha(listOfVisibleGateways) {
+    const radarStyle = {
+      stroke: false,
+      fillOpacity: 0.25,
+      fillColor: "#0000FF",
+      zIndex: 25
+    }
+    if (listOfVisibleGateways) {
+      const listOfAlphaCover = listOfVisibleGateways.map((gatewayID, index) => {
+        if (gatewayID in this.props.mapDetails.gatewayAlphaShapes) {
+
+          return <GeoJSON key={"alpha_cover_" + gatewayID} data={this.props.mapDetails.gatewayAlphaShapes[gatewayID]} />
+        }
+        else {
+          return ""
+        }
+      })
+      return listOfAlphaCover
+    }
+    return ""
+  }
+
   render() {
     if (this.props.mapDetails.renderSingle) {
       // We only need to render a single gateway
+      const gatewayID = this.props.mapDetails.renderSingle.gatewayID;
       if (this.props.mapDetails.renderSingle.mode === 'radar') {
         return (<div>
           {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
-          {this.drawGatewayRadars([this.props.mapDetails.renderSingle.gatewayID])}
+          {this.drawGatewayRadars([gatewayID])}
         </div>
         )
       }
       else if (this.props.mapDetails.renderSingle.mode === 'alpha') {
-        return (<div>
-          {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
-          {this.drawGatewayCircles([this.props.mapDetails.renderSingle.gatewayID])}
-        </div>
-        )
+        // Check if we have data
+        if (gatewayID in this.props.mapDetails.gatewayAlphaShapes) {
+          return (<div>
+            {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
+            {this.drawGatewayAlpha([gatewayID])}
+          </div>)
+        }
+        else {
+          // Fire off event to get the data
+          this.props.fetchGWAlphaShape(gatewayID)
+          return (<div>
+            {this.drawMarkersAboveZoom(Object.keys(this.props.mapDetails.gatewayDetails))}
+            </div>)
+        }
       }
     }
     return (<div>
@@ -231,6 +264,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchNewMapData: (mapExtent, _, knownGateways) => dispatch(fetchNewMapData(mapExtent, {}, knownGateways)),
   setSingleGateway: (gatewayID, mode) => dispatch(setSingleGateway(gatewayID, mode)),
   clearSingleGateway: () => dispatch(clearSingleGateway()),
+  fetchGWAlphaShape: (gatewayID) => dispatch(fetchGatewayAlphaShape(gatewayID)),
 })
 
 const GatewayRendering = connect(mapStateToProps, mapDispatchToProps)(_GatewayRendering)

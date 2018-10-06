@@ -83,3 +83,4 @@ export function fetchApplicationDevices(app_id) {
       .catch(error => dispatch(receiveDevicesFailed(error)))
   }
 }
+
