@@ -14,6 +14,10 @@ body {
 	height:100vh;
 }
 
+.textBlock {
+  padding-top:100px;
+}
+
 .user-tab-centering {
   width: auto;
 }

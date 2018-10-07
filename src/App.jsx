@@ -6,7 +6,7 @@ import { Route, Switch } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router'
 
 // Our JS files
-import { About, User, Home, HeaderBar, LeaderBoard } from './components'
+import { About, User, Home, HeaderBar, LeaderBoard, LoggedIn, FourOFour } from './components'
 import { store, history } from './helpers/store'
 
 //Required CSS files
@@ -31,8 +31,9 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
               <Route path="/leaderboard" component={LeaderBoard} />
-              <Route path="/user" component={User}>
-              </Route>
+              <Route path="/user" component={User} />
+              <Route path="/loggedin" component={LoggedIn} />
+              <Route component={FourOFour} />
             </Switch>
           </div>
         </ConnectedRouter>

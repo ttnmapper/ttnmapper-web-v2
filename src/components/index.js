@@ -4,6 +4,8 @@ export { default as Home }  from './Home/Home';
 export { default as User } from './User/User';
 export { default as LeaderBoard } from './LeaderBoard/LeaderBoard';
 export { default as AlertPopup } from './AlertPopup';
+export { default as Loggedin } from './LoggedIn/LoggedIn';
+export { default as FourOFour } from './FourOFour/FourOFour';
 
 // // These are under /Devices
 export { default as Devices } from './Devices/Devices'

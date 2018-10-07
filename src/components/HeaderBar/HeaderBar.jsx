@@ -9,6 +9,12 @@ import mainLogo from './logo.png';
 
 class _HeaderBar extends Component {
 
+  nonMapStyle = {
+    position: 'fixed',
+    top: '0px',
+    width:'100%',
+  }
+
   renderBrand() {
     return (
       <nav id="navbar-brand">
@@ -86,8 +92,14 @@ class _HeaderBar extends Component {
         <span className="navbar-toggler-icon"></span>
       </button>)
 
+    let style = {}
+    if (this.props.router.location.pathname !== '/' ) {
+      console.log("Non-router sttyle!")
+      style = this.nonMapStyle
+    }
+
     return (
-      <nav id="navbar" className="navbar navbar-expand-sm ">
+      <nav id="navbar" className="navbar navbar-expand-sm " style={style}>
         {navbarBrand}
         {navbarButton}
         {navbarNavigation}
@@ -107,6 +119,7 @@ class _HeaderBar extends Component {
 
 
 const mapStateToProps = state => ({
+  router: state.router,
   userState: state.userData.userState,
   currentRoute: state.router.location.pathname,
 })

@@ -6,7 +6,7 @@ import mapperImage from './mapper_1.png';
 class _About extends Component {
   render() {
     return (
-      <div className="container">
+      <div className="container textBlock">
         <div className="col" />
         <div className="col-8" >
           <div className="row header-row">
