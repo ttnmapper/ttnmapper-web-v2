@@ -6,6 +6,7 @@ import './headerbar.css'
 
 import unknownUser from './unknownUser.png';
 import mainLogo from './logo.png';
+import { getTTNLoginLink } from '../../api-calls'
 
 class _HeaderBar extends Component {
 
@@ -78,7 +79,7 @@ class _HeaderBar extends Component {
     else {
       return (
         <li id="user-nav-item" key="loginlink" className="nav-item">
-          <NavLink className="nav-link navbar-highlight" to="/login">Login</NavLink>
+          <a className="nav-link navbar-highlight" href={ getTTNLoginLink() }>{this.props.userState.loggedIn ? "Logout": "Login"}</a>
         </li>
       )
     }

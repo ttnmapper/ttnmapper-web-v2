@@ -9,6 +9,7 @@ var request = require('sync-request');
 module.exports = merge(common, {
   devServer: {
     inline: true,
+    port: 8010,
     contentBase: path.join(__dirname, 'static'),
     publicPath: "",
     historyApiFallback: true,
@@ -19,6 +20,11 @@ module.exports = merge(common, {
       '/old_api': {
         target: 'https://ttnmapper.org',
         pathRewrite: {'^/old_api' : ''},
+        changeOrigin: true,
+        secure: false,
+      },
+      '/api/v1' : {
+        target: 'localhost:6000',
         changeOrigin: true,
         secure: false,
       }

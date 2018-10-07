@@ -1,4 +1,4 @@
-const host = 'http://localhost:8080'
+const host = 'http://localhost:8010'
 
 export const getApplication = () => {
   return host + "/api/v1/application/"
@@ -67,4 +67,8 @@ export const fetchGWAlphaShape = (gatewayID) => {
   return fetch(host +"/old_api/geojson/"+gatewayID+"/alphashape.geojson", {
     method: "GET"
   })
+}
+
+export const getTTNLoginLink = () => {
+  return 'http://127.0.0.1:8011/loginProvider/login?state=1&response_type=code&client_id=ttn-mapper&redirect_uri=http://localhost:8010/loggedin'
 }
