@@ -55,6 +55,16 @@ export function setSingleGateway(gatewayID, mode) {
   }
 }
 
+export function addSingleGateway(gatewayID, mode) {
+  return {
+    type: mapConstants.ADD_SINGLE_GATEWAY,
+    payload: {
+      gatewayID: gatewayID,
+      mode: mode
+    }
+  }
+}
+
 export function clearSingleGateway(){
   return {
     type: mapConstants.CLEAR_SINGLE_GATEWAY,

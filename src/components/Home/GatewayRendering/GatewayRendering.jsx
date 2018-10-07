@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Popup, Marker, GeoJSON } from 'react-leaflet'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { parseCoordsFromQuery } from '../query-utils'
-import { setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
+import { addSingleGateway, setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
 
 // Workaround for leaflet css?
 import L from 'leaflet';
-import { fetchGWAlphaShape } from '../../../api-calls';
 delete L.Icon.Default.prototype._getIconUrl;
+
+import 'react-leaflet-markercluster/dist/styles.min.css'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -58,6 +60,17 @@ class _GatewayRendering extends Component {
     }
   }
 
+  setSingleGateway(gatewayID, mode, event) {
+    if (event.shiftKey) {
+      this.props.addSingleGateway(gatewayID, mode)
+    }
+    else {
+      this.props.setSingleGateway(gatewayID, mode)
+    }
+    event.preventDefault()
+  }
+
+
   drawSingleMarker(gatewayID) {
     if (gatewayID in this.props.mapDetails.gatewayDetails) {
       const details = this.props.mapDetails.gatewayDetails[gatewayID]
@@ -98,8 +111,8 @@ class _GatewayRendering extends Component {
             <br />Show only this gateway's coverage as:
             <br />
             <ul>
-              <li><a href="#" onClick={this.props.setSingleGateway.bind(this, gatewayID, 'radar')}>radar</a></li>
-              <li><a href="#" onClick={this.props.setSingleGateway.bind(this, gatewayID, 'alpha')}>alpha</a></li>
+              <li><a href="#" onClick={this.setSingleGateway.bind(this,gatewayID, 'radar')}>radar</a></li>
+              <li><a href="#" onClick={this.setSingleGateway.bind(this,gatewayID, 'alpha')}>alpha</a></li>
               <li><a href="#" onClick={this.props.clearSingleGateway.bind(this)}>clear</a></li>
             </ul>
           </Popup>
@@ -122,7 +135,15 @@ class _GatewayRendering extends Component {
         return this.drawSingleMarker(this.singleGateway.gateway)
       } else {
         const listOfMarkers = listOfVisibleGateways.map((gatewayID, index) => this.drawSingleMarker(gatewayID))
-        return listOfMarkers
+        if (this.props.mapDetails.currentPosition.zoom < 9) {
+        return (
+          <MarkerClusterGroup showCoverageOnHover={false}>
+            { listOfMarkers }
+          </MarkerClusterGroup>)
+        }
+        else {
+          return listOfMarkers
+        }
       }
     }
     else {
@@ -193,7 +214,7 @@ class _GatewayRendering extends Component {
     const alphaStyle = {
       stroke: false,
       fillOpacity: 0.25,
-      fillColor: "#0000FF",
+      fillColor: "#37d699",
       zIndex: 25
     }
     if (listOfVisibleGateways) {
@@ -207,33 +228,40 @@ class _GatewayRendering extends Component {
     }
   }
 
-  render() {
-    if (this.props.mapDetails.renderSingle) {
-      // We only need to render a single gateway
-      const gatewayID = this.props.mapDetails.renderSingle.gatewayID;
-      if (this.props.mapDetails.renderSingle.mode === 'radar') {
-        return (<div>
+  drawSingleMode(gatewayID, mode) {
+    if (mode === 'radar') {
+      return (<div key={'single_gw_' + gatewayID}>
+        {this.drawMarkers(this.props.mapDetails.visibleGateways)}
+        {this.drawGatewayRadars([gatewayID])}
+      </div>
+      )
+    }
+    else if (mode === 'alpha') {
+      // Check if we have data
+      if (gatewayID in this.props.mapDetails.gatewayAlphaShapes) {
+        return (<div key={'single_gw_' + gatewayID}>
           {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-          {this.drawGatewayRadars([gatewayID])}
-        </div>
-        )
+          {this.drawGatewayAlpha([gatewayID])}
+        </div>)
       }
-      else if (this.props.mapDetails.renderSingle.mode === 'alpha') {
-        // Check if we have data
-        if (gatewayID in this.props.mapDetails.gatewayAlphaShapes) {
-          return (<div>
-            {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-            {this.drawGatewayAlpha([gatewayID])}
+      else {
+        // Fire off event to get the data
+        this.props.fetchGWAlphaShape(gatewayID)
+        return (<div key={'single_gw_' + gatewayID}>
+          {this.drawMarkers(this.props.mapDetails.visibleGateways)}
           </div>)
-        }
-        else {
-          // Fire off event to get the data
-          this.props.fetchGWAlphaShape(gatewayID)
-          return (<div>
-            {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-            </div>)
-        }
       }
+    }
+  }
+
+  render() {
+    if (this.props.mapDetails.renderSingle.length > 0) {
+      // We only need to render a single gateway
+      const singleGateways = this.props.mapDetails.renderSingle.map((currElement, index) => {
+        return this.drawSingleMode(currElement.gatewayID, currElement.mode)
+      })
+      return (singleGateways)
+
     }
     // No in single mode
     return (<div>
@@ -251,6 +279,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
+  addSingleGateway: (gatewayID, mode) => dispatch(addSingleGateway(gatewayID, mode)),
   setSingleGateway: (gatewayID, mode) => dispatch(setSingleGateway(gatewayID, mode)),
   clearSingleGateway: () => dispatch(clearSingleGateway()),
   fetchGWAlphaShape: (gatewayID) => dispatch(fetchGatewayAlphaShape(gatewayID)),
