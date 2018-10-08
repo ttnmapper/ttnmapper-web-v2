@@ -1,17 +1,44 @@
 import {combineReducers} from 'redux'
-import { USER_LOGGED_IN, USER_LOGGED_OUT} from '../constants'
+import { loginConstants} from '../constants'
 
-export function userState(state, action) {
-	if (state in window) {
-		return { 'loggedIn' : false}
-	}
-	if (action.type === USER_LOGGED_IN) {
-		return Object.assign({}, state, { 'loggedIn' : true})
-	}
-	else if (action.type === USER_LOGGED_OUT) {
-		return Object.assign({}, state, { 'loggedIn' : false})
-	}
-	else {
-		return state
-	}
+function tokens(state, action) {
+  if (typeof state == 'undefined') {
+    return { 'mToken': "" }
+  }
+
+  switch (action.type) {
+    case loginConstants.RECEIVE_TOKENS:
+      return  { 'mToken': action.payload.mToken }
+    case loginConstants.RECEIVE_TOKENS_FAILURE:
+      return { 'mToken': "" }
+    case loginConstants.LOGOUT:
+      return { 'mToken': "" }
+    default:
+      return state
+  }
 }
+
+function loggedIn(state, action) {
+	if (typeof state == 'undefined') {
+    return false
+  }
+
+	switch (action.type) {
+    case loginConstants.RECEIVE_TOKENS:
+      return true
+    case loginConstants.RECEIVE_TOKENS_FAILURE:
+      return false
+    case loginConstants.LOGOUT:
+      return true
+    default:
+      return state
+  }
+
+}
+
+
+export const userState = combineReducers({
+  loggedIn: loggedIn,
+  tokens: tokens,
+  userName: 'Tony'
+})

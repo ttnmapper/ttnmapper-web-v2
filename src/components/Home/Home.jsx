@@ -131,7 +131,7 @@ class _Home extends Component {
   }
 
   componentDidMount() {
-    
+
     if (this.map) {
       const currentExtent = this.map.leafletElement.getBounds()
       this.props.fetchNewMapData(currentExtent, this.copiedCoords.zoom, Object.keys(this.props.mapDetails.gatewayDetails))

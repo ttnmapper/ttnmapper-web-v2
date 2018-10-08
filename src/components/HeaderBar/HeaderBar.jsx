@@ -69,7 +69,7 @@ class _HeaderBar extends Component {
         (
           <li id="user-nav-item" className="nav-item" key="usersettingslink">
             <div className="nav-link navbar-highlight">
-		          <span className="oi" data-glyph="cog" title="icon name" aria-hidden="true" style={{color: "inherit"}}></span>
+		          <span className="glyphicon glyphicon-cog oi" data-glyph="cog" title="icon name" aria-hidden="true" style={{color: "inherit"}}></span>
             </div>
           </li>
         )

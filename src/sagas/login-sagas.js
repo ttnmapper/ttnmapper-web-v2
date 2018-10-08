@@ -4,6 +4,7 @@ gateway positions and coverage maps.
 */
 import { call, put, takeLatest, takeEvery} from 'redux-saga/effects'
 import { loginConstants } from '../constants'
+import { push } from 'react-router-redux';
 
 import * as Api from '../api-calls'
 
@@ -30,6 +31,10 @@ function* postCodetoServer(action) {
       type: loginConstants.RECEIVE_TOKENS,
       payload:  json
     });
+
+    // And redirect to user page
+    yield put (push('/user'))
+
   } catch (e) {
     yield put({
       type: loginConstants.RECEIVE_TOKENS_FAILURE,
