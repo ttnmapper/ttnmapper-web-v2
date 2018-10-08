@@ -6,7 +6,8 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga'
 
 import * as reducers from '../reducers'
-import {mapDataSagas} from '../sagas/map-data-sagas'
+import {mapDataSagas } from '../sagas/map-data-sagas'
+import {loginSagas} from '../sagas/login-sagas'
 
 const rootReducer = combineReducers({
   ...reducers,
@@ -29,3 +30,4 @@ export const store = createStore(
 )
 
 sagaMiddleware.run(mapDataSagas)
+sagaMiddleware.run(loginSagas)

@@ -72,3 +72,12 @@ export const fetchGWAlphaShape = (gatewayID) => {
 export const getTTNLoginLink = () => {
   return 'http://127.0.0.1:8011/loginProvider/login?state=1&response_type=code&client_id=ttn-mapper&redirect_uri=http://localhost:8010/loggedin'
 }
+
+
+export const exchangeCodeForToken = (code) => {
+  return fetch(host +"/api/v1/login", {
+    method: "POST",
+    // headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({"code": code})
+  })
+}

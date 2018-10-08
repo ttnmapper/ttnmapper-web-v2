@@ -24,7 +24,7 @@ module.exports = merge(common, {
         secure: false,
       },
       '/api/v1' : {
-        target: 'localhost:6000',
+        target: 'http://localhost:8011',
         changeOrigin: true,
         secure: false,
       }
