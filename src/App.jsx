@@ -8,6 +8,7 @@ import { ConnectedRouter } from 'connected-react-router'
 // Our JS files
 import { About, User, Home, HeaderBar, LeaderBoard, LoggedIn, FourOFour } from './components'
 import { store, history } from './helpers/store'
+import { UserRoute } from './components/small-components'
 
 //Required CSS files
 import './styling/styling'
@@ -32,7 +33,8 @@ class App extends Component {
               <Route path="/about" component={About} />
               <Route path="/leaderboard" component={LeaderBoard} />
               <Route path="/loggedin" component={LoggedIn} />
-              <Route path="/user" component={User} />
+              <UserRoute path='/user' component={User} />
+              {/* <Route path="/user" component={User} /> */}
               <Route component={FourOFour} />
             </Switch>
           </div>
@@ -41,5 +43,6 @@ class App extends Component {
     )
   }
 }
+
 
 ReactDOM.render(<App/>,document.getElementById('maps-app'))

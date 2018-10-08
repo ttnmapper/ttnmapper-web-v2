@@ -10,7 +10,7 @@ export const getApplicationDetail = (app_id) => {
 }
 
 export const getDevices = (app_id) => {
-  return host + "/api/v1/application/"+app_id+ "/device/"
+  return host + "/api/v1/application/"+app_id+ "/device"
 }
 
 

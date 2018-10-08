@@ -32,8 +32,8 @@ export function fetchApplications() {
       .then(response => response.json())
       .then((json) => {
         //Receive the applications into the state
-        dispatch(receiveApplications(json))
-        return json
+        dispatch(receiveApplications(json.applications))
+        return json.applications
       })
       .then((json) => {
         // For each of the applications, fetch the device info as well
@@ -78,7 +78,8 @@ export function fetchApplicationDevices(app_id) {
     return fetch(getDevices(app_id))
       .then(response => response.json())
       .then((json) => {
-        dispatch(receiveDevices(json))
+        console.log(json)
+        dispatch(receiveDevices(json.devices))
       })
       .catch(error => dispatch(receiveDevicesFailed(error)))
   }

@@ -7,16 +7,11 @@ class _LoggedIn extends Component {
   render() {
     return (
       <div className="container textBlock">
-      <div className="col" />
-
-      <div className="col-8" >
-        <div className="row header-row">
-          <h1 className="display-4">Logging in...</h1>
+        <div className="loading-div card">
+          <span >Logging in...</span>
+          <span className="oi" id="loading" data-glyph="cog" title="icon name" aria-hidden="true"></span>
         </div>
       </div>
-
-      <div className="col" />
-    </div>
     )
   }
 

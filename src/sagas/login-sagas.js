@@ -46,7 +46,6 @@ function* postCodetoServer(action) {
 }
 
 
-
 function* loginSagas() {
   // Take only the latest one, in cae two move events occur
   yield takeEvery(loginConstants.SEND_CODE_TO_BACKEND, postCodetoServer);

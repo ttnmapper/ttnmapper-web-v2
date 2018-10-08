@@ -12,6 +12,7 @@ class _User extends Component {
   render() {
     return (
       <div className="container">
+      <div className="row header-row"></div>
         <div className="row">
           <ul className="nav nav-tabs" id="nav-user-tab">
             <li className="nav-item"><NavLink className="nav-link user-tab-options" activeClassName="user-tab-selected" to="/user/devices">Devices</NavLink></li>
@@ -30,6 +31,9 @@ class _User extends Component {
 }
 
 const mapStateToProps = state => ({
+  router: state.router,
+  userState: state.userData.userState,
+  currentRoute: state.router.location.pathname,
 })
 
 const User = connect(
