@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 // Our own code
 import { UserDataLoading, UserDataError } from '../small-components'
-import { fetchApplications } from '../../actions/fetch-data'
+import { fetchApplications } from '../../actions/data-actions'
 
 /**
  * This component renders a list of all the devices, sorted by their application

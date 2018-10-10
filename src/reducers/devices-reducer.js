@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux'
-import { USER_LOGGED_OUT, REQUEST_DEVICES, RECEIVE_DEVICES, RECEIVE_DEVICES_FAILED } from '../constants'
+import { loginConstants, dataConstants } from '../constants'
 
 const defaultDevicesGeneral = {last_updated: null, state: "none"}
 
@@ -10,19 +10,19 @@ function devicesGeneral(state, action) {
 	}
 
   switch (action.type) {
-    case USER_LOGGED_OUT:
+    case loginConstants.USER_LOGGED_OUT:
       // Clear the data!
       return defaultDevicesGeneral;
-    case REQUEST_DEVICES:
+    case dataConstants.REQUEST_DEVICES:
       return Object.assign({}, state, {
         state: "loading"
       })
-    case RECEIVE_DEVICES:
+    case dataConstants.RECEIVE_DEVICES:
       return Object.assign({}, state, {
         state: "data",
         last_update: "now"
       })
-    case RECEIVE_DEVICES_FAILED:
+    case dataConstants.RECEIVE_DEVICES_FAILED:
       return Object.assign({}, state, {
         state: "error"
       })
@@ -31,9 +31,14 @@ function devicesGeneral(state, action) {
 }
 
 function devicesData(state = {}, action) {
+  if (typeof state == 'undefined') {
+		return {}
+  }
+
   switch (action.type) {
-    case RECEIVE_DEVICES:
-      return Object.assign({}, state, action.data)
+    case dataConstants.RECEIVE_DEVICES:
+
+      return Object.assign({}, state, action.payload.devices)
   }
   return state
 }

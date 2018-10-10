@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux'
-import { REQUEST_APPLICATIONS, RECEIVE_APPLICATIONS, RECEIVE_APPLICATIONS_FAILED} from '../constants'
+import { loginConstants, dataConstants} from '../constants'
 
 export function applicationsDetails(state=[], action) {
 	switch (action.type) {
-		case RECEIVE_APPLICATIONS: {
-			return action.data
+		case dataConstants.RECEIVE_APPLICATIONS: {
+			return action.payload
 		}
 		default:
 			return state
@@ -18,15 +18,15 @@ export function applicationsGeneral(state, action) {
 	}
 
 	switch (action.type) {
-		case REQUEST_APPLICATIONS:
+		case dataConstants.REQUEST_APPLICATIONS:
 			return Object.assign({}, state, {
 				state: "loading"
 			})
-		case RECEIVE_APPLICATIONS:
+		case dataConstants.RECEIVE_APPLICATIONS:
 			return Object.assign({}, state, {
 				state: "data"
 			})
-		case RECEIVE_APPLICATIONS_FAILED:
+		case dataConstants.RECEIVE_APPLICATIONS_FAILED:
 			return Object.assign({}, state, {
 				state: "error"
 			})

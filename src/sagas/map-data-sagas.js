@@ -62,7 +62,6 @@ function* requestGatewayDetails(action) {
   try {
     const response = yield call(Api.fetchGWDetailsList, action.payload.list);
     const json = yield response.json();
-    console.log(json)
 
     yield put({
       type: mapConstants.RECEIVE_GATEWAY_DETAILS,
@@ -87,7 +86,6 @@ function* requestGatewayCircles(action) {
   try {
     const response = yield call(Api.fetchGWCirclesList, action.payload.list);
     const json = yield response.json();
-    console.log(json)
 
     yield put({
       type: mapConstants.RECEIVE_MAP_GW_CIRCLES,
@@ -112,7 +110,6 @@ function* requestGatewayRadar(action) {
   try {
     const response = yield call(Api.fetchGWRadarsList, action.payload.list);
     const json = yield response.json();
-    console.log(json)
 
     yield put({
       type: mapConstants.RECEIVE_MAP_GW_RADAR,
@@ -134,7 +131,6 @@ function* requestGatewayAlpha(action) {
   try {
     const response = yield call(Api.fetchGWAlphaShape, action.payload.gatewayID);
     const json = yield response.json();
-    console.log(json)
 
     yield put({
       type: mapConstants.RECEIVE_MAP_GW_ALPHA,
