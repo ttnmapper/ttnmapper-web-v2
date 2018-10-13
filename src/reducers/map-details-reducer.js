@@ -6,7 +6,7 @@ import { mapConstants} from '../constants'
 export function currentPosition(state, action) {
 	if (typeof state == 'undefined') {
     //Demo position for now
-		return {lat: -33.92945, long: 18.86326, zoom: 13}
+		return {lat: -32.40405, long: 20.24230, zoom: 7}
   }
 
 	switch (action.type) {

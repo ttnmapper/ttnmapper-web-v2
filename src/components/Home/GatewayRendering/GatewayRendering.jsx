@@ -103,7 +103,7 @@ class _GatewayRendering extends Component {
           <Popup offset={[-11,0]}>
             <b>{('description' in details ? details.description : details.gwaddr)}</b>
             <br />
-            {details.gwaddr}
+            {gatewayID}
             <br />
             {optionalSection}
             <br />Last heard at {details.last_heard}

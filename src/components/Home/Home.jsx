@@ -119,7 +119,7 @@ class _Home extends Component {
 
     return (
       <div id="mapsContainer" >
-        <Map center={position} zoom={zoom} onMoveend={this.mapMovedEventHandler} zoomend={this.mapMovedEventHandler} ref={(ref) => { this.map = ref; }}>
+        <Map center={position} zoom={zoom} onMoveend={this.mapMovedEventHandler} zoomend={this.mapMovedEventHandler} ref={(ref) => { this.map = ref; }} maxZoom={18} minZoom={2} >
           <LayersControl position="topright">
             {this.addBaseTileLayers()}
           </LayersControl>
