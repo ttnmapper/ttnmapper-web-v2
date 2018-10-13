@@ -32,6 +32,9 @@ function* postCodetoServer(action) {
       payload:  json
     });
 
+    // Store the token
+    localStorage.setItem('mTokens', json);
+
     // And redirect to user page
     yield put (push('/user'))
 
@@ -45,9 +48,18 @@ function* postCodetoServer(action) {
   }
 }
 
+function* returningLoginUser(action){
+  try {
+    // Check if a
+  } catch (e) {
+
+  }
+}
+
 
 function* loginSagas() {
   // Take only the latest one, in cae two move events occur
+  yield takeEvery(loginConstants.SEND_CODE_TO_BACKEND, postCodetoServer);
   yield takeEvery(loginConstants.SEND_CODE_TO_BACKEND, postCodetoServer);
 }
 

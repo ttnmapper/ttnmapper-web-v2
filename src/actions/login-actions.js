@@ -14,3 +14,16 @@ export function sendCodeToBackend(code) {
     }
   }
 }
+
+/** When the user returns to the website, send the code to the back-end to verify the user
+ *
+ * @param mAccessToken
+ */
+export function reLoginUser(mAccessToken) {
+  return {
+    type: loginConstants.RETURNING_LOGIN_USER,
+    payload: {
+      token: mAccessToken
+    }
+  }
+}
