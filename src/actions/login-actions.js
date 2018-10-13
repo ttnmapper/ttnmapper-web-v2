@@ -19,11 +19,20 @@ export function sendCodeToBackend(code) {
  *
  * @param mAccessToken
  */
-export function reLoginUser(mAccessToken) {
+export function verifyExistingToken(mAccessToken) {
   return {
     type: loginConstants.RETURNING_LOGIN_USER,
     payload: {
       token: mAccessToken
+    }
+  }
+}
+
+export function logout(location) {
+  return {
+    type: loginConstants.LOG_OUT_REQUESTED,
+    payload: {
+      previousLocation: location
     }
   }
 }

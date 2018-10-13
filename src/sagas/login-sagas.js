@@ -27,13 +27,18 @@ function* postCodetoServer(action) {
       return
     }
 
+    // Save the tokens
     yield put({
       type: loginConstants.RECEIVE_TOKENS,
-      payload:  json
+      payload: json
     });
 
+    // Tell everyone we're logged in.
+    yield put({type: loginConstants.USER_LOGGED_IN});
+
     // Store the token
-    localStorage.setItem('mTokens', json);
+    localStorage.setItem('mToken', JSON.stringify(json));
+    console.log("User logged in, stored")
 
     // And redirect to user page
     yield put (push('/user'))
@@ -48,19 +53,54 @@ function* postCodetoServer(action) {
   }
 }
 
+/** When a user returns and has a token in local storage, we verify this with the server
+ *
+ * @param {*} action
+ */
 function* returningLoginUser(action){
   try {
-    // Check if a
+    const response = yield call(Api.verifyExistingToken, action.payload.token.access_token);
+    const json = yield response.json();
+
+    // If we receive a failure
+    if ('loggedIn' in json && json.loggedIn === false) {
+      yield put({
+        type: loginConstants.RECEIVE_TOKENS_FAILURE,
+        message: json.message,
+        payload: {
+        }
+      });
+      return
+    }
+
+    // If the code is verified
+    console.log("Code was verified!")
+    yield put({
+      type: loginConstants.USER_LOGGED_IN
+    });
+
   } catch (e) {
 
+    console.log("Error:")
+    console.log(e)
   }
+}
+
+function* logoutUser(action){
+
+  localStorage.removeItem('mToken')
+
+  yield put({
+    type: loginConstants.USER_LOGGED_OUT
+  });
 }
 
 
 function* loginSagas() {
   // Take only the latest one, in cae two move events occur
   yield takeEvery(loginConstants.SEND_CODE_TO_BACKEND, postCodetoServer);
-  yield takeEvery(loginConstants.SEND_CODE_TO_BACKEND, postCodetoServer);
+  yield takeEvery(loginConstants.RETURNING_LOGIN_USER, returningLoginUser);
+  yield takeEvery(loginConstants.LOG_OUT_REQUESTED, logoutUser);
 }
 
 export { loginSagas };

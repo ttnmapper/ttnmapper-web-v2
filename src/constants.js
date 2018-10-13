@@ -1,3 +1,4 @@
+import { LoggedIn } from "./components";
 
 
 export const dataConstants = {
@@ -46,5 +47,15 @@ export const loginConstants = {
   SEND_CODE_TO_BACKEND: 'SEND_CODE_TO_BACKEND',
   RECEIVE_TOKENS: 'RECEIVE_TOKENS',
   RECEIVE_TOKENS_FAILURE: '',
-  USER_LOGGED_OUT: 'USER_LOGGED_OUT'
+
+  USER_LOGGED_IN: 'USER_LOGGED_IN',
+  LOG_OUT_REQUESTED: 'LOG_OUT_REQUESTED',
+  USER_LOGGED_OUT: 'USER_LOGGED_OUT',
+
+  RETURNING_LOGIN_USER: 'RETURNING_LOGIN_USER',
+
+
+  LoggedIn: 'LoggedIn',
+  LoggedOut: 'LoggedOut',
+  CheckingToken: 'CheckingToken'
 }

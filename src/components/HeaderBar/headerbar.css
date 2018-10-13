@@ -118,3 +118,34 @@ The following component are present:
 #navbar .navbar-toggler-icon {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
+
+.custom-dropdown-menu {
+  position:fixed !important;
+  z-index:45;
+  list-style:none;
+  top: initial;
+  left: initial;
+  right:0;
+  display:none;
+  border-radius: 0;
+  margin:0;
+  padding:0;
+}
+
+.dropdown-menu.show {
+  display:block;
+}
+
+.custom-dropdown-item {
+  padding: var(--heading-item-padding);
+  height: var(--heading-item-height);
+  color: var(--header-link-inactive-color);
+  background-color:var(--dark-blue-bg-color);
+  display:block;
+  width: 100%;
+  clear: both;
+}
+
+.custom-dropdown-item:hover {
+  text-decoration: none;
+}

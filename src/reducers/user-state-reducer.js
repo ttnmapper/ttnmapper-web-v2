@@ -3,7 +3,14 @@ import { loginConstants} from '../constants'
 
 function tokens(state, action) {
   if (typeof state == 'undefined') {
-    return { 'mToken': "" }
+    const mTokens = localStorage.getItem('mToken')
+
+    if (mTokens !== null) {
+      return JSON.parse(mTokens)
+    }
+    else {
+      return { 'mToken': "" }
+    }
   }
 
   switch (action.type) {
@@ -20,25 +27,41 @@ function tokens(state, action) {
 
 function loggedIn(state, action) {
 	if (typeof state == 'undefined') {
-    return false
+    // First run!
+    const mTokens = localStorage.getItem('mToken')
+
+    if (mTokens !== null) {
+      // We have a token
+      return loginConstants.CheckingToken
+    }
+    else {
+      return loginConstants.LoggedOut
+    }
   }
 
 	switch (action.type) {
-    case loginConstants.RECEIVE_TOKENS:
-      return true
+    case loginConstants.USER_LOGGED_IN:
+      return loginConstants.LoggedIn
+
     case loginConstants.RECEIVE_TOKENS_FAILURE:
-      return false
-    case loginConstants.LOGOUT:
-      return true
+      return loginConstants.LoggedOut
+
+    case loginConstants.USER_LOGGED_OUT:
+      return loginConstants.LoggedOut
+
     default:
       return state
   }
 
 }
 
+function userName(state, action) {
+  return "Test User"
+}
+
 
 export const userState = combineReducers({
   loggedIn: loggedIn,
   tokens: tokens,
-  userName: 'Tony'
+  userName: userName
 })

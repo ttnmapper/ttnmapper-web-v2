@@ -82,6 +82,7 @@ class _About extends Component {
               sollicitudin dolor. Pellentesque consectetur quam at luctus ultrices. Nullam vehicula eget
               tortor eget egestas. Phasellus eget finibus dui.
         </p>
+
           </div>
         </div>
         <div className="col" />

@@ -80,3 +80,11 @@ export const exchangeCodeForToken = (code) => {
     body: JSON.stringify({"code": code})
   })
 }
+
+export const verifyExistingToken = (code) => {
+  return fetch(host +"/api/v1/verifyExistingToken", {
+    method: "POST",
+    // headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({"mToken": code})
+  })
+}

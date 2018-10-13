@@ -6,9 +6,10 @@ import {About,User,Home, HeaderBar, LeaderBoard} from '../components'
 import {_HeaderBar } from '../components/HeaderBar/HeaderBar'
 
 import Provider from './provider'
+import { loginConstants } from '../constants';
 
 const loggedInUserState = {
-  loggedIn: true,
+  loggedIn: loginConstants.LoggedIn,
   userName: "Test User"
 }
 

@@ -7,6 +7,8 @@ import './headerbar.css'
 import unknownUser from './unknownUser.png';
 import mainLogo from './logo.png';
 import { getTTNLoginLink } from '../../api-calls'
+import { loginConstants } from '../../constants';
+import { logout } from '../../actions/login-actions'
 
 class _HeaderBar extends Component {
 
@@ -14,6 +16,12 @@ class _HeaderBar extends Component {
     position: 'fixed',
     top: '0px',
     width:'100%',
+  }
+
+  constructor(props){
+    super(props)
+
+    this.logout = this.props.logout.bind(this)
   }
 
   renderBrand() {
@@ -33,7 +41,8 @@ class _HeaderBar extends Component {
       (<li key="aboutlink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/about">About</NavLink></li>),
       (<li key="leaderboardlink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/leaderboard">Leader Board</NavLink></li>)
     ]
-    if (this.props.userState.loggedIn) {
+    console.log("Checking log-in")
+    if (this.props.loggedIn === loginConstants.LoggedIn) {
       menuOptions.push(<li key="myDataLink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/user">My Data</NavLink></li>)
     }
 
@@ -49,12 +58,13 @@ class _HeaderBar extends Component {
         </ul>
       </nav>)
   }
+  //
 
   /**
    * Render and return the login tab on the right on the navbar
    */
   renderLoginOptions() {
-    if (this.props.userState.loggedIn) {
+    if (this.props.loggedIn === loginConstants.LoggedIn) {
       return [
         (
           <li id="user-nav-item" className="nav-item" key="userlink">
@@ -68,9 +78,20 @@ class _HeaderBar extends Component {
         ),
         (
           <li id="user-nav-item" className="nav-item" key="usersettingslink">
-            <div className="nav-link navbar-highlight">
-		          <span className="glyphicon glyphicon-cog oi" data-glyph="cog" title="icon name" aria-hidden="true" style={{color: "inherit"}}></span>
+          <div className="dropdown show">
+            <a className="dropdown-toggle nav-link navbar-highlight" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span className="glyphicon glyphicon-cog oi" data-glyph="cog" title="icon name" aria-hidden="true" style={{color: "inherit"}}></span>
+            </a>
+
+              <div className="custom-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a className="custom-dropdown-item navbar-highlight" href="#">User Settings</a>
+                <a className="custom-dropdown-item navbar-highlight" onClick={this.logout} href="#">Logout</a>
+              </div>
             </div>
+            {/* <div className="test-div" >
+            This is a test
+            </div> */}
+
           </li>
         )
       ]
@@ -79,7 +100,7 @@ class _HeaderBar extends Component {
     else {
       return (
         <li id="user-nav-item" key="loginlink" className="nav-item">
-          <a className="nav-link navbar-highlight" href={ getTTNLoginLink() }>{this.props.userState.loggedIn ? "Logout": "Login"}</a>
+          <a className="nav-link navbar-highlight" href={ getTTNLoginLink() }>{this.props.loggedIn===loginConstants.LoggedIn ? "Logout": "Login"}</a>
         </li>
       )
     }
@@ -95,7 +116,6 @@ class _HeaderBar extends Component {
 
     let style = {}
     if (this.props.router.location.pathname !== '/' ) {
-      console.log("Non-router sttyle!")
       style = this.nonMapStyle
     }
 
@@ -108,12 +128,12 @@ class _HeaderBar extends Component {
     )
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.currentRoute !== nextProps.currentRoute) {
-      return true
-    }
-    return false
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (this.props.currentRoute !== nextProps.currentRoute) {
+  //     return true
+  //   }
+  //   return false
+  // }
 
 }
 
@@ -121,17 +141,16 @@ class _HeaderBar extends Component {
 
 const mapStateToProps = state => ({
   router: state.router,
+  loggedIn: state.userData.userState.loggedIn,
   userState: state.userData.userState,
   currentRoute: state.router.location.pathname,
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {}
-}
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  logout: (currentPosition) => dispatch(logout(currentPosition))
+})
 
-const HeaderBar = connect(
-  mapStateToProps
-)(_HeaderBar)
+const HeaderBar = connect(mapStateToProps,mapDispatchToProps)(_HeaderBar)
 
 export default HeaderBar
 export { _HeaderBar }

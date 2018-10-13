@@ -13,6 +13,7 @@ import { UserRoute } from './components/small-components'
 //Required CSS files
 import './styling/styling'
 import './app.css'
+import LoginChecker from './components/SmallComponents/LoginChecker';
 
 class App extends Component {
 
@@ -28,13 +29,13 @@ class App extends Component {
         <ConnectedRouter history={history}>
           <div id="app-container">
             <HeaderBar />
+            <LoginChecker />
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
               <Route path="/leaderboard" component={LeaderBoard} />
               <Route path="/loggedin" component={LoggedIn} />
               <UserRoute path='/user' component={User} />
-              {/* <Route path="/user" component={User} /> */}
               <Route component={FourOFour} />
             </Switch>
           </div>
