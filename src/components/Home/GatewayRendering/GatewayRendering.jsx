@@ -3,20 +3,20 @@ import { connect } from 'react-redux'
 import { Popup, Marker, GeoJSON } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import { parseCoordsFromQuery } from '../query-utils'
+import { parseQuery, parseCoordsFromQuery } from '../query-utils'
 import { addSingleGateway, setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
 
 // Workaround for leaflet css?
 import L from 'leaflet';
-delete L.Icon.Default.prototype._getIconUrl;
+// delete L.Icon.Default.prototype._getIconUrl;
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
 
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-});
+// L.Icon.Default.mergeOptions({
+//   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+//   iconUrl: require('leaflet/dist/images/marker-icon.png'),
+//   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+// });
 
 const gwMarkerIconRoundBlue = L.icon({
   iconUrl: require("./images/gateway_dot.png"),
@@ -43,21 +43,11 @@ const gwMarkerIconRoundYellow = L.icon({
   popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
 });
 
+
 class _GatewayRendering extends Component {
 
   constructor(props) {
     super(props)
-
-    this.singleGateway = null
-    if ('location' in props) {
-      const singleGateway = parseCoordsFromQuery(props.location.search)
-      console.log("Single gateway mode!")
-      console.log(singleGateway)
-
-      if (singleGateway.gateway !== null && singleGateway.type !== null) {
-        this.singleGateway = singleGateway
-      }
-    }
   }
 
   setSingleGateway(gatewayID, mode, event) {
@@ -255,20 +245,33 @@ class _GatewayRendering extends Component {
   }
 
   render() {
-    if (this.props.mapDetails.renderSingle.length > 0) {
-      // We only need to render a single gateway
-      const singleGateways = this.props.mapDetails.renderSingle.map((currElement, index) => {
-        return this.drawSingleMode(currElement.gatewayID, currElement.mode)
-      })
-      return (singleGateways)
+    if (this.props.rendermode === "coverage") {
+      // coverage mode can be either all gateways or a single gateway
+      if (this.props.mapDetails.renderSingle.length > 0) {
+        console.log("Render single")
+        // We only need to render a single gateway
+        const singleGateways = this.props.mapDetails.renderSingle.map((currElement, index) => {
+          return this.drawSingleMode(currElement.gatewayID, currElement.mode)
+        })
+        return (singleGateways)
 
+      }
+      else {
+        // Normal mode
+        console.log("Render normal")
+        return (<div>
+          {this.drawMarkers(this.props.mapDetails.visibleGateways)}
+          {this.props.mapDetails.currentPosition.zoom >= 10 && this.drawGatewayRadars(this.props.mapDetails.visibleGateways)}
+          {this.props.mapDetails.currentPosition.zoom < 10 && this.drawGatewayCircles(this.props.mapDetails.visibleGateways)}
+        </div>)
+      }
     }
-    // No in single mode
-    return (<div>
-      {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-      {this.props.mapDetails.currentPosition.zoom >= 10 && this.drawGatewayRadars(this.props.mapDetails.visibleGateways)}
-      {this.props.mapDetails.currentPosition.zoom < 10 && this.drawGatewayCircles(this.props.mapDetails.visibleGateways)}
-    </div>)
+
+    if (this.props.rendermode === 'packets') {
+      return (<div>
+        {this.drawMarkers(this.props.mapDetails.visibleGateways)}
+      </div>)
+    }
   }
 }
 
@@ -283,6 +286,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   setSingleGateway: (gatewayID, mode) => dispatch(setSingleGateway(gatewayID, mode)),
   clearSingleGateway: () => dispatch(clearSingleGateway()),
   fetchGWAlphaShape: (gatewayID) => dispatch(fetchGatewayAlphaShape(gatewayID)),
+  ...ownProps
 })
 
 const GatewayRendering = connect(mapStateToProps, mapDispatchToProps)(_GatewayRendering)

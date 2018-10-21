@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import { UserDataLoading, UserDataError } from '../small-components'
 import { fetchApplications } from '../../actions/data-actions'
 
+import './devices.css'
+
 /**
  * This component renders a list of all the devices, sorted by their application
  */
@@ -26,9 +28,10 @@ class _Devices extends React.Component {
 
 		return (
 			<div key={application['app_id']}>
-				<h1 >
-				{ application['description'] }
-				</h1>
+        <div className="devices-header" >
+          <h2> { application['app_id'] } </h2>
+          <small className="text-muted">{application['description']}</small>
+        </div>
 				{ device_panel }
 			</div>)
 	}

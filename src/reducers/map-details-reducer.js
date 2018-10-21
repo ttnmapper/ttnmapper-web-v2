@@ -103,6 +103,33 @@ function gatewayAlphaShapes(state, action) {
   }
 }
 
+function packetsQuery(state, action) {
+  if (typeof state == 'undefined') {
+    return {}
+  }
+
+  switch (action.type) {
+    case mapConstants.RECEIVE_PACKETS_DETAILS:
+      return action.payload.packetRequest
+    default:
+
+      return state
+  }
+}
+
+function packetsData(state,action) {
+  if (typeof state == 'undefined') {
+		return []
+  }
+
+  switch (action.type) {
+    case mapConstants.RECEIVE_PACKETS_DETAILS:
+      return action.payload.packetData
+    default:
+      return state
+  }
+}
+
 export const mapDetails = combineReducers({
   currentPosition: currentPosition,
   gatewayDetails: gatewayDetails,
@@ -110,5 +137,8 @@ export const mapDetails = combineReducers({
   gatewayCircleCover: gatewayCircleCover,
   gatewayRadarCover: gatewayRadarCover,
   gatewayAlphaShapes: gatewayAlphaShapes,
-  renderSingle: renderSingle
+  renderSingle: renderSingle,
+  packets: combineReducers({
+    packetsQuery, packetsData
+   })
 })

@@ -74,15 +74,18 @@ function* returningLoginUser(action){
     }
 
     // If the code is verified
-    console.log("Code was verified!")
     yield put({
       type: loginConstants.USER_LOGGED_IN
     });
 
   } catch (e) {
-
-    console.log("Error:")
+    // Todo: Show a nice error message to the user
+    console.log("Error")
     console.log(e)
+
+    yield put({
+      type: loginConstants.USER_LOGGED_OUT
+    });
   }
 }
 

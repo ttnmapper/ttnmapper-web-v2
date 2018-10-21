@@ -9,18 +9,16 @@ import { ConnectedRouter } from 'connected-react-router'
 import { About, User, Home, HeaderBar, LeaderBoard, LoggedIn, FourOFour } from './components'
 import { store, history } from './helpers/store'
 import { UserRoute } from './components/small-components'
+import LoginChecker from './components/SmallComponents/LoginChecker';
 
 //Required CSS files
 import './styling/styling'
 import './app.css'
-import LoginChecker from './components/SmallComponents/LoginChecker';
 
 class App extends Component {
 
   constructor(props) {
     super(props)
-
-    //This function is only called once! Load the previous coords here
   }
 
   render() {
@@ -44,6 +42,5 @@ class App extends Component {
     )
   }
 }
-
 
 ReactDOM.render(<App/>,document.getElementById('maps-app'))

@@ -127,6 +127,9 @@ function* requestGatewayRadar(action) {
   }
 }
 
+/*
+Call the API endpoint to find alpha coverage
+*/
 function* requestGatewayAlpha(action) {
   try {
     const response = yield call(Api.fetchGWAlphaShape, action.payload.gatewayID);
@@ -149,6 +152,35 @@ function* requestGatewayAlpha(action) {
   }
 }
 
+/*
+Get the packets recived for a specific device
+*/
+function* requestPacketDetails(action) {
+  try {
+    const dateRange = {'start':action.payload.fromDate, 'end': action.payload.toDate}
+
+    const response = yield call(Api.fetchPacketData, action.payload.deviceID, dateRange);
+    const json = yield response.json();
+
+    yield put({
+      type: mapConstants.RECEIVE_PACKETS_DETAILS,
+      payload: {
+        packetRequest: {
+          ...action.patload
+        },
+        packetData: json
+      }
+    });
+  } catch (e) {
+    yield put({
+      type: mapConstants.RECEIVE_PACKETS_DETAILS_FAILED,
+      message: e.message,
+      payload: {
+      }
+    });
+  }
+}
+
 
 function* mapDataSagas() {
   // Take only the latest one, in cae two move events occur
@@ -158,6 +190,7 @@ function* mapDataSagas() {
   yield takeEvery(mapConstants.REQUEST_MAP_GW_CIRCLES, requestGatewayCircles);
   yield takeEvery(mapConstants.REQUEST_MAP_GW_RADAR, requestGatewayRadar);
   yield takeEvery(mapConstants.REQUEST_MAP_GW_ALPHA, requestGatewayAlpha);
+  yield takeEvery(mapConstants.REQUEST_PACKETS_DETAILS, requestPacketDetails);
 }
 
 export { mapDataSagas };

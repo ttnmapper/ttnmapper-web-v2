@@ -49,3 +49,19 @@ export function parseSingleGatewayFromQuery(queryString) {
 
   return parsedCoords
 }
+
+
+export function parseQuery(queryString) {
+  var partsOfStr = queryString.substring(1).split('&');
+
+  let params = {}
+
+  for (var ind in partsOfStr) {
+    //Split into name and value
+    var assignment = partsOfStr[ind].split('=')
+    if (assignment.length == 2) {
+        params[assignment[0]] = assignment[1];
+    }
+  }
+  return params
+}

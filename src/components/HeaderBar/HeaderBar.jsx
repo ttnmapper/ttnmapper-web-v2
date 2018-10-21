@@ -41,7 +41,6 @@ class _HeaderBar extends Component {
       (<li key="aboutlink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/about">About</NavLink></li>),
       (<li key="leaderboardlink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/leaderboard">Leader Board</NavLink></li>)
     ]
-    console.log("Checking log-in")
     if (this.props.loggedIn === loginConstants.LoggedIn) {
       menuOptions.push(<li key="myDataLink" className="nav-item"><NavLink className="nav-link navbar-highlight" to="/user">My Data</NavLink></li>)
     }

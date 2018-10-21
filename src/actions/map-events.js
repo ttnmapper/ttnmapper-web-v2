@@ -8,15 +8,30 @@ import qs from 'query-string';
  * When the map is moved we need to store the new position, and update the url bar.
  * @param {Object} newPosition
 */
-export function updateMapPosition(newPosition, otherParams) {
+export function updateMapPosition(newPosition, queryString) {
+  var partsOfStr = queryString.substring(1).split('&');
+  let parsedParams = {}
+
+  for (var ind in partsOfStr) {
+    //Split into name and value
+    var assignment = partsOfStr[ind].split('=')
+    if (assignment.length == 2) {
+      parsedParams[assignment[0]] = assignment[1]
+    }
+  }
+  //Remove lat, long and zoom from the params
+  delete parsedParams.lat;
+  delete parsedParams.long;
+  delete parsedParams.zoom;
+
   //This will need changing if we get more arguments, such as mode/selected gateway/layer
-  const searchString = qs.stringify(newPosition) + qs.stringify(otherParams);
+  const newSearchString = qs.stringify(newPosition) + '&' + qs.stringify(parsedParams);
 
   return dispatch => {
     // Store the new position in the state
     dispatch({type: UPDATE_MAP_POSITION, newPosition: newPosition })
     // Store the new position in the URL
-    dispatch(push({ search: searchString }))
+    dispatch(push({ search: newSearchString }))
   }
 }
 
@@ -81,6 +96,18 @@ export function fetchGatewayAlphaShape(gatewayID) {
     type: mapConstants.REQUEST_MAP_GW_ALPHA,
     payload: {
       gatewayID: gatewayID
+    }
+  }
+}
+
+
+export function fetchPacketData(deviceID, fromDate, toDate) {
+  return {
+    type: mapConstants.REQUEST_PACKETS_DETAILS,
+    payload: {
+      deviceID: deviceID,
+      fromDate: fromDate,
+      toDate: toDate
     }
   }
 }

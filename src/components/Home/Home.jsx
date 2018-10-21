@@ -6,7 +6,9 @@ const { BaseLayer } = LayersControl
 import { parseCoordsFromQuery } from './query-utils'
 import { updateMapPosition, fetchNewMapData } from '../../actions/map-events'
 import GatewayRendering from './GatewayRendering/GatewayRendering'
+import PacketRendering from './PacketRendering/PacketRendering'
 import AlertPopup from '../AlertPopup'
+import { parseQuery } from './query-utils'
 
 import 'leaflet/dist/leaflet.css';
 import './home.css'
@@ -26,11 +28,28 @@ class _Home extends Component {
     this.copiedCoords = this.props.mapDetails.currentPosition
 
     if ('location' in props && 'search' in props.location && props.location.search !== "") {
-      const parsedCoords = parseCoordsFromQuery(props.location.search)
+      this.params = parseQuery(props.location.search)
+    } else {
+      this.params = {}
+    }
 
-      // Verify all the arguments were given, otherwise, just use previous position
-      if (parsedCoords.lat !== null && parsedCoords.long !== null && parsedCoords.zoom !== null) {
-        this.copiedCoords = parsedCoords
+    if ('lat' in this.params && 'long' in this.params && 'zoom' in this.params) {
+        this.copiedCoords.lat = this.params.lat
+        this.copiedCoords.long = this.params.long
+        this.copiedCoords.zoom = this.params.zoom
+    }
+
+    this.rendermode = 'coverage'
+    this.packetsSettings = null
+    // packets mdoe will also have deviceID, date_from and date_to
+    if ('mode' in this.params && this.params.mode === 'packets') {
+      if ('deviceID' in this.params && 'fromDate' in this.params && 'toDate' in this.params) {
+        this.rendermode = 'packets'
+        this.packetsSettings = {
+          deviceID: this.params.deviceID,
+          fromDate: this.params.fromDate,
+          toDate: this.params.toDate
+        }
       }
     }
   }
@@ -43,7 +62,8 @@ class _Home extends Component {
       long: coordsFromMap.lng,
       zoom: event.target.getZoom()
     }
-    this.props.updateMapPosition(newCoords, {other: "abcdef"})
+
+    this.props.updateMapPosition(newCoords, this.props.location.search)
 
     if (this.map) {
       const currentExtent = this.map.leafletElement.getBounds()
@@ -123,7 +143,8 @@ class _Home extends Component {
           <LayersControl position="topright">
             {this.addBaseTileLayers()}
           </LayersControl>
-          <GatewayRendering />
+          <GatewayRendering rendermode={this.rendermode} />
+          <PacketRendering requestedPackets={this.packetsSettings}/>
         </Map>
         <AlertPopup />
       </div>
@@ -146,7 +167,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateMapPosition: (newPosition) => dispatch(updateMapPosition(newPosition)),
+  updateMapPosition: (newPosition, previousSearch) => dispatch(updateMapPosition(newPosition,previousSearch)),
   fetchNewMapData: (mapExtent, zoomLevel) => dispatch(fetchNewMapData(mapExtent, zoomLevel, [],[],[]))
 })
 

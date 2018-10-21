@@ -1,0 +1,40 @@
+.devices-header h2 {
+  font-size: 18pt;
+  padding-top:1.4em;
+}
+
+.info-block {
+  color: #000;
+  width:50%;
+  float:left;
+  font-size: 10pt;
+}
+
+.map-block {
+  width:300px;
+  float:right;
+  height:200px;
+}
+
+.card-desription {
+  padding-bottom: 1em;
+}
+
+.card-key {
+  font-weight: 300;
+  color: #777;
+  width: 35%;
+  display: inline-block
+}
+
+.card-links {
+  padding-top: 0.5em;
+}
+
+.card-links a {
+  display: block;
+}
+
+.map-block {
+  z-index: 5;
+}
