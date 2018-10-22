@@ -16,6 +16,8 @@ function* requestMapData(action) {
       const json = yield response.json();
 
       yield put({type: mapConstants.RECEIVE_MAP_GATEWAYS, payload:{listOfGateways: json.gateways}});
+      yield put({type: mapConstants.SET_VISIBLE_GATEWAYS, payload:{listOfGateways: json.gateways}});
+
 
       let missingGWDetails = []
       let missingGWCircles = []
@@ -171,6 +173,17 @@ function* requestPacketDetails(action) {
         packetData: json
       }
     });
+
+    // Calculate all the gateways we require
+    let requiredGateways = {}
+    for (let i = 0; i < json.length; i++) {
+      requiredGateways[json[i].gwaddr] = 1
+    }
+    requiredGateways = Object.keys(requiredGateways);
+
+    yield put({ type: mapConstants.REQUEST_GATEWAY_DETAILS, payload: {list: requiredGateways}});
+    yield put({type: mapConstants.SET_VISIBLE_GATEWAYS, payload:{listOfGateways: requiredGateways}});
+
   } catch (e) {
     yield put({
       type: mapConstants.RECEIVE_PACKETS_DETAILS_FAILED,

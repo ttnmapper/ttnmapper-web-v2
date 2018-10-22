@@ -65,14 +65,16 @@ class _Home extends Component {
 
     this.props.updateMapPosition(newCoords, this.props.location.search)
 
-    if (this.map) {
-      const currentExtent = this.map.leafletElement.getBounds()
-      const currentZoom = newCoords.zoom
-      this.props.fetchNewMapData(currentExtent,
-        currentZoom,
-        Object.keys(this.props.mapDetails.gatewayDetails),
-        Object.keys(this.props.mapDetails.gatewayCircleCover),
-        Object.keys(this.props.mapDetails.gatewayRadarCover))
+    if (this.rendermode === "coverage") {
+      if (this.map) {
+        const currentExtent = this.map.leafletElement.getBounds()
+        const currentZoom = newCoords.zoom
+        this.props.fetchNewMapData(currentExtent,
+          currentZoom,
+          Object.keys(this.props.mapDetails.gatewayDetails),
+          Object.keys(this.props.mapDetails.gatewayCircleCover),
+          Object.keys(this.props.mapDetails.gatewayRadarCover))
+      }
     }
   }
 
@@ -155,7 +157,9 @@ class _Home extends Component {
 
     if (this.map) {
       const currentExtent = this.map.leafletElement.getBounds()
-      this.props.fetchNewMapData(currentExtent, this.copiedCoords.zoom, Object.keys(this.props.mapDetails.gatewayDetails))
+      if (this.rendermode === "coverage") {
+        this.props.fetchNewMapData(currentExtent, this.copiedCoords.zoom, Object.keys(this.props.mapDetails.gatewayDetails))
+      }
     }
   }
 }

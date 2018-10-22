@@ -65,9 +65,12 @@ export function visibleGateways(state, action) {
   }
 
   switch (action.type) {
-    case mapConstants.RECEIVE_MAP_GATEWAYS:
+    case mapConstants.SET_VISIBLE_GATEWAYS: {
+
+      console.log("Updating visible gateways")
       // Update the list of current gateways
       return action.payload.listOfGateways
+    }
     default:
       return state;
   }

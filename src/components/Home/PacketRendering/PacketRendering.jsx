@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Popup, CircleMarker, GeoJSON } from 'react-leaflet'
+import { Popup, CircleMarker, GeoJSON, Polyline } from 'react-leaflet'
 
 import {fetchPacketData} from '../../../actions/map-events'
 
@@ -63,17 +63,27 @@ class _PacketRendering extends Component {
       fillColor: color,
       opacity: 0.3,
       weight: 2
-    }
+    };
 
     const markerOptions = {
-        stroke: false,
-        radius: 5,
-        color: color,
-        fillColor: color,
-        fillOpacity: 0.8
+      stroke: false,
+      radius: 5,
+      color: color,
+      fillColor: color,
+      fillOpacity: 0.8
     };
 
     const distance = 5
+
+    let lines = []
+    // Look up the gateway locations
+    if (this.props.gateways) {
+      if (packet.gwaddr in this.props.gateways) {
+        const gw = this.props.gateways[packet.gwaddr]
+
+        lines = [[packet.lat, packet.lon], [gw.lat, gw.lon]]
+      }
+    }
 
     return (
       <CircleMarker center={[packet.lat, packet.lon]} {...markerOptions} key={"marker_" + packet.id}>
@@ -91,7 +101,7 @@ class _PacketRendering extends Component {
           <b>Distance:</b> {distance}m<br />
           <b>Altitude: </b> {packet.alt}m <br/>
         </Popup>
-        {/* <Polyline positions={[[packet.lat, packet.lon],[]]}/> */}
+        <Polyline positions={lines} {...lineOptions} />
       </CircleMarker>
     )
   }
@@ -99,7 +109,11 @@ class _PacketRendering extends Component {
   render() {
     if (this.props.requestedPackets) {
       if (this.props.statePackets.packetsData.length > 0) {
-        return this.props.statePackets.packetsData.map(this.renderPacket);
+        let listOfMarkers = []
+        for (let i = 0; i < this.props.statePackets.packetsData.length; i++) {
+          listOfMarkers.push(this.renderPacket(this.props.statePackets.packetsData[i]))
+        }
+        return listOfMarkers
       }
     }
     return (" ")
@@ -108,7 +122,8 @@ class _PacketRendering extends Component {
 
 const mapStateToProps = state => {
   return {
-    statePackets: state.mapDetails.packets
+    statePackets: state.mapDetails.packets,
+    gateways: state.mapDetails.gatewayDetails
   }
 }
 
