@@ -10,25 +10,21 @@ class _AlertPopup extends React.Component {
   }
 
   render() {
-    let popup = ""
+    let popups = []
     if (this.props.connectionState === false) {
-      popup = (<div class="alert alert-warning" role="alert">Error connecting to server.</div>)
+      popups.push((
+        <div id="warning-container" style={{display:"none"}}>
+          <div class="alert alert-warning" id="connection-warning" role="alert">Error connecting to server.</div>
+        </div>))
     }
 
-    return (
-      <ReactCSSTransitionGroup
-          transitionName="example"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}>
-          { popup }
-      </ReactCSSTransitionGroup>
-    );
+    return popups
   }
 }
 
 const mapStateToProps = state => {
   return {
-    connectionState: true,
+    connectionState: false,
   }
 }
 

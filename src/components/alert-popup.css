@@ -1,6 +1,13 @@
-#connection-warning {
-	position:absolute;
+#warning-container {
+  position:absolute;
 	z-index:25;
 	bottom: 0;
-  	left: 0;
+  width:100%;
+  transition:position .5s ease-in;
+}
+
+#connection-warning {
+  width:60%;
+  margin-left:auto;
+  margin-right:auto;
 }
