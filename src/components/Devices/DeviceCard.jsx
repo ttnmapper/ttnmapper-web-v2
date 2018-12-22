@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Map, TileLayer,  } from 'react-leaflet'
-import { Marker, Popup } from 'react-leaflet'
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import L from 'leaflet';
+import { Panel } from 'react-bootstrap';
 
 // Workaround for leaflet css?
 import 'leaflet/dist/leaflet.css';
@@ -16,12 +15,13 @@ import 'react-leaflet-markercluster/dist/styles.min.css'
 //   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 // });
 
-const gwMarkerIconRoundBlue = L.icon({
-  iconUrl: require("../Home/GatewayRendering/images/gateway_dot.png"),
-  iconSize: [20, 20], // size of the icon
-  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
-});
+import { gwMarkerIconRoundBlue } from '../Home/GatewayRendering/GatewayRendering'
+// const gwMarkerIconRoundBlue = L.icon({
+//   iconUrl: require("../Home/GatewayRendering/images/gateway_dot.png"),
+//   iconSize: [20, 20], // size of the icon
+//   iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
+//   popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
+// });
 
 
 
@@ -30,6 +30,8 @@ class _DeviceCard extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {}
+    this.state.activeKey = true
   }
 
 
@@ -44,47 +46,27 @@ class _DeviceCard extends React.Component {
       const device_position = [devices.latitude, devices.longitude]
 
       return (
-        <div className="card device-card" >
-          <a data-toggle="collapse" href={"#collapse-device-" + uid}  aria-expanded="false" aria-controls={"collapse-device-" + uid}>
-            <div className="card-header">
-              {devices['dev_id']}
-            </div>
-          </a>
-          <div className="card-body">
-            <div className="info-block" >
-              <div className="card-desription">{devices['description']}</div>
-              <div><span className="card-key">Device EUI</span><span className="card-value">&nbsp;{devices.lorawan_device.dev_eui}</span></div>
-              <div><span className="card-key">Last Seen</span><span className="card-value">&nbsp;A week ago</span></div>
-              <div><span className="card-key">Coordinates</span><span className="card-value">&nbsp;{"N" +devices['latitude']+" E"+devices['longitude']}&nbsp;</span></div>
-              <div className="card-links">
-                <NavLink to={"/?mode=packets&deviceID=" + uid + "&fromDate=&toDate="}>View full map</NavLink>
-                <a href="/">Download CSV data</a>
-              </div>
-            </div>
-            <div className="map-block leaflet-container">
-              <Map center={device_position} zoom={default_zoom} zoomControl={false} dragging={false} touchZoom={false} doubleClickZoom={false} scrollWheelZoom={false} boxZoom={false} keyboard={false}>
-                <TileLayer
-                    attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-                    maxZoom="19"
-                  />
-                  <Marker key={"marker-"+devices['dev_id']} position={device_position} icon={gwMarkerIconRoundBlue}>
-                    <Popup>
-                      A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                  </Marker>
-              </Map>
-            </div>
-          </div>
-        </div>
+        <Panel className="card device-card" defaultExpanded activeKey={this.state.activeKey}>
+          <Panel.Heading className="card-header">
+            <Panel.Title toggle>
+            Panel heading with a title
+            </Panel.Title>
+          </Panel.Heading>
+          <Panel.Collapse>
+            <Panel.Body className="card-body">
+              Panel content
+          </Panel.Body>
+          </Panel.Collapse>
+        </Panel>
+
       )
     }
     else {
       return (<div className="card device-card" > </div>)
     }
   }
-
-  componentDidMount(){
+  //zoomControl={false} dragging={false} touchZoom={false} doubleClickZoom={false} scrollWheelZoom={false} boxZoom={false} keyboard={false}
+  componentDidMount() {
     if (this.map) {
       this.map.invalidateSize()
     }

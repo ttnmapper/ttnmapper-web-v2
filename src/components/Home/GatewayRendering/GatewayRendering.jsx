@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Popup, Marker, GeoJSON } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import { parseQuery, parseCoordsFromQuery } from '../query-utils'
 import { addSingleGateway, setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
 
 // Workaround for leaflet css?
@@ -292,4 +291,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 const GatewayRendering = connect(mapStateToProps, mapDispatchToProps)(_GatewayRendering)
 
 export default GatewayRendering;
-export { _GatewayRendering };
+export { _GatewayRendering, gwMarkerIconRoundBlue };

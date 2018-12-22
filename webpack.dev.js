@@ -48,10 +48,6 @@ module.exports = merge(common, {
   devtool: 'source-map',
   plugins: [
     new CopyWebpackPlugin([
-      { from: 'node_modules/jquery/dist/jquery.min.js', to: 'js' },
-      { from: 'node_modules/jquery/dist/jquery.min.map', to: 'js' },
-      { from: 'node_modules/bootstrap/dist/js/bootstrap.min.js', to: 'js' },
-      { from: 'node_modules/bootstrap/dist/js/bootstrap.min.js.map', to: 'js' },
       { from: 'node_modules/bootstrap/dist/css/bootstrap.min.css', to: 'css' },
       { from: 'node_modules/bootstrap/dist/css/bootstrap.min.css.map', to: 'css' },
       { from: 'node_modules/open-iconic/font/css/open-iconic.css', to: 'css' },

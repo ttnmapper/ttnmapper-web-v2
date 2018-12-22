@@ -11,10 +11,13 @@ class _AlertPopup extends React.Component {
 
   render() {
     let popups = []
-    if (this.props.connectionState === false) {
+
+    const display = this.props.network.connected ? "none" : ""
+
+    if (true) {
       popups.push((
-        <div id="warning-container" style={{display:"none"}}>
-          <div class="alert alert-warning" id="connection-warning" role="alert">Error connecting to server.</div>
+        <div id="warning-container" style={{display:display}} key="warning-div">
+          <div className="alert alert-warning" id="connection-warning" role="alert">Error connecting to server.</div>
         </div>))
     }
 
@@ -24,7 +27,7 @@ class _AlertPopup extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    connectionState: false,
+    network: state.network,
   }
 }
 
