@@ -52,11 +52,13 @@ module.exports = merge(common, {
       { from: 'node_modules/bootstrap/dist/css/bootstrap.min.css.map', to: 'css' },
       { from: 'node_modules/open-iconic/font/css/open-iconic.css', to: 'css' },
       { from: 'node_modules/leaflet/dist/leaflet.css', to: 'css' },
+      { from: 'node_modules/leaflet/dist/images', to: 'css' },
       { from: 'static/index.html', to: '' },
-      { from: 'node_modules/open-iconic/font/fonts/open-iconic.otf', to: 'fonts' },
-      { from: 'node_modules/open-iconic/font/fonts/open-iconic.ttf', to: 'fonts' },
-      { from: 'node_modules/open-iconic/font/fonts/open-iconic.svg', to: 'fonts' },
-      { from: 'node_modules/open-iconic/font/fonts/open-iconic.woff', to: 'fonts' },
     ])
   ]
 });
+
+      // { from: 'node_modules/open-iconic/font/fonts/open-iconic.otf', to: 'fonts' },
+      // { from: 'node_modules/open-iconic/font/fonts/open-iconic.ttf', to: 'fonts' },
+      // { from: 'node_modules/open-iconic/font/fonts/open-iconic.svg', to: 'fonts' },
+      // { from: 'node_modules/open-iconic/font/fonts/open-iconic.woff', to: 'fonts' },
