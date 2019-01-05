@@ -10,7 +10,7 @@ module.exports = merge(common, {
       {from:'node_modules/open-iconic/font/css/open-iconic.css', to: 'css'},
       {from:'node_modules/leaflet/dist/leaflet.css', to: 'css'},
       {from: 'node_modules/leaflet/dist/leaflet/images', to: 'css' },
-      {from:'static/index.html', to: ''}
+      {from:'static/.', to: ''}
     ])
   ],
 });
