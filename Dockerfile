@@ -5,7 +5,7 @@ LABEL builder=true
 
 WORKDIR /frontend
 
-COPY package.json yarn.lock ./
+COPY package.json ./
 
 # Install packages
 RUN yarn install --pure-lockfile --cache-folder ./.yarn-cache
