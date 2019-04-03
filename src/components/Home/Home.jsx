@@ -130,6 +130,15 @@ class _Home extends Component {
             fadeAnimation={false}
           />
         </BaseLayer>
+      ),
+      (
+        <BaseLayer key="opentopomap" name="OpenTopo Map">
+          <TileLayer
+            attribution="Kartendaten: © OpenStreetMap-Mitwirkende, SRTM | Kartendarstellung: © OpenTopoMap (CC-BY-SA)"
+            url="https://b.tile.opentopomap.org/{z}/{x}/{y}.png"
+            fadeAnimation={false}
+          />
+        </BaseLayer>
       )
     ]
   }
