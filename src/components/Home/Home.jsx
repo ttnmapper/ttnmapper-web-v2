@@ -134,7 +134,7 @@ class _Home extends Component {
       (
         <BaseLayer key="opentopomap" name="OpenTopo Map">
           <TileLayer
-            attribution="Kartendaten: © OpenStreetMap-Mitwirkende, SRTM | Kartendarstellung: © OpenTopoMap (CC-BY-SA)"
+            attribution='Map Data: © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende, SRTM | Map display: © <a href="http://opentopomap.org/">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
             url="https://b.tile.opentopomap.org/{z}/{x}/{y}.png"
             fadeAnimation={false}
           />
