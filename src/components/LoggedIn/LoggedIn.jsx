@@ -11,6 +11,9 @@ class _LoggedIn extends Component {
     super(props)
 
     this.loggedInParams = { code: null, state: null } // parameters from just logging in
+    this.timer = null
+
+    this.tick = this.tick.bind(this)
   }
 
   render() {
@@ -58,17 +61,36 @@ class _LoggedIn extends Component {
       }
     }
   }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+
+    // If we have made the request, and received the login tickets, set a timer
+    if ('loginTicket' in this.props.loginTicket) {
+      let timer = setInterval(this.tick, 3000);
+      this.timer = timer
+      //this.setState({timer});
+    }
+  }
+
+  tick() {
+    console.log("Tick!")
+    this.props.checkLoginTicketStatus(this.props.loginTicket)
+    console.log(this)
+  }
 }
+
 
 
 const mapStateToProps = state => {
   return {
     loggedIn: state.userData.userState.loggedIn,
+    loginTicket: state.userData.userState.tokens
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   sendCodeToBackend: (code) => dispatch(sendCodeToBackend(code)),
+  checkLoginTicketStatus: (ticket) => dispatch(checkLoginTicketStatus(ticket))
 })
 
 const LoggedIn = connect(mapStateToProps, mapDispatchToProps)(_LoggedIn)

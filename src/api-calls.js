@@ -83,7 +83,7 @@ export const getTTNLoginLink = () => {
 
 
 export const exchangeCodeForToken = (code) => {
-  return fetch(host +"/api/v1/login", {
+  return fetch(host +"/api/v1/accounts/login", {
     method: "POST",
     // headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({"code": code})
@@ -95,5 +95,13 @@ export const verifyExistingToken = (code) => {
     method: "POST",
     // headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({"mToken": code})
+  })
+}
+
+export const checkTicket = (ticket) => {
+  return fetch(host +"/api/v1/accounts/verifyToken", {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({"ticket": ticket})
   })
 }

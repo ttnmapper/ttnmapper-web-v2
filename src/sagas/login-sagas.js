@@ -9,7 +9,9 @@ import { push } from 'react-router-redux';
 import * as Api from '../api-calls'
 
 /*
-Call the API endpoint to find details about a specific gateway
+ * After returning from TTN log-in, send the code to the server receive a
+ * login-ticket, which can be polled to check login status. Server login can
+ * take a short while
 */
 function* postCodetoServer(action) {
   try {
@@ -19,7 +21,7 @@ function* postCodetoServer(action) {
 
     if ('success' in json && json.success === false) {
       yield put({
-        type: loginConstants.RECEIVE_TOKENS_FAILURE,
+        type: loginConstants.RECEIVE_LOGIN_TICKET_FAILURE,
         message: json.message,
         payload: {
         }
@@ -27,25 +29,25 @@ function* postCodetoServer(action) {
       return
     }
 
-    // Save the tokens
+    // Save the login ticket.
     yield put({
-      type: loginConstants.RECEIVE_TOKENS,
+      type: loginConstants.RECEIVE_LOGIN_TICKET,
       payload: json
     });
 
     // Tell everyone we're logged in.
-    yield put({type: loginConstants.USER_LOGGED_IN});
+    //yield put({type: loginConstants.USER_LOGGED_IN});
 
     // Store the token
-    localStorage.setItem('mToken', JSON.stringify(json));
-    console.log("User logged in, stored")
+    // localStorage.setItem('mToken', JSON.stringify(json));
+    // console.log("User logged in, stored")
 
     // And redirect to user page
-    yield put (push('/user'))
+    //yield put (push('/user'))
 
   } catch (e) {
     yield put({
-      type: loginConstants.RECEIVE_TOKENS_FAILURE,
+      type: loginConstants.RECEIVE_LOGIN_TICKET_FAILURE,
       message: e.message,
       payload: {
       }
@@ -89,6 +91,25 @@ function* returningLoginUser(action){
   }
 }
 
+function* checkLoginTicket(action) {
+  try {
+    const response = yield call(Api.checkTicket, action.payload.ticket);
+    const json = yield response.json();
+
+    if ('error' in json) {
+      console.log("Error:")
+      console.log(json.error)
+      return
+    }
+
+    console.log(json.login_state)
+  } catch (e) {
+    // Todo: Show a nice error message to the user
+    console.log("Error")
+    console.log(e)
+  }
+}
+
 function* logoutUser(action){
 
   localStorage.removeItem('mToken')
@@ -104,6 +125,7 @@ function* loginSagas() {
   yield takeEvery(loginConstants.SEND_CODE_TO_BACKEND, postCodetoServer);
   yield takeEvery(loginConstants.RETURNING_LOGIN_USER, returningLoginUser);
   yield takeEvery(loginConstants.LOG_OUT_REQUESTED, logoutUser);
+  yield takeEvery(loginConstants.CHECK_LOGIN_TICKET, checkLoginTicket);
 }
 
 export { loginSagas };

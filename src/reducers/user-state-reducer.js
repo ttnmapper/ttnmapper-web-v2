@@ -14,6 +14,8 @@ function tokens(state, action) {
   }
 
   switch (action.type) {
+    case loginConstants.RECEIVE_LOGIN_TICKET:
+    return { 'loginTicket': action.payload}
     case loginConstants.RECEIVE_TOKENS:
       return  { 'mToken': action.payload.mToken }
     case loginConstants.RECEIVE_TOKENS_FAILURE:

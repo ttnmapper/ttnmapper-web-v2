@@ -24,7 +24,8 @@ module.exports = merge(common, {
         secure: false,
       },
       '/api/v1' : {
-        target: 'http://localhost:8011',
+        target: 'http://localhost:5000',
+        pathRewrite: {'^/api/v1' : ''},
         changeOrigin: true,
         secure: false,
       }

@@ -12,9 +12,10 @@ class _LoginChecker extends Component {
   }
 
   componentDidMount(){
+    /*
     if (this.props.loggedIn === loginConstants.CheckingToken) {
       this.props.verifyExistingToken(this.props.tokens.mToken)
-    }
+    }*/
   }
 
   render() {
