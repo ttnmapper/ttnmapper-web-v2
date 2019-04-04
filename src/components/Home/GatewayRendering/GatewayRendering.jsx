@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Popup, Marker, GeoJSON } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
+import Spiderfy from '../Spiderfy/Spiderfy'
 
 import { addSingleGateway, setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
 
@@ -131,7 +132,10 @@ class _GatewayRendering extends Component {
           </MarkerClusterGroup>)
         }
         else {
-          return listOfMarkers
+          return (
+          <Spiderfy >
+            { listOfMarkers }
+          </Spiderfy>)
         }
       }
     }

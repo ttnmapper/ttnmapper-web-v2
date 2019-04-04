@@ -9808,6 +9808,11 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
+overlapping-marker-spiderfier-leaflet@^0.2.6-2:
+  version "0.2.6-2"
+  resolved "https://registry.yarnpkg.com/overlapping-marker-spiderfier-leaflet/-/overlapping-marker-spiderfier-leaflet-0.2.6-2.tgz#4086526d1304f02adbf9bd5388ef57925cf243ef"
+  integrity sha512-5h+fDoskNuVwxcsYu2RaocRcAMU7n7VGDuuqHQyZOK3CcO7ndRxqEjNXZoj0m96pHpVJeQHLIj2pbdFfB1e2mA==
+
 p-cancelable@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-0.3.0.tgz#b9e123800bcebb7ac13a479be195b507b98d30fa"
