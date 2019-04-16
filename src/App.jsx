@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { Route, Switch } from 'react-router'
+import { Route, Switch, Redirect } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router'
 
 // Our JS files
@@ -10,6 +10,7 @@ import { About, User, Home, HeaderBar, LeaderBoard, LoggedIn, FourOFour } from '
 import { store, history } from './helpers/store'
 import { UserRoute } from './components/small-components'
 import LoginChecker from './components/SmallComponents/LoginChecker';
+import RedirectOldSpecial from './components/SmallComponents/RedirectOldSpecial'
 
 //Required CSS files
 import './styling/styling'
@@ -33,6 +34,7 @@ class App extends Component {
               <Route path="/about" component={About} />
               <Route path="/leaderboard" component={LeaderBoard} />
               <Route path="/loggedin" component={LoggedIn} />
+              <RedirectOldSpecial from="/special" to="/" />
               <UserRoute path='/user' component={User} />
               <Route component={FourOFour} />
             </Switch>
