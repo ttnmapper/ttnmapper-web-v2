@@ -3,48 +3,39 @@ import { MapLayer, withLeaflet } from 'react-leaflet';
 import oms from 'overlapping-marker-spiderfier-leaflet'
 import L from 'leaflet';
 
-class _Spiderfy extends MapLayer {
+class Spiderfy extends MapLayer {
 
-    constructor(props) {
-        super(props)
-        this.oms = null
+    createLeafletElement(props) {
+        const { map } = props.leaflet;
+        this.oms = this.createOverlappingMarkerSpiderfier(map);
+        const el = L.layerGroup();
+        this.contextValue = { ...props.leaflet, layerContainer: el };
+        return el;
     }
 
-    createLeafletElement ({children, leaflet: {map, ...props}})  {
-        let newLayer = L.featureGroup()
-        this.oms = new OverlappingMarkerSpiderfier(map);
-
-        console.log(children)
-
-        var popup = new L.Popup();
-        this.oms.addListener('click', function(marker) {
-            console.log("Listener clicked")
-            popup.setContent(marker.desc);
-            popup.setLatLng(marker.getLatLng());
-            map.openPopup(popup);
+    componentDidMount() {
+        super.componentDidMount();
+        this.leafletElement.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+            this.oms.addMarker(layer);
+        }
         });
-
-        this.oms.addListener('spiderfy', function(markers) {
-            map.closePopup();
-          });
-
-        
-
-        // for (var i = 0; i< children.length; i++) {
-        //     console.log(children[i])
-        //     console.log(children[i]._store); 
-        // }
-
-        return newLayer
     }
 
-    updateLeafletElement (fromProps: Object, toProps: Object): Object {
-        console.log("Updated")
-        console.log(fromProps)
-        console.log(toProps)
+    createOverlappingMarkerSpiderfier(map) {
+        const oms = new window.OverlappingMarkerSpiderfier(map);
+        oms.addListener("spiderfy", markers => {
+        markers.forEach(m => m.closePopup())//force to close popup 
+        if (this.props.onSpiderfy) this.props.onSpiderfy(markers);
+        });
+        oms.addListener("unspiderfy", markers => {
+        if (this.props.onUnspiderfy) this.props.onUnspiderfy(markers);
+        });
+        oms.addListener("click", marker => {
+        if (this.props.onClick) this.props.onClick(marker);
+        });
+        return oms;
     }
-
 }
 
-
-export default withLeaflet(_Spiderfy);
+export default withLeaflet(Spiderfy);

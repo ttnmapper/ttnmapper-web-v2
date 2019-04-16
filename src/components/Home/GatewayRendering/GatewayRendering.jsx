@@ -264,17 +264,19 @@ class _GatewayRendering extends Component {
         console.log("Render normal")
         return (<div>
           {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-          {this.props.mapDetails.currentPosition.zoom >= 10 && this.drawGatewayRadars(this.props.mapDetails.visibleGateways)}
-          {this.props.mapDetails.currentPosition.zoom < 10 && this.drawGatewayCircles(this.props.mapDetails.visibleGateways)}
-        </div>)
+                </div>)
       }
     }
 
-    if (this.props.rendermode === 'packets') {
-      return (<div>
-        {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-      </div>)
-    }
+    // {this.props.mapDetails.currentPosition.zoom >= 10 && this.drawGatewayRadars(this.props.mapDetails.visibleGateways)}
+    // {this.props.mapDetails.currentPosition.zoom < 10 && this.drawGatewayCircles(this.props.mapDetails.visibleGateways)}
+  
+
+    // if (this.props.rendermode === 'packets') {
+    //   return (<div>
+    //     {this.drawMarkers(this.props.mapDetails.visibleGateways)}
+    //   </div>)
+    // }
   }
 }
 

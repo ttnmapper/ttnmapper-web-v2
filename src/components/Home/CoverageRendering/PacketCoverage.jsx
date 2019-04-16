@@ -101,7 +101,11 @@ class _PacketRendering extends Component {
           <b>Distance:</b> {distance}m<br />
           <b>Altitude: </b> {packet.alt}m <br/>
         </Popup>
-        <Polyline positions={lines} {...lineOptions} />
+        <Polyline positions={lines} {...lineOptions} >
+        <Popup>
+          Hello
+        </Popup>
+        </Polyline>
       </CircleMarker>
     )
   }
