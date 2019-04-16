@@ -12,7 +12,9 @@ module.exports = merge(common, {
     port: 8010,
     contentBase: path.join(__dirname, 'static'),
     publicPath: "",
-    historyApiFallback: true,
+    historyApiFallback: {
+      index: 'index.html'
+    },
     staticOptions: {
       redirect: false
     },
@@ -24,8 +26,7 @@ module.exports = merge(common, {
         secure: false,
       },
       '/api/v1' : {
-        target: 'http://localhost:5000',
-        pathRewrite: {'^/api/v1' : ''},
+        target: 'http://localhost:8011',
         changeOrigin: true,
         secure: false,
       }
