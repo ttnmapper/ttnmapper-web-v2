@@ -148,7 +148,6 @@ class _Home extends Component {
     const position = [this.copiedCoords.lat, this.copiedCoords.long]
 
     let Gateways;
-    let Coverage;
 
     if (true) {
       Gateways = <GatewayRendering rendermode={this.rendermode} />
@@ -162,20 +161,14 @@ class _Home extends Component {
           </LayersControl>
           <LayersControl position="topright" collapsed={false} >
             <LayersControl.BaseLayer name='Alpha Shapes'>
-              <Marker position={[51.51, -0.06]}>
-              </Marker>
             </LayersControl.BaseLayer>
             
             <LayersControl.BaseLayer name='Circle Coverage'>
-            <Marker position={[51.51, -0.06]}>
-              </Marker>
-                <CircleCoverage />
+              <CircleCoverage />
             </LayersControl.BaseLayer>
 
             <LayersControl.BaseLayer name='Radar Coverage'>
-              <Marker position={[51.51, -0.06]}>
-              </Marker>
-                <RadarCoverage />
+              <RadarCoverage />
             </LayersControl.BaseLayer>
           </LayersControl>
           { Gateways }

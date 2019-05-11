@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Popup, Marker, GeoJSON } from 'react-leaflet'
+import { Popup, Marker } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import Spiderfy from '../Spiderfy/Spiderfy'
 
@@ -50,17 +50,10 @@ class _GatewayRendering extends Component {
     super(props)
   }
 
-  setSingleGateway(gatewayID, mode, event) {
-    if (event.shiftKey) {
-      this.props.addSingleGateway(gatewayID, mode)
-    }
-    else {
-      this.props.setSingleGateway(gatewayID, mode)
-    }
-    event.preventDefault()
-  }
-
-
+  /**
+   * Return a single Marker object, with it's popup description
+   * @param {gatewayID} The ID of the gateway, this will be looked up in this.props
+   */
   drawSingleMarker(gatewayID) {
     if (gatewayID in this.props.mapDetails.gatewayDetails) {
       const details = this.props.mapDetails.gatewayDetails[gatewayID]
@@ -98,13 +91,6 @@ class _GatewayRendering extends Component {
             {optionalSection}
             <br />Last heard at {details.last_heard}
             <br />Channels heard on: {details.channels}
-            <br />Show only this gateway's coverage as:
-            <br />
-            <ul>
-              <li><a href="#" onClick={this.setSingleGateway.bind(this,gatewayID, 'radar')}>radar</a></li>
-              <li><a href="#" onClick={this.setSingleGateway.bind(this,gatewayID, 'alpha')}>alpha</a></li>
-              <li><a href="#" onClick={this.props.clearSingleGateway.bind(this)}>clear</a></li>
-            </ul>
           </Popup>
         </Marker>
       )
@@ -113,7 +99,7 @@ class _GatewayRendering extends Component {
   }
 
   /**
-   * Draw the markers. This assues the zoom level checking was already done
+   * Draw the markers. 
    *
    * This function returns a list of <Marker> components, that can be inserted into
    * the map component
@@ -144,83 +130,10 @@ class _GatewayRendering extends Component {
     }
   }
 
-  /**
-   * Helper function for gateway circles
-   */
-  pointToLayer(feature, latlng) {
-    return L.circle(latlng, feature.properties.radius, {
-      stroke: false,
-      color: feature.style.color,
-      fillColor: feature.style.color,
-      fillOpacity: 0.25
-    })
-  }
 
-  /**
-   * Draw rough coverage circles, for use with quite large zoom levels. Zoom level check done somewhere else.
-   *
-   * This function returns a list of <GeoJSON> components, that can be inserted into
-   * the map component
-   */
-  drawGatewayCircles(listOfVisibleGateways) {
-    if (listOfVisibleGateways) {
-      const listOfCircles = listOfVisibleGateways.map((gatewayID, index) => {
-        if (gatewayID in this.props.mapDetails.gatewayCircleCover) {
-          return <GeoJSON key={"circle_cover_" + gatewayID} data={this.props.mapDetails.gatewayCircleCover[gatewayID]} pointToLayer={this.pointToLayer.bind(this)} />
-        }
-      })
-      return listOfCircles
-    }
-  }
 
-  /**
-   * Draw the radars for a list of gateways. Zoom level check done somewhere else.
-   *
-   * This function returns a list of <GeoJSON> components, that can be inserted into
-   * the map component
-   */
-  drawGatewayRadars(listOfVisibleGateways) {
-    const radarStyle = {
-      stroke: false,
-      fillOpacity: 0.25,
-      fillColor: "#0000FF",
-      zIndex: 25
-    }
-    if (listOfVisibleGateways) {
-      const listOfRadarCover = listOfVisibleGateways.map((gatewayID, index) => {
-        if (gatewayID in this.props.mapDetails.gatewayRadarCover) {
-
-          return <GeoJSON key={"radar_cover_" + gatewayID} data={this.props.mapDetails.gatewayRadarCover[gatewayID]} style={radarStyle} />
-        }
-      })
-      return listOfRadarCover
-    }
-  }
-
-  /**
-   * Draw the alpha shape for a list of gateways
-   *
-   * This function returns a list of <GeoJSON> components, that can be inserted into
-   * the map component
-   */
-  drawGatewayAlpha(listOfVisibleGateways) {
-    const alphaStyle = {
-      stroke: false,
-      fillOpacity: 0.25,
-      fillColor: "#37d699",
-      zIndex: 25
-    }
-    if (listOfVisibleGateways) {
-      const listOfAlphaCover = listOfVisibleGateways.map((gatewayID, index) => {
-        if (gatewayID in this.props.mapDetails.gatewayAlphaShapes) {
-
-          return <GeoJSON key={"alpha_cover_" + gatewayID} data={this.props.mapDetails.gatewayAlphaShapes[gatewayID]} style={alphaStyle} />
-        }
-      })
-      return listOfAlphaCover
-    }
-  }
-
+  
+  /*
   drawSingleMode(gatewayID, mode) {
     if (mode === 'radar') {
       return (<div key={'single_gw_' + gatewayID}>
@@ -245,9 +158,10 @@ class _GatewayRendering extends Component {
           </div>)
       }
     }
-  }
+  }*/
 
   render() {
+    /*
     if (this.props.rendermode === "coverage") {
       // coverage mode can be either all gateways or a single gateway
       if (this.props.mapDetails.renderSingle.length > 0) {
@@ -262,11 +176,9 @@ class _GatewayRendering extends Component {
       else {
         // Normal mode
         console.log("Render normal")
-        return (<div>
-          {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-                </div>)
+        
       }
-    }
+    }*/
 
     // {this.props.mapDetails.currentPosition.zoom >= 10 && this.drawGatewayRadars(this.props.mapDetails.visibleGateways)}
     // {this.props.mapDetails.currentPosition.zoom < 10 && this.drawGatewayCircles(this.props.mapDetails.visibleGateways)}
@@ -277,6 +189,8 @@ class _GatewayRendering extends Component {
     //     {this.drawMarkers(this.props.mapDetails.visibleGateways)}
     //   </div>)
     // }
+
+    return (<div> {this.drawMarkers(this.props.mapDetails.visibleGateways)} </div>)
   }
 }
 
@@ -287,9 +201,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  addSingleGateway: (gatewayID, mode) => dispatch(addSingleGateway(gatewayID, mode)),
-  setSingleGateway: (gatewayID, mode) => dispatch(setSingleGateway(gatewayID, mode)),
-  clearSingleGateway: () => dispatch(clearSingleGateway()),
   fetchGWAlphaShape: (gatewayID) => dispatch(fetchGatewayAlphaShape(gatewayID)),
   ...ownProps
 })
