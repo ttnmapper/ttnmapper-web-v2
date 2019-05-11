@@ -4,46 +4,47 @@ import { Popup, Marker } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import Spiderfy from '../Spiderfy/Spiderfy'
 
-import { addSingleGateway, setSingleGateway, clearSingleGateway, fetchGatewayAlphaShape } from '../../../actions/map-events'
+import {fetchGatewayAlphaShape } from '../../../actions/map-events'
 
 // Workaround for leaflet css?
 import L from 'leaflet';
-// delete L.Icon.Default.prototype._getIconUrl;
-
 import 'react-leaflet-markercluster/dist/styles.min.css'
+import { list } from 'postcss';
 
-// L.Icon.Default.mergeOptions({
-//   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-//   iconUrl: require('leaflet/dist/images/marker-icon.png'),
-//   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-// });
+// The icons' graphics files should always be the same dimension
+const icoSize = [20,20];
+const icoAnchor = [10, 10];
+const icoPopupAnchor = [10, 10];
 
 const gwMarkerIconRoundBlue = L.icon({
   iconUrl: require("./images/gateway_dot.png"),
-  iconSize: [20, 20], // size of the icon
-  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
+  iconSize: icoSize,
+  iconAnchor: icoAnchor,
+  popupAnchor: icoPopupAnchor
 });
 const gwMarkerIconRoundGreen = L.icon({
   iconUrl: require("./images/gateway_dot_green.png"),
-  iconSize: [20, 20], // size of the icon
-  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
+  iconSize: icoSize,
+  iconAnchor: icoAnchor,
+  popupAnchor: icoPopupAnchor
 });
 const gwMarkerIconRoundRed = L.icon({
   iconUrl: require("./images/gateway_dot_red.png"),
-  iconSize: [20, 20], // size of the icon
-  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
+  iconSize: icoSize,
+  iconAnchor: icoAnchor,
+  popupAnchor: icoPopupAnchor
 });
 const gwMarkerIconRoundYellow = L.icon({
   iconUrl: require("./images/gateway_dot_yellow.png"),
-  iconSize: [20, 20], // size of the icon
-  iconAnchor: [10, 10], // point of the icon which will correspond to marker\'s location
-  popupAnchor: [10, 10] // point from which the popup should open relative to the iconAnchor
+  iconSize: icoSize,
+  iconAnchor: icoAnchor,
+  popupAnchor: icoPopupAnchor
 });
 
+/*
+  A leaflet map layer to render the gateway icons and their pop-ups
 
+*/
 class _GatewayRendering extends Component {
 
   constructor(props) {
@@ -51,16 +52,23 @@ class _GatewayRendering extends Component {
   }
 
   /**
-   * Return a single Marker object, with it's popup description
+   * Return a single gateway marker object, with it's popup description. Will
+   * not render if we do not have the gateway details.
+   * 
    * @param {gatewayID} The ID of the gateway, this will be looked up in this.props
+   * @returns A JSX Marker object
    */
   drawSingleMarker(gatewayID) {
     if (gatewayID in this.props.mapDetails.gatewayDetails) {
-      const details = this.props.mapDetails.gatewayDetails[gatewayID]
+
+      const gwDetails = this.props.mapDetails.gatewayDetails[gatewayID]
+      // Optional section displays extra info, if the gateway should be 
+      // removed or single channel
       let optionalSection = ""
       let icon = gwMarkerIconRoundBlue
 
-      if (details.last_heard < (Date.now() / 1000) - (60 * 60 * 1)) {
+      // Fill out the optional sections, and possibly change the icons
+      if (gwDetails.last_heard < (Date.now() / 1000) - (60 * 60 * 1)) {
         optionalSection = (
           <div>
             <br />
@@ -70,7 +78,7 @@ class _GatewayRendering extends Component {
           </div>
         )
         icon = gwMarkerIconRoundRed
-      } else if (details.channels < 3) {
+      } else if (gwDetails.channels < 3) {
         optionalSection = (
           <div>
             <br />
@@ -82,15 +90,15 @@ class _GatewayRendering extends Component {
       }
 
       return (
-        <Marker position={[details.lat, details.lon]} key={"marker_" + gatewayID} icon={icon}>
+        <Marker position={[gwDetails.lat, gwDetails.lon]} key={"marker_" + gatewayID} icon={icon}>
           <Popup offset={[-11,0]}>
-            <b>{('description' in details ? details.description : details.gwaddr)}</b>
+            <b>{('description' in gwDetails ? gwDetails.description : gwDetails.gwaddr)}</b>
             <br />
             {gatewayID}
             <br />
             {optionalSection}
-            <br />Last heard at {details.last_heard}
-            <br />Channels heard on: {details.channels}
+            <br />Last heard at {gwDetails.last_heard}
+            <br />Channels heard on: {gwDetails.channels}
           </Popup>
         </Marker>
       )
@@ -98,41 +106,6 @@ class _GatewayRendering extends Component {
     return ""
   }
 
-  /**
-   * Draw the markers. 
-   *
-   * This function returns a list of <Marker> components, that can be inserted into
-   * the map component
-   */
-  drawMarkers(listOfVisibleGateways) {
-
-    if (listOfVisibleGateways) {
-      if (this.singleGateway && this.singleGateway.hideothers === true) {
-        return this.drawSingleMarker(this.singleGateway.gateway)
-      } else {
-        const listOfMarkers = listOfVisibleGateways.map((gatewayID, index) => this.drawSingleMarker(gatewayID))
-        if (this.props.mapDetails.currentPosition.zoom < 9) {
-        return (
-          <MarkerClusterGroup showCoverageOnHover={false}>
-            { listOfMarkers }
-          </MarkerClusterGroup>)
-        }
-        else {
-          return (
-          <Spiderfy >
-            { listOfMarkers }
-          </Spiderfy>)
-        }
-      }
-    }
-    else {
-      return ""
-    }
-  }
-
-
-
-  
   /*
   drawSingleMode(gatewayID, mode) {
     if (mode === 'radar') {
@@ -160,7 +133,7 @@ class _GatewayRendering extends Component {
     }
   }*/
 
-  render() {
+  
     /*
     if (this.props.rendermode === "coverage") {
       // coverage mode can be either all gateways or a single gateway
@@ -190,13 +163,45 @@ class _GatewayRendering extends Component {
     //   </div>)
     // }
 
-    return (<div> {this.drawMarkers(this.props.mapDetails.visibleGateways)} </div>)
+  /**
+   * Main render function.
+   */
+  render() {
+
+    if (this.props.visibleGateways) {
+      if (this.props.singleGateway && this.props.singleGateway.hideothers === true) {
+        return this.drawSingleMarker(this.singleGateway.gateway)
+      } else {
+        const listOfMarkers = this.props.visibleGateways.map((gatewayID, _) => this.drawSingleMarker(gatewayID))
+        if (this.props.currentZoom < 9) {
+          // If we are zoommed out, just cluster the markers.
+          return (
+            <MarkerClusterGroup showCoverageOnHover={false}>
+              { listOfMarkers }
+            </MarkerClusterGroup>)
+        }
+        else {
+          // Otherwise spiderfy them, so an individual one can be selected
+          return (
+          <Spiderfy >
+            { listOfMarkers }
+          </Spiderfy>)
+        }
+      }
+    }
+    else {
+      return ""
+    }
   }
 }
 
 const mapStateToProps = state => {
-  return {
+  return { 
+    singleGateway: null,
+    visibleGateways: state.mapDetails.visibleGateways,
     mapDetails: state.mapDetails,
+    currentZoom: state.mapDetails.currentPosition.zoom,
+    gatewayDetails: state.mapDetails.gatewayDetails
   }
 }
 
