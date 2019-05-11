@@ -37,7 +37,8 @@ function* requestMapData(action) {
         }
 
         // Check if we have radar data for this gateway, and if it is required
-        if (!action.payload.knownRadar.includes(json.gateways[i]) && (action.payload.zoomLevel >= 10)) {
+        // Used to have ) && (action.payload.zoomLevel >= 10) in the if, to check zoom levels
+        if (!action.payload.knownRadar.includes(json.gateways[i])) {
           missingGWRadars.push(json.gateways[i])
         }
       }

@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
 import { FeatureGroup, GeoJSON } from 'react-leaflet'
 
 /*
@@ -37,7 +36,7 @@ class _CircleCoverage extends Component {
             stroke: false,
             color: feature.style.color,
             fillColor: feature.style.color,
-            fillOpacity: 0.15
+            fillOpacity: 0.25
         })
     }
 
@@ -50,7 +49,6 @@ class _CircleCoverage extends Component {
           this.drawGatewayCircle(this.singleGateway.gateway)
         } else {
           const listOfCircles = this.props.visibleGateways.map((gatewayID, _) => this.drawGatewayCircle(gatewayID))
-            // Otherwise spiderfy them, so an individual one can be selected
           return (<FeatureGroup> {listOfCircles} </FeatureGroup>)
         }
       }

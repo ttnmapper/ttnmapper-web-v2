@@ -4,7 +4,6 @@ import { Popup, Marker } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import Spiderfy from '../Spiderfy/Spiderfy'
 
-import {fetchGatewayAlphaShape } from '../../../actions/map-events'
 
 // Workaround for leaflet css?
 import L from 'leaflet';
@@ -206,7 +205,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchGWAlphaShape: (gatewayID) => dispatch(fetchGatewayAlphaShape(gatewayID)),
   ...ownProps
 })
 

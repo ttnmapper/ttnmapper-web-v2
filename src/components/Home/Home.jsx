@@ -165,6 +165,7 @@ class _Home extends Component {
             </LayersControl.BaseLayer>
 
             <LayersControl.BaseLayer name='Alpha Shapes'>
+              <AlphaCoverage />
             </LayersControl.BaseLayer>
 
             <LayersControl.BaseLayer name='Radar Coverage' >
@@ -186,7 +187,8 @@ class _Home extends Component {
         this.props.fetchNewMapData(currentExtent, this.copiedCoords.zoom, 
           Object.keys(this.props.mapDetails.gatewayDetails), 
           Object.keys(this.props.mapDetails.gatewayCircleCover),
-          Object.keys(this.props.mapDetails.gatewayRadarCover)
+          Object.keys(this.props.mapDetails.gatewayRadarCover),
+          Object.keys(this.props.mapDetails.gatewayAlphaShapes)
         )
       }
     }
@@ -201,7 +203,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateMapPosition: (newPosition, previousSearch) => dispatch(updateMapPosition(newPosition,previousSearch)),
-  fetchNewMapData: (mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar) => dispatch(fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar))
+  fetchNewMapData: (mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar, knownAlphas) => dispatch(fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar, knownAlphas))
 })
 
 const Home = connect(mapStateToProps, mapDispatchToProps)(_Home)

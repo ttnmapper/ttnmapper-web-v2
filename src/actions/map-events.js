@@ -41,7 +41,7 @@ export function updateMapPosition(newPosition, queryString) {
  * @param {Object} mapExtent
  * @param {Object} dataToFetch
  */
-export function fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar) {
+export function fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar, knownAlphas) {
   return {
     type: mapConstants.REQUEST_MAP_GATEWAYS,
     payload: {
@@ -49,7 +49,8 @@ export function fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircle
       zoomLevel: zoomLevel,
       knownGateways: knownGateways,
       knownCircles: knownCircles,
-      knownRadar: knownRadar
+      knownRadar: knownRadar,
+      knownAlphas: knownAlphas
     }
   }
 }
@@ -70,6 +71,8 @@ export function setSingleGateway(gatewayID, mode) {
   }
 }
 
+/*
+// KW - Deprecate multiple single
 export function addSingleGateway(gatewayID, mode) {
   return {
     type: mapConstants.ADD_SINGLE_GATEWAY,
@@ -86,20 +89,7 @@ export function clearSingleGateway(){
 
   }
 }
-
-/**
- * Fetch the data for a single gateway alpha shape
- * @param {*} gatewayID
- */
-export function fetchGatewayAlphaShape(gatewayID) {
-  return {
-    type: mapConstants.REQUEST_MAP_GW_ALPHA,
-    payload: {
-      gatewayID: gatewayID
-    }
-  }
-}
-
+*/
 
 export function fetchPacketData(deviceID, fromDate, toDate) {
   return {
