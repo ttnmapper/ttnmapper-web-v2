@@ -160,14 +160,14 @@ class _Home extends Component {
             {this.addBaseTileLayers()}
           </LayersControl>
           <LayersControl position="topright" collapsed={false} >
-            <LayersControl.BaseLayer name='Alpha Shapes'>
-            </LayersControl.BaseLayer>
-            
             <LayersControl.BaseLayer name='Circle Coverage'>
               <CircleCoverage />
             </LayersControl.BaseLayer>
 
-            <LayersControl.BaseLayer name='Radar Coverage'>
+            <LayersControl.BaseLayer name='Alpha Shapes'>
+            </LayersControl.BaseLayer>
+
+            <LayersControl.BaseLayer name='Radar Coverage' >
               <RadarCoverage />
             </LayersControl.BaseLayer>
           </LayersControl>
@@ -183,7 +183,11 @@ class _Home extends Component {
     if (this.map) {
       const currentExtent = this.map.leafletElement.getBounds()
       if (this.rendermode === "coverage") {
-        this.props.fetchNewMapData(currentExtent, this.copiedCoords.zoom, Object.keys(this.props.mapDetails.gatewayDetails))
+        this.props.fetchNewMapData(currentExtent, this.copiedCoords.zoom, 
+          Object.keys(this.props.mapDetails.gatewayDetails), 
+          Object.keys(this.props.mapDetails.gatewayCircleCover),
+          Object.keys(this.props.mapDetails.gatewayRadarCover)
+        )
       }
     }
   }
@@ -197,7 +201,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateMapPosition: (newPosition, previousSearch) => dispatch(updateMapPosition(newPosition,previousSearch)),
-  fetchNewMapData: (mapExtent, zoomLevel) => dispatch(fetchNewMapData(mapExtent, zoomLevel, [],[],[]))
+  fetchNewMapData: (mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar) => dispatch(fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar))
 })
 
 const Home = connect(mapStateToProps, mapDispatchToProps)(_Home)

@@ -1,7 +1,13 @@
-// Render the Alpha coverage
-import React, { Component } from 'react'
+/*
+  A Leaflet map layer which renders multiple or individual gateway coverage.
+
+  The alpha coverage is a geometric shape which tries to approximate the area
+  in which a gateway has coverage. These are calculated on the backend, and 
+  sent to the front end as a geojson string.
+*/
+
+import { Component } from 'react'
 import { connect } from 'react-redux'
-import { Overlay } from 'react-leaflet'
 
 class _AlphaCoverage extends Component {
     render() {

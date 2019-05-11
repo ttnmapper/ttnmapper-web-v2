@@ -18,7 +18,8 @@ function* requestMapData(action) {
       yield put({type: mapConstants.RECEIVE_MAP_GATEWAYS, payload:{listOfGateways: json.gateways}});
       yield put({type: mapConstants.SET_VISIBLE_GATEWAYS, payload:{listOfGateways: json.gateways}});
 
-
+      // We received a new list of visible gateways. Check if we have details/circles/radar for them, if not, request it.
+      // We can batch these requests, so create lists.
       let missingGWDetails = []
       let missingGWCircles = []
       let missingGWRadars = []
@@ -26,12 +27,12 @@ function* requestMapData(action) {
       for (let i = 0; i < json.gateways.length; i++) {
         // check if we have any details about this gateway
         if (!action.payload.knownGateways.includes(json.gateways[i])){
-
+          // if not, ask for some details.
           missingGWDetails.push(json.gateways[i])
         }
 
         // Check if we have circle data for this gateway, and if it is required
-        if (!action.payload.knownCircles.includes(json.gateways[i]) && (7 <= action.payload.zoomLevel) && (action.payload.zoomLevel < 10)) {
+        if (!action.payload.knownCircles.includes(json.gateways[i])) {
           missingGWCircles.push(json.gateways[i])
         }
 
@@ -50,7 +51,6 @@ function* requestMapData(action) {
       if (missingGWRadars.length > 0) {
         yield put({type: mapConstants.REQUEST_MAP_GW_RADAR, payload: {list: missingGWRadars}});
       }
-
 
    } catch (e) {
       yield put({type: mapConstants.RECEIVE_MAP_GATEWAYS_FAILED, message: e.message});
