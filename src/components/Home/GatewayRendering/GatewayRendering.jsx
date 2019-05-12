@@ -105,63 +105,6 @@ class _GatewayRendering extends Component {
     return ""
   }
 
-  /*
-  drawSingleMode(gatewayID, mode) {
-    if (mode === 'radar') {
-      return (<div key={'single_gw_' + gatewayID}>
-        {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-        {this.drawGatewayRadars([gatewayID])}
-      </div>
-      )
-    }
-    else if (mode === 'alpha') {
-      // Check if we have data
-      if (gatewayID in this.props.mapDetails.gatewayAlphaShapes) {
-        return (<div key={'single_gw_' + gatewayID}>
-          {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-          {this.drawGatewayAlpha([gatewayID])}
-        </div>)
-      }
-      else {
-        // Fire off event to get the data
-        this.props.fetchGWAlphaShape(gatewayID)
-        return (<div key={'single_gw_' + gatewayID}>
-          {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-          </div>)
-      }
-    }
-  }*/
-
-  
-    /*
-    if (this.props.rendermode === "coverage") {
-      // coverage mode can be either all gateways or a single gateway
-      if (this.props.mapDetails.renderSingle.length > 0) {
-        console.log("Render single")
-        // We only need to render a single gateway
-        const singleGateways = this.props.mapDetails.renderSingle.map((currElement, index) => {
-          return this.drawSingleMode(currElement.gatewayID, currElement.mode)
-        })
-        return (singleGateways)
-
-      }
-      else {
-        // Normal mode
-        console.log("Render normal")
-        
-      }
-    }*/
-
-    // {this.props.mapDetails.currentPosition.zoom >= 10 && this.drawGatewayRadars(this.props.mapDetails.visibleGateways)}
-    // {this.props.mapDetails.currentPosition.zoom < 10 && this.drawGatewayCircles(this.props.mapDetails.visibleGateways)}
-  
-
-    // if (this.props.rendermode === 'packets') {
-    //   return (<div>
-    //     {this.drawMarkers(this.props.mapDetails.visibleGateways)}
-    //   </div>)
-    // }
-
   /**
    * Main render function.
    */

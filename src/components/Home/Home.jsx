@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Map, TileLayer, LayersControl, Marker, Popup } from 'react-leaflet'
+import { Map, TileLayer, LayersControl, FeatureGroup } from 'react-leaflet'
 
 import { updateMapPosition, fetchNewMapData } from '../../actions/map-events'
 import GatewayRendering from './GatewayRendering/GatewayRendering'
@@ -160,6 +160,9 @@ class _Home extends Component {
             {this.addBaseTileLayers()}
           </LayersControl>
           <LayersControl position="topright" collapsed={false} >
+            <LayersControl.BaseLayer name='No Coverage'>
+            <FeatureGroup />
+            </LayersControl.BaseLayer>
             <LayersControl.BaseLayer name='Circle Coverage'>
               <CircleCoverage />
             </LayersControl.BaseLayer>
