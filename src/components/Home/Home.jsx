@@ -10,11 +10,10 @@ import AlphaCoverage from './CoverageRendering/AlphaCoverage'
 import CircleCoverage from './CoverageRendering/CircleCoverage'
 import RadarCoverage from './CoverageRendering/RadarCoverage'
 
-import 'leaflet/dist/leaflet.css';
-import './home.css'
+import 'leaflet/dist/leaflet.css'
+import './home.css';
 
 class _Home extends Component {
-
   constructor(props) {
     super(props)
 
@@ -34,15 +33,14 @@ class _Home extends Component {
     }
 
     if ('lat' in this.params && 'long' in this.params && 'zoom' in this.params) {
-        this.copiedCoords.lat = this.params.lat
-        this.copiedCoords.long = this.params.long
-        this.copiedCoords.zoom = this.params.zoom
+      this.copiedCoords.lat = this.params.lat
+      this.copiedCoords.long = this.params.long
+      this.copiedCoords.zoom = this.params.zoom
     }
 
     this.rendermode = 'coverage'
     this.packetsSettings = null
-    console.log("Home component params")
-    console.log(this.params)
+
     // packets mdoe will also have deviceID, date_from and date_to
     if ('mode' in this.params && this.params.mode === 'packets') {
       if ('deviceID' in this.params && 'fromDate' in this.params && 'toDate' in this.params) {
@@ -204,7 +202,7 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   updateMapPosition: (newPosition, previousSearch) => dispatch(updateMapPosition(newPosition,previousSearch)),
   fetchNewMapData: (mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar, knownAlphas) => dispatch(fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar, knownAlphas))
 })

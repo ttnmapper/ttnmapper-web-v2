@@ -15,7 +15,7 @@ request if you can implement it yourself. If you would like to contribute more, 
 so that you can be included in discussions.
 
 ## Development
-See the [development](./docs/development) readme.
+See the [development](./docs/development.md) readme.
 
 ## Deployment
 Here be dragons
