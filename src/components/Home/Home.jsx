@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Map, TileLayer, LayersControl, FeatureGroup } from 'react-leaflet'
+import PropTypes from 'prop-types';
 
 import { updateMapPosition, fetchNewMapData } from '../../actions/map-events'
 import GatewayRendering from './GatewayRendering/GatewayRendering'
@@ -13,9 +14,15 @@ import RadarCoverage from './CoverageRendering/RadarCoverage'
 import 'leaflet/dist/leaflet.css'
 import './home.css';
 
+/** 
+ * This is the main map component. It renders maps with different coverage settings.
+ */
+
 class _Home extends Component {
   constructor(props) {
     super(props)
+
+    const {mapDetails, location} = this.props;
 
     this.mapMovedEventHandler = this.mapMovedEventHandler.bind(this)
     /*
@@ -24,10 +31,10 @@ class _Home extends Component {
     We need to store the coords for the url or if the map is re-visited. So: Copy the coords when
     first mounted, and hope they stay in sync.
     */
-    this.copiedCoords = this.props.mapDetails.currentPosition
+    this.copiedCoords = mapDetails.currentPosition
 
-    if ('location' in props && 'search' in props.location && props.location.search !== "") {
-      this.params = parseQuery(props.location.search)
+    if ('search' in location && location.search !== "") {
+      this.params = parseQuery(location.search)
     } else {
       this.params = {}
     }
@@ -38,10 +45,13 @@ class _Home extends Component {
       this.copiedCoords.zoom = this.params.zoom
     }
 
+    // Rendermode was a URL parameter indicating how to show the map. Coverage
+    // is circle/radar/alpha mode, packets shows individaul packets for a 
+    // device.
     this.rendermode = 'coverage'
     this.packetsSettings = null
 
-    // packets mdoe will also have deviceID, date_from and date_to
+    // packets mode will also have deviceID, date_from and date_to
     if ('mode' in this.params && this.params.mode === 'packets') {
       if ('deviceID' in this.params && 'fromDate' in this.params && 'toDate' in this.params) {
         this.rendermode = 'packets'
@@ -61,30 +71,26 @@ class _Home extends Component {
     }
   }
 
-  mapMovedEventHandler(event) {
-    // Dispatch an action handler to update the state
-    let coordsFromMap = event.target.getBounds().getCenter()
-    const newCoords = {
-      lat: coordsFromMap.lat,
-      long: coordsFromMap.lng,
-      zoom: event.target.getZoom()
-    }
+  componentDidMount() {
+    const {fetchNewMapData, mapDetails} = this.props
 
-    this.props.updateMapPosition(newCoords, this.props.location.search)
-
-    if (this.rendermode === "coverage") {
-      if (this.map) {
-        const currentExtent = this.map.leafletElement.getBounds()
-        const currentZoom = newCoords.zoom
-        this.props.fetchNewMapData(currentExtent,
-          currentZoom,
-          Object.keys(this.props.mapDetails.gatewayDetails),
-          Object.keys(this.props.mapDetails.gatewayCircleCover),
-          Object.keys(this.props.mapDetails.gatewayRadarCover))
+    // Once the map is mounted, make sure we have data for all the devices.
+    if (this.map) {
+      const currentExtent = this.map.leafletElement.getBounds()
+      if (this.rendermode === "coverage") {
+        fetchNewMapData(currentExtent, this.copiedCoords.zoom, 
+          Object.keys(mapDetails.gatewayDetails), 
+          Object.keys(mapDetails.gatewayCircleCover),
+          Object.keys(mapDetails.gatewayRadarCover),
+          Object.keys(mapDetails.gatewayAlphaShapes)
+        )
       }
     }
   }
 
+  /**
+   * Helper function for creating the map. Returns a list of leaflet Layers
+   */
   addBaseTileLayers() {
     return [
       (
@@ -141,25 +147,51 @@ class _Home extends Component {
     ]
   }
 
+  /**
+   *  Handler for the leaflet map. Check for gateways when the map is moved.
+   */
+  mapMovedEventHandler(event) {
+    const {updateMapPosition, fetchNewMapData, location, mapDetails} = this.props
+
+    // Dispatch an event to update the state
+    let coordsFromMap = event.target.getBounds().getCenter()
+    const newCoords = {
+      lat: coordsFromMap.lat,
+      long: coordsFromMap.lng,
+      zoom: event.target.getZoom()
+    }
+
+    updateMapPosition(newCoords, location.search)
+
+    // Dispatch an event to check and get possible new data
+    if (this.rendermode === "coverage") {
+      if (this.map) {
+        const currentExtent = this.map.leafletElement.getBounds()
+        const currentZoom = newCoords.zoom
+        fetchNewMapData(currentExtent,
+          currentZoom,
+          Object.keys(mapDetails.gatewayDetails),
+          Object.keys(mapDetails.gatewayCircleCover),
+          Object.keys(mapDetails.gatewayRadarCover))
+      }
+    }
+  }
+
   render() {
     const zoom = this.copiedCoords.zoom
     const position = [this.copiedCoords.lat, this.copiedCoords.long]
 
-    let Gateways;
-
-    if (true) {
-      Gateways = <GatewayRendering rendermode={this.rendermode} />
-    }
+    let Gateways = (<GatewayRendering rendermode={this.rendermode} />)
 
     return (
-      <div id="mapsContainer" >
-        <Map center={position} zoom={zoom} onMoveend={this.mapMovedEventHandler} zoomend={this.mapMovedEventHandler} ref={(ref) => { this.map = ref; }} maxZoom={18} minZoom={2} >
+      <div id="mapsContainer">
+        <Map center={position} zoom={zoom} onMoveend={this.mapMovedEventHandler} zoomend={this.mapMovedEventHandler} ref={(ref) => { this.map = ref; }} maxZoom={18} minZoom={2}>
           <LayersControl position="topright" collapsed={false}>
             {this.addBaseTileLayers()}
           </LayersControl>
-          <LayersControl position="topright" collapsed={false} >
+          <LayersControl position="topright" collapsed={false}>
             <LayersControl.BaseLayer name='No Coverage'>
-            <FeatureGroup />
+              <FeatureGroup />
             </LayersControl.BaseLayer>
             <LayersControl.BaseLayer name='Circle Coverage'>
               <CircleCoverage />
@@ -169,7 +201,7 @@ class _Home extends Component {
               <AlphaCoverage />
             </LayersControl.BaseLayer>
 
-            <LayersControl.BaseLayer name='Radar Coverage' >
+            <LayersControl.BaseLayer name='Radar Coverage'>
               <RadarCoverage />
             </LayersControl.BaseLayer>
           </LayersControl>
@@ -180,20 +212,13 @@ class _Home extends Component {
     )
   }
 
-  componentDidMount() {
+}
 
-    if (this.map) {
-      const currentExtent = this.map.leafletElement.getBounds()
-      if (this.rendermode === "coverage") {
-        this.props.fetchNewMapData(currentExtent, this.copiedCoords.zoom, 
-          Object.keys(this.props.mapDetails.gatewayDetails), 
-          Object.keys(this.props.mapDetails.gatewayCircleCover),
-          Object.keys(this.props.mapDetails.gatewayRadarCover),
-          Object.keys(this.props.mapDetails.gatewayAlphaShapes)
-        )
-      }
-    }
-  }
+_Home.propTypes = {
+  mapDetails: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  updateMapPosition: PropTypes.func.isRequired,
+  fetchNewMapData: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => {

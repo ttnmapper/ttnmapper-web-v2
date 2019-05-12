@@ -1,4 +1,4 @@
-export { userData } from './user-data-reducer.js'
-export { ui } from './ui-reducer.js'
-export { mapDetails } from './map-details-reducer.js'
-export { network } from './network-reducer.js'
+export { userData } from './user-data-reducer'
+export { ui } from './ui-reducer'
+export { mapDetails } from './map-details-reducer'
+export { network } from './network-reducer'

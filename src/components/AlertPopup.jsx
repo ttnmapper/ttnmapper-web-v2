@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
 
@@ -14,12 +14,13 @@ class _AlertPopup extends React.Component {
 
     const display = this.props.network.connected ? "none" : ""
 
+    /*
     if (true) {
       popups.push((
         <div id="warning-container" style={{display:display}} key="warning-div">
           <div className="alert alert-warning" id="connection-warning" role="alert">Error connecting to server.</div>
         </div>))
-    }
+    }*/
 
     return popups
   }

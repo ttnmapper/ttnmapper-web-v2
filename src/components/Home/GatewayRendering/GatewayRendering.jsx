@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Popup, Marker } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import Spiderfy from '../Spiderfy/Spiderfy'
-
+import PropTypes from 'prop-types';
 
 // Workaround for leaflet css?
 import L from 'leaflet';
 import 'react-leaflet-markercluster/dist/styles.min.css'
-import { list } from 'postcss';
+//import { list } from 'postcss';
+
+import Spiderfy from '../Spiderfy/Spiderfy'
 
 // The icons' graphics files should always be the same dimension
 const icoSize = [20,20];
@@ -41,8 +42,7 @@ const gwMarkerIconRoundYellow = L.icon({
 });
 
 /*
-  A leaflet map layer to render the gateway icons and their pop-ups
-
+  A leaflet map layer to render the gateway icons and their pop-up icons
 */
 class _GatewayRendering extends Component {
 
@@ -58,9 +58,11 @@ class _GatewayRendering extends Component {
    * @returns A JSX Marker object
    */
   drawSingleMarker(gatewayID) {
-    if (gatewayID in this.props.mapDetails.gatewayDetails) {
+    const {gatewayDetails} = this.props
 
-      const gwDetails = this.props.mapDetails.gatewayDetails[gatewayID]
+    if (gatewayID in gatewayDetails) {
+
+      const gwDetails = gatewayDetails[gatewayID]
       // Optional section displays extra info, if the gateway should be 
       // removed or single channel
       let optionalSection = ""
@@ -73,7 +75,7 @@ class _GatewayRendering extends Component {
             <br />
             <font color="red">Offline.</font>
             Will be removed from the map in 5 days.
-            < br />
+            <br />
           </div>
         )
         icon = gwMarkerIconRoundRed
@@ -81,7 +83,8 @@ class _GatewayRendering extends Component {
         optionalSection = (
           <div>
             <br />
-            Likely a < font color="orange" > Single Channel Gateway.</font >
+            Likely a 
+            <font color="orange"> Single Channel Gateway.</font>
             <br />
           </div>
         )
@@ -96,8 +99,12 @@ class _GatewayRendering extends Component {
             {gatewayID}
             <br />
             {optionalSection}
-            <br />Last heard at {gwDetails.last_heard}
-            <br />Channels heard on: {gwDetails.channels}
+            <br />
+            Last heard at 
+            {gwDetails.last_heard}
+            <br />
+            Channels heard on: 
+            {gwDetails.channels}
           </Popup>
         </Marker>
       )
@@ -109,25 +116,29 @@ class _GatewayRendering extends Component {
    * Main render function.
    */
   render() {
+    const {visibleGateways, singleGateway, currentZoom} = this.props
 
-    if (this.props.visibleGateways) {
-      if (this.props.singleGateway && this.props.singleGateway.hideothers === true) {
-        return this.drawSingleMarker(this.singleGateway.gateway)
+    if (visibleGateways) {
+      if (singleGateway && singleGateway.hideothers === true) {
+        return this.drawSingleMarker(singleGateway.gateway)
       } else {
-        const listOfMarkers = this.props.visibleGateways.map((gatewayID, _) => this.drawSingleMarker(gatewayID))
-        if (this.props.currentZoom < 9) {
+        const listOfMarkers = visibleGateways.map((gatewayID) => this.drawSingleMarker(gatewayID))
+
+        if (currentZoom < 9) {
           // If we are zoommed out, just cluster the markers.
           return (
             <MarkerClusterGroup showCoverageOnHover={false}>
               { listOfMarkers }
-            </MarkerClusterGroup>)
+            </MarkerClusterGroup>
+          )
         }
         else {
           // Otherwise spiderfy them, so an individual one can be selected
           return (
-          <Spiderfy >
-            { listOfMarkers }
-          </Spiderfy>)
+            <Spiderfy>
+              { listOfMarkers }
+            </Spiderfy>
+          )
         }
       }
     }
@@ -137,11 +148,17 @@ class _GatewayRendering extends Component {
   }
 }
 
+_GatewayRendering.propTypes = {
+  singleGateway: PropTypes.object.isRequired,
+  visibleGateways: PropTypes.array.isRequired,
+  currentZoom: PropTypes.func.isRequired,
+  gatewayDetails: PropTypes.func.isRequired
+}
+
 const mapStateToProps = state => {
   return { 
     singleGateway: null,
     visibleGateways: state.mapDetails.visibleGateways,
-    mapDetails: state.mapDetails,
     currentZoom: state.mapDetails.currentPosition.zoom,
     gatewayDetails: state.mapDetails.gatewayDetails
   }
