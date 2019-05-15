@@ -104,6 +104,19 @@ if [ $COMMAND = init ];  then
 	ttn-lw-cli --ca ./certs/cert.pem clients create --client-id ttnmapper --name "TTN Mapper" --user-id admin \
 	--redirect-uris "localhost:8010/login_callback" --secret="supasecret" --grants 0,2 --rights 1,6,8,15,20,30,38,39 --state STATE_APPROVED
 
+	# Create users without being logged in due to https://github.com/TheThingsNetwork/lorawan-stack/pull/387, https://github.com/TheThingsNetwork/lorawan-stack/issues/672
+	ttn-lw-cli --ca ./certs/cert.pem logout
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-allan --primary-email-address allan@localhost --name Allan --password AllanAllan1
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-belinda --primary-email-address belinda@localhost --name Belinda --password BelindaBelinda1
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-charlie --primary-email-address charlie@localhost --name "Charles Brown, Esq" --password CharlieCharlie1
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-diane --primary-email-address diane@localhost --name Diane --password DianeDiane1
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-edgar --primary-email-address edgar@localhost --name Edgar --password EdgarEdgar1
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-freddie --primary-email-address freddie@localhost --name "Freddie fricking long name that wont render right" --password FreddieFreddie1
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-giselle --primary-email-address giselle@localhost --name Giselle --password GiselleGiselle1
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-howard --primary-email-address howard@localhost --name Howard --password HowardHoward1
+	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-ivan --primary-email-address ivan@localhost --name Ivan --password InvalidInvalid1
+	ttn-lw-cli --ca ./certs/cert.pem login 
+
 	# Create some users
 	# User Allan,   - 3 applications, 2,3,4 devices each. Used for normal testing
 	# User Belinda 	- 1 Application, 50 devices Testing Large number of devices
@@ -116,8 +129,6 @@ if [ $COMMAND = init ];  then
 	# User Invalid 	- Nothing. Cancelles login due to wrong password
 
 	# User Allan,   - 3 applications, 2,3,4 devices each. Used for normal testing
-	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-allan --primary-email-address allan@localhost --name Allan --password AllanAllan1
-	ttn-lw-cli --ca ./certs/cert.pem application create --application-id app-allan-1 --name "Allan Application 1" --user-id uid-allan
 	ttn-lw-cli --ca ./certs/cert.pem device create --application-id app-allan-1 --device-id dev-allan-1 --description "Allan device 1 description" --name "Allan device 1" --dev-eui 0111223344556601 --join-eui 8000000000010001 --lorawan-version 1.0.2 --lorawan-phy-version 1.0.2-b --frequency-plan-id EU_868_890
 	ttn-lw-cli --ca ./certs/cert.pem device create --application-id app-allan-1 --device-id dev-allan-2 --description "Allan device 2 description" --name "Allan device 2" --dev-eui 0111223344556602 --join-eui 8000000000010002 --lorawan-version 1.0.2 --lorawan-phy-version 1.0.2-b --frequency-plan-id EU_868_890
 	ttn-lw-cli --ca ./certs/cert.pem application create --application-id app-allan-2 --name "Allan Application 2" --user-id uid-allan
@@ -132,7 +143,6 @@ if [ $COMMAND = init ];  then
 
 
 	# User Belinda 	- 1 Application, 50 devices Testing Large number of devices
-	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-belinda --primary-email-address belinda@localhost --name Belinda --password BelindaBelinda1
 	ttn-lw-cli --ca ./certs/cert.pem application create --application-id app-belinda-1 --name "Belinda Application 1" --user-id uid-belinda
 	# Create 40 devices for this application
 	for i in $(seq -f "%02g" 1 40)
@@ -141,12 +151,9 @@ if [ $COMMAND = init ];  then
 	done
 
 
-	# User Charlie 	- Nothing 
-	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-charlie --primary-email-address charlie@localhost --name "Charles Brown, Esq" --password CharlieCharlie1
 
 
 	# User Diane 	- 40 Applications, 1 device each. Other combo of large numbers
-	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-diane --primary-email-address diane@localhost --name Diane --password DianeDiane1
 	# Create 40 applications, 1 device each
 	for i in $(seq -f "%02g" 1 40)
 	do
@@ -156,27 +163,23 @@ if [ $COMMAND = init ];  then
 
 
 	# Edgar - one application, no devices
-	ttn-lw-cli --ca ./certs/cert.pem application create --application-id app-freddie-1 --name "Freddie Application 1" --user-id uid-freddie
+	ttn-lw-cli --ca ./certs/cert.pem application create --application-id app-edgar-1 --name "Edgar Application 1" --user-id uid-edgar
 
 
 	# Freddie - An anoyingly long name
-	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-freddie --primary-email-address freddie@localhost --name "Freddie fricking long name that wont render right" --password FreddieFreddie1
 	ttn-lw-cli --ca ./certs/cert.pem application create --application-id app-freddie-1 --name "Freddie Application 1" --user-id uid-freddie
 
 
 	# User Giselle 	- Application, 2 devices
-	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-giselle --primary-email-address giselle@localhost --name Giselle --password GiselleGiselle1
 	ttn-lw-cli --ca ./certs/cert.pem application create --application-id app-giselle-1 --name "Giselle Application 1" --user-id uid-giselle
 	ttn-lw-cli --ca ./certs/cert.pem device create --application-id app-giselle-1 --device-id dev-giselle-1 --description "Giselle device 1 description" --name "Giselle device 9" --dev-eui 0711223344556601 --join-eui 8000000000070009 --lorawan-version 1.0.2 --lorawan-phy-version 1.0.2-b --frequency-plan-id EU_868_890
 	ttn-lw-cli --ca ./certs/cert.pem device create --application-id app-giselle-1 --device-id dev-giselle-2 --description "Giselle device 2 description" --name "Giselle device 9" --dev-eui 0711223344556602 --join-eui 8000000000070009 --lorawan-version 1.0.2 --lorawan-phy-version 1.0.2-b --frequency-plan-id EU_868_890
 
 
 	# User Howard - Shares application with Giselle
-	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-howard --primary-email-address howard@localhost --name Howard --password HowardHoward1
 	ttn-lw-cli --ca ./certs/cert.pem applications collaborators set --application-id app-giselle-1 --user-id uid-howard --right-application-devices-read --right-application-info
 
 	# User Invalid 	- Nothing. Cancelles login due to wrong password
-	ttn-lw-cli --ca ./certs/cert.pem users create --user-id uid-ivan --primary-email-address ivan@localhost --name Ivan --password InvalidInvalid1
 
 
 	docker-compose down
