@@ -151,13 +151,13 @@ class _GatewayRendering extends Component {
 _GatewayRendering.propTypes = {
   singleGateway: PropTypes.object.isRequired,
   visibleGateways: PropTypes.array.isRequired,
-  currentZoom: PropTypes.func.isRequired,
-  gatewayDetails: PropTypes.func.isRequired
+  currentZoom: PropTypes.string.isRequired,
+  gatewayDetails: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => {
   return { 
-    singleGateway: null,
+    singleGateway: {},
     visibleGateways: state.mapDetails.visibleGateways,
     currentZoom: state.mapDetails.currentPosition.zoom,
     gatewayDetails: state.mapDetails.gatewayDetails

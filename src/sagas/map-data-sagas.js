@@ -23,6 +23,7 @@ function* requestMapData(action) {
       let missingGWDetails = []
       let missingGWCircles = []
       let missingGWRadars = []
+      let missingGWAlpha = []
 
       for (let i = 0; i < json.gateways.length; i++) {
         // check if we have any details about this gateway
@@ -41,6 +42,10 @@ function* requestMapData(action) {
         if (!action.payload.knownRadar.includes(json.gateways[i])) {
           missingGWRadars.push(json.gateways[i])
         }
+
+        if (!action.payload.knownAlphas.includes(json.gateways[i])) {
+          missingGWAlpha.push(json.gateways[i])
+        }
       }
 
       if (missingGWDetails.length > 0) {
@@ -51,6 +56,9 @@ function* requestMapData(action) {
       }
       if (missingGWRadars.length > 0) {
         yield put({type: mapConstants.REQUEST_MAP_GW_RADAR, payload: {list: missingGWRadars}});
+      }
+      if (missingGWAlpha.length > 0) {
+        yield put({type: mapConstants.REQUEST_MAP_GW_ALPHA, payload: {list: missingGWAlpha}});
       }
 
    } catch (e) {
