@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { Route, Switch, Redirect } from 'react-router'
+import { Route, Switch } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router'
 
 // Our JS files
@@ -45,4 +45,4 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(<App/>,document.getElementById('maps-app'))
+ReactDOM.render(<App />,document.getElementById('maps-app'))

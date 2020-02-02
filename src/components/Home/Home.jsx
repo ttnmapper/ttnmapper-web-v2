@@ -7,12 +7,16 @@ import { updateMapPosition, fetchNewMapData } from '../../actions/map-events'
 import GatewayRendering from './GatewayRendering/GatewayRendering'
 import AlertPopup from '../AlertPopup'
 import { parseQuery } from './query-utils'
+import MapSettingsSidebar from './MapsettingsSidebar'
 import AlphaCoverage from './CoverageRendering/AlphaCoverage'
-import CircleCoverage from './CoverageRendering/CircleCoverage'
 import RadarCoverage from './CoverageRendering/RadarCoverage'
 
 import 'leaflet/dist/leaflet.css'
 import './home.css';
+import { mapConstants } from '../../constants';
+
+//const RenderModes = Object.freeze({"none":0, "grid":1, "radar":2, "color_radar":3, "alpha": 4})
+
 
 /** 
  * This is the main map component. It renders maps with different coverage settings.
@@ -27,31 +31,38 @@ class _Home extends Component {
     this.mapMovedEventHandler = this.mapMovedEventHandler.bind(this)
     /*
     Bit of trickery here: When the map is created it gets coordinates, but is never re-rendered.
-    Then the map is move the event listener gets coordinates which don't exactly match.
+    Then the map is moved the event listener gets coordinates which don't exactly match.
     We need to store the coords for the url or if the map is re-visited. So: Copy the coords when
     first mounted, and hope they stay in sync.
     */
-    this.copiedCoords = mapDetails.currentPosition
+    this.copiedCoords = Object.assign({}, mapDetails.currentPosition)
 
+    // Check if we should parse URL parameters
+    
     if ('search' in location && location.search !== "") {
       this.params = parseQuery(location.search)
     } else {
       this.params = {}
     }
+    
 
+    // Copy the coords if they were set in the URL parameters
     if ('lat' in this.params && 'long' in this.params && 'zoom' in this.params) {
       this.copiedCoords.lat = this.params.lat
       this.copiedCoords.long = this.params.long
       this.copiedCoords.zoom = this.params.zoom
     }
 
+    // Todo: On first load, check the rendermode setting. If is is for 
+    // individual GW, check that they are also set
+
     // Rendermode was a URL parameter indicating how to show the map. Coverage
     // is circle/radar/alpha mode, packets shows individaul packets for a 
     // device.
-    this.rendermode = 'coverage'
-    this.packetsSettings = null
+    this.gwCoverageMode = mapConstants.RENDER_MODE_GRID
 
     // packets mode will also have deviceID, date_from and date_to
+    /*
     if ('mode' in this.params && this.params.mode === 'packets') {
       if ('deviceID' in this.params && 'fromDate' in this.params && 'toDate' in this.params) {
         this.rendermode = 'packets'
@@ -68,7 +79,7 @@ class _Home extends Component {
           date: this.params.date
         }
       }
-    }
+    }*/
   }
 
   componentDidMount() {
@@ -77,14 +88,22 @@ class _Home extends Component {
     // Once the map is mounted, make sure we have data for all the devices.
     if (this.map) {
       const currentExtent = this.map.leafletElement.getBounds()
-      if (this.rendermode === "coverage") {
-        fetchNewMapData(currentExtent, this.copiedCoords.zoom, 
-          Object.keys(mapDetails.gatewayDetails), 
-          Object.keys(mapDetails.gatewayCircleCover),
-          Object.keys(mapDetails.gatewayRadarCover),
-          Object.keys(mapDetails.gatewayAlphaShapes)
-        )
+      let knownCoverage = {}
+      switch(this.gwCoverageMode) {
+        case mapConstants.RENDER_MODE_RADAR:
+          knownCoverage = mapDetails.gatewayRadarCover; break;
+        case mapConstants.RENDER_MODE_COLOR_RADAR:
+          break;
+        case mapConstants.RENDER_MODE_ALPHA:
+          knownCoverage = mapDetails.gatewayAlphaCover; break;
       }
+
+      fetchNewMapData(currentExtent,
+        this.copiedCoords.zoom, 
+        this.gwCoverageMode,
+        Object.keys(mapDetails.gatewayDetails), 
+        Object.keys(knownCoverage)
+      )
     }
   }
 
@@ -148,12 +167,15 @@ class _Home extends Component {
   }
 
   /**
-   *  Handler for the leaflet map. Check for gateways when the map is moved.
+   * Handler for the leaflet map.
+   * 
+   * When the map is moved, check if we need to load new gateways, and store 
+   * the new location in localstore.
    */
   mapMovedEventHandler(event) {
     const {updateMapPosition, fetchNewMapData, location, mapDetails} = this.props
 
-    // Dispatch an event to update the state
+    // Get the new coordinates from the object
     let coordsFromMap = event.target.getBounds().getCenter()
     const newCoords = {
       lat: coordsFromMap.lat,
@@ -161,19 +183,28 @@ class _Home extends Component {
       zoom: event.target.getZoom()
     }
 
+    // Dispatch an event to update the state
     updateMapPosition(newCoords, location.search)
 
     // Dispatch an event to check and get possible new data
-    if (this.rendermode === "coverage") {
-      if (this.map) {
-        const currentExtent = this.map.leafletElement.getBounds()
-        const currentZoom = newCoords.zoom
-        fetchNewMapData(currentExtent,
-          currentZoom,
-          Object.keys(mapDetails.gatewayDetails),
-          Object.keys(mapDetails.gatewayCircleCover),
-          Object.keys(mapDetails.gatewayRadarCover))
+    if (this.map) {
+      const currentExtent = this.map.leafletElement.getBounds()
+      let knownCoverage = {}
+      switch(this.gwCoverageMode) {
+        case mapConstants.RENDER_MODE_RADAR:
+          knownCoverage = mapDetails.gatewayRadarCover; break;
+        case mapConstants.RENDER_MODE_COLOR_RADAR:
+          break;
+        case mapConstants.RENDER_MODE_ALPHA:
+          knownCoverage = mapDetails.gatewayAlphaCover; break;
       }
+
+      fetchNewMapData(currentExtent,
+        newCoords.zoom, 
+        this.gwCoverageMode,
+        Object.keys(mapDetails.gatewayDetails), 
+        Object.keys(knownCoverage)
+      )
     }
   }
 
@@ -185,16 +216,26 @@ class _Home extends Component {
 
     return (
       <div id="mapsContainer">
-        <Map center={position} zoom={zoom} onMoveend={this.mapMovedEventHandler} zoomend={this.mapMovedEventHandler} ref={(ref) => { this.map = ref; }} maxZoom={18} minZoom={2}>
-          <LayersControl position="topright" collapsed={false}>
+      
+        <MapSettingsSidebar />
+        
+        <Map 
+          className="sidebar-map" 
+          center={position} 
+          zoom={zoom} 
+          onMoveend={this.mapMovedEventHandler} 
+          zoomend={this.mapMovedEventHandler} 
+          ref={(ref) => { this.map = ref; }} 
+          maxZoom={18} 
+          minZoom={2}
+          >
+          
+          <LayersControl position="topleft" collapsed={true} >
             {this.addBaseTileLayers()}
           </LayersControl>
-          <LayersControl position="topright" collapsed={false}>
+          {/* <LayersControl position="topright" collapsed={false}>
             <LayersControl.BaseLayer name='No Coverage'>
               <FeatureGroup />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer name='Circle Coverage'>
-              <CircleCoverage />
             </LayersControl.BaseLayer>
 
             <LayersControl.BaseLayer name='Alpha Shapes'>
@@ -204,7 +245,7 @@ class _Home extends Component {
             <LayersControl.BaseLayer name='Radar Coverage'>
               <RadarCoverage />
             </LayersControl.BaseLayer>
-          </LayersControl>
+          </LayersControl> */}
           { Gateways }
         </Map>
         <AlertPopup />
@@ -229,7 +270,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
   updateMapPosition: (newPosition, previousSearch) => dispatch(updateMapPosition(newPosition,previousSearch)),
-  fetchNewMapData: (mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar, knownAlphas) => dispatch(fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar, knownAlphas))
+  fetchNewMapData: (mapExtent, zoomLevel, coverageType, knownDetails, knownCoverage) => dispatch(fetchNewMapData(mapExtent, zoomLevel, coverageType, knownDetails, knownCoverage))
 })
 
 const Home = connect(mapStateToProps, mapDispatchToProps)(_Home)

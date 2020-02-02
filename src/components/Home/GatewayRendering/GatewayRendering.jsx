@@ -151,7 +151,7 @@ class _GatewayRendering extends Component {
 _GatewayRendering.propTypes = {
   singleGateway: PropTypes.object.isRequired,
   visibleGateways: PropTypes.array.isRequired,
-  currentZoom: PropTypes.string.isRequired,
+  currentZoom: PropTypes.number.isRequired,
   gatewayDetails: PropTypes.object.isRequired
 }
 

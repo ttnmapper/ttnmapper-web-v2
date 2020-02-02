@@ -1,0 +1,53 @@
+
+.sbOptionList{
+    list-style: none;
+    padding: 0 0 0 0;
+    margin:0;
+    height:100%;
+}
+
+.sbOption {
+    padding: 0.5em 1em;
+}
+.sbOption a {
+    height:auto;
+    padding:0;
+    margin:0;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    position:relative;
+}
+
+/* Hovering over the option : Give it a shadow, slightly change the color*/
+.sbOption a {
+    color: var(--header-link-inactive-color);
+}
+.sbOption a:hover {
+    box-shadow: 0px 0px 10px #333;
+    color: var(--header-link-hover-color);
+}
+
+/*When the option is active, give it a solid border and shadow, but don't react to mouse moves*/
+.sbOption.active a {
+    border: 2px solid var(--dark-blue-bg-color);
+    box-shadow: 0px 0px 20px #ccc;
+}
+.sbOption.active a:hover {
+    color: var(--header-link-inactive-color);
+    box-shadow: 0px 0px 20px #ccc;
+}
+
+
+.sbOption .sbOptionName {
+    position:absolute;
+    width:100%;
+    padding: 0.1em;
+    text-align:center;
+    background-color: var(--dark-blue-bg-color);
+}
+
+
+.sbOption img {
+    max-width: 100%;
+    max-height: 100%;
+}

@@ -27,9 +27,9 @@ export function parseCoordsFromQuery(queryString) {
 
 export function parseSingleGatewayFromQuery(queryString) {
   // Remove the '?' at the beginning, split by comma
-  var partsOfStr = queryString.substring(1).split('&');
+  let partsOfStr = queryString.substring(1).split('&');
 
-  const parsedGateway = {
+  let parsedGateway = {
     gateway: null,
     type: null,
     hideothers: null
@@ -37,7 +37,7 @@ export function parseSingleGatewayFromQuery(queryString) {
 
   for (var ind in partsOfStr) {
     //Split into name and value
-    var assignment = partsOfStr[ind].split('=')
+    let assignment = partsOfStr[ind].split('=')
     if (assignment.length == 2) {
       switch (assignment[0]) {
         case 'gateway': parsedCoords.gateway = assignment[1]; break;

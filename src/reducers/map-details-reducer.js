@@ -3,6 +3,7 @@ import { UPDATE_MAP_POSITION } from '../constants'
 import { mapConstants} from '../constants'
 
 
+
 export function currentPosition(state, action) {
 	if (typeof state == 'undefined') {
     //Demo position for now
@@ -17,6 +18,14 @@ export function currentPosition(state, action) {
   }
 }
 
+export function renderingMode(state, action) {
+  if (typeof state == 'undefined') {
+		return {mode: mapConstants.RENDER_GRID, active_gws: []}
+  }
+
+  return state;
+}
+
 export function gatewayDetails(state, action) {
   if (typeof state == 'undefined') {
 		return {}
@@ -25,20 +34,6 @@ export function gatewayDetails(state, action) {
   switch (action.type) {
     // We might need to make a new entry in the list
     case mapConstants.RECEIVE_GATEWAY_DETAILS:
-      return Object.assign({}, state, action.payload.listOfGateways)
-    default:
-      return state;
-  }
-}
-
-export function gatewayCircleCover(state, action) {
-  if (typeof state == 'undefined') {
-		return {}
-  }
-
-  switch (action.type) {
-    // We might need to make a new entry in the list
-    case mapConstants.RECEIVE_MAP_GW_CIRCLES:
       return Object.assign({}, state, action.payload.listOfGateways)
     default:
       return state;
@@ -67,7 +62,6 @@ export function visibleGateways(state, action) {
   switch (action.type) {
     case mapConstants.SET_VISIBLE_GATEWAYS: {
 
-      console.log("Updating visible gateways")
       // Update the list of current gateways
       return action.payload.listOfGateways
     }
@@ -106,6 +100,7 @@ function gatewayAlphaShapes(state, action) {
   }
 }
 
+/*
 function packetsQuery(state, action) {
   if (typeof state == 'undefined') {
     return {}
@@ -131,17 +126,17 @@ function packetsData(state,action) {
     default:
       return state
   }
-}
+}*/
 
 export const mapDetails = combineReducers({
   currentPosition: currentPosition,
+  renderingMode: renderingMode,
   gatewayDetails: gatewayDetails,
   visibleGateways: visibleGateways,
-  gatewayCircleCover: gatewayCircleCover,
   gatewayRadarCover: gatewayRadarCover,
   gatewayAlphaShapes: gatewayAlphaShapes,
   renderSingle: renderSingle,
-  packets: combineReducers({
-    packetsQuery, packetsData
-   })
+  // packets: combineReducers({
+  //   packetsQuery, packetsData
+  //  })
 })

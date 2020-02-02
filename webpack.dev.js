@@ -25,8 +25,8 @@ module.exports = merge(common, {
         changeOrigin: true,
         secure: false,
       },
-      '/api/v1' : {
-        target: 'http://localhost:8011',
+      '/v2/api' : {
+        target: 'http://localhost:8400',
         changeOrigin: true,
         secure: false,
       }
@@ -56,11 +56,11 @@ module.exports = merge(common, {
       { from: 'node_modules/leaflet/dist/leaflet.css', to: 'css' },
       { from: 'node_modules/leaflet/dist/images', to: 'css' },
       { from: 'static/.', to: '' },
+      { from: 'node_modules/open-iconic/font/fonts/open-iconic.otf', to: 'fonts' },
+      { from: 'node_modules/open-iconic/font/fonts/open-iconic.ttf', to: 'fonts' },
+      { from: 'node_modules/open-iconic/font/fonts/open-iconic.svg', to: 'fonts' },
+      { from: 'node_modules/open-iconic/font/fonts/open-iconic.woff', to: 'fonts' },      
     ])
   ]
 });
 
-      // { from: 'node_modules/open-iconic/font/fonts/open-iconic.otf', to: 'fonts' },
-      // { from: 'node_modules/open-iconic/font/fonts/open-iconic.ttf', to: 'fonts' },
-      // { from: 'node_modules/open-iconic/font/fonts/open-iconic.svg', to: 'fonts' },
-      // { from: 'node_modules/open-iconic/font/fonts/open-iconic.woff', to: 'fonts' },

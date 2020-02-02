@@ -1,24 +1,26 @@
-import { UPDATE_MAP_POSITION, mapConstants } from '../constants'
-
 import { push } from 'react-router-redux';
 import qs from 'query-string';
 
+import { UPDATE_MAP_POSITION, mapConstants } from '../constants'
 
 /**
- * When the map is moved we need to store the new position, and update the url bar.
- * @param {Object} newPosition
+ * Dispatch events to update the lat, long and zoom in the state and the url bar
+ * 
+ * @param {Object} newPosition  Should contain lat, long and zoom parameters
+ * @param {Object} queryString  The original query string
 */
 export function updateMapPosition(newPosition, queryString) {
-  var partsOfStr = queryString.substring(1).split('&');
+  let partsOfStr = queryString.substring(1).split('&');
   let parsedParams = {}
 
-  for (var ind in partsOfStr) {
+  for (let ind in partsOfStr) {
     //Split into name and value
-    var assignment = partsOfStr[ind].split('=')
+    let assignment = partsOfStr[ind].split('=')
     if (assignment.length == 2) {
       parsedParams[assignment[0]] = assignment[1]
     }
   }
+
   //Remove lat, long and zoom from the params
   delete parsedParams.lat;
   delete parsedParams.long;
@@ -38,19 +40,19 @@ export function updateMapPosition(newPosition, queryString) {
 /**
  * Fetch the data required to draw the current, depending on zoom level
  * mapExtent should contain a bounding box of the current map, and the zoom level
+ * 
  * @param {Object} mapExtent
  * @param {Object} dataToFetch
  */
-export function fetchNewMapData(mapExtent, zoomLevel, knownGateways, knownCircles, knownRadar, knownAlphas) {
+export function fetchNewMapData(mapExtent, zoomLevel, coverageType, knownDetails, knownCoverage) {
   return {
     type: mapConstants.REQUEST_MAP_GATEWAYS,
     payload: {
       mapExtent: mapExtent,
       zoomLevel: zoomLevel,
-      knownGateways: knownGateways,
-      knownCircles: knownCircles,
-      knownRadar: knownRadar,
-      knownAlphas: knownAlphas
+      coverageType: coverageType, 
+      knownDetails: knownDetails,
+      knownCoverage: knownCoverage,
     }
   }
 }
