@@ -86,7 +86,7 @@ export function updateGwCoverage(newCoverage) {
   return {
     type: mapConstants.CHANGE_MAP_COVERAGE,
     payload: {
-      newLayer: newCoverage
+      newCoverage: newCoverage
     }
   }
 }

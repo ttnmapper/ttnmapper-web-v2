@@ -26,7 +26,9 @@ export function renderingMode(state, action) {
 
   switch (action.type) {
     case mapConstants.CHANGE_MAP_COVERAGE:
-      return {mode: action.payload.newCoverage}
+      console.log(action.payload.newCoverage)
+      return {mode: action.payload.newCoverage, active_gws: state.active_gws}
+      break;
     default:
       return state
   }

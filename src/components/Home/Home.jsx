@@ -53,14 +53,6 @@ class _Home extends Component {
       this.copiedCoords.zoom = this.params.zoom
     }
 
-    // Todo: On first load, check the rendermode setting. If is is for 
-    // individual GW, check that they are also set
-
-    // Rendermode was a URL parameter indicating how to show the map. Coverage
-    // is circle/radar/alpha mode, packets shows individaul packets for a 
-    // device.
-    this.gwCoverageMode = mapConstants.RENDER_MODE_GRID
-
     // packets mode will also have deviceID, date_from and date_to
     /*
     if ('mode' in this.params && this.params.mode === 'packets') {
@@ -100,14 +92,37 @@ class _Home extends Component {
 
       fetchNewMapData(currentExtent,
         this.copiedCoords.zoom, 
-        this.gwCoverageMode,
+        mapDetails.renderingMode.mode,
         Object.keys(mapDetails.gatewayDetails), 
         Object.keys(knownCoverage)
       )
     }
   }
-
-  componentWillUpdate(object nextProps, object nextState)
+  componentDidUpdate(prevProps) {
+    const {fetchNewMapData, mapDetails} = this.props
+    
+    if (prevProps.mapDetails.renderingMode.mode !== mapDetails.renderingMode.mode) {
+      if (this.map) {
+        const currentExtent = this.map.leafletElement.getBounds()
+        let knownCoverage = {}
+        switch(this.gwCoverageMode) {
+          case mapConstants.RENDER_MODE_RADAR:
+            knownCoverage = mapDetails.gatewayRadarCover; break;
+          case mapConstants.RENDER_MODE_COLOR_RADAR:
+            break;
+          case mapConstants.RENDER_MODE_ALPHA:
+            knownCoverage = mapDetails.gatewayAlphaCover; break;
+        }
+  
+        fetchNewMapData(currentExtent,
+          this.copiedCoords.zoom, 
+          mapDetails.renderingMode.mode,
+          Object.keys(mapDetails.gatewayDetails), 
+          Object.keys(knownCoverage)
+        )
+      }
+    }
+  }
 
   /**
    * Helper function for creating the map. Returns a list of leaflet Layers
@@ -115,7 +130,7 @@ class _Home extends Component {
   addBaseTileLayers() {
     return [
       (
-        <LayersControl.BaseLayer key="stamenTonerLiteLayer" checked name="Stamen TonerLite">
+        <LayersControl.BaseLayer key="stamenTonerLiteLayer" checked={this.props.mapDetails.mapLayer.layer === mapConstants.LAYER_TONERLITE} name="Stamen TonerLite">
           <TileLayer
             attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}"
@@ -124,44 +139,49 @@ class _Home extends Component {
             minZoom="0"
             maxZoom="20"
             fadeAnimation={false}
+            zIndex="50"
           />
         </LayersControl.BaseLayer>
       ),
       (
-        <LayersControl.BaseLayer key="osmMapnikLayer" name="OSM Mapnik">
+        <LayersControl.BaseLayer key="osmMapnikLayer" checked={this.props.mapDetails.mapLayer.layer === mapConstants.LAYER_OSM_MAPNIK} name="OSM Mapnik">
           <TileLayer
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             maxZoom="19"
             fadeAnimation={false}
+            zIndex="51"
           />
         </LayersControl.BaseLayer>
       ),
       (
-        <LayersControl.BaseLayer key="terrainLayer" name="Terrain">
+        <LayersControl.BaseLayer key="terrainLayer" checked={this.props.mapDetails.mapLayer.layer === mapConstants.LAYER_TERRAIN} name="Terrain">
           <TileLayer
             url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}'
             attribution='Tiles &copy; Esri &mdash; Source: Esri'
             maxZoom="13"
             fadeAnimation={false}
+            zIndex="52"
           />
         </LayersControl.BaseLayer>
       ),
       (
-        <LayersControl.BaseLayer key="esriWorldImageryLayer" name="Satellite">
+        <LayersControl.BaseLayer key="esriWorldImageryLayer" checked={this.props.mapDetails.mapLayer.layer === mapConstants.LAYER_SATELLITE} name="Satellite">
           <TileLayer
             attribution="Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             fadeAnimation={false}
+            zIndex="53"
           />
         </LayersControl.BaseLayer>
       ),
       (
-        <LayersControl.BaseLayer key="opentopomap" name="OpenTopo Map">
+        <LayersControl.BaseLayer key="opentopomap" checked={this.props.mapDetails.mapLayer.layer === mapConstants.LAYER_OPEN_TOPO_MAP} name="OpenTopo Map">
           <TileLayer
             attribution='Map Data: © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende, SRTM | Map display: © <a href="http://opentopomap.org/">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
             url="https://b.tile.opentopomap.org/{z}/{x}/{y}.png"
             fadeAnimation={false}
+            zIndex="54"
           />
         </LayersControl.BaseLayer>
       )
@@ -192,7 +212,7 @@ class _Home extends Component {
     if (this.map) {
       const currentExtent = this.map.leafletElement.getBounds()
       let knownCoverage = {}
-      switch(this.gwCoverageMode) {
+      switch(mapDetails.renderingMode.mode) {
         case mapConstants.RENDER_MODE_RADAR:
           knownCoverage = mapDetails.gatewayRadarCover; break;
         case mapConstants.RENDER_MODE_COLOR_RADAR:
@@ -210,9 +230,11 @@ class _Home extends Component {
     }
   }
 
+
   render() {
     const zoom = this.copiedCoords.zoom
     const position = [this.copiedCoords.lat, this.copiedCoords.long]
+    const {mapDetails} = this.props
 
     let Gateways = (<GatewayRendering rendermode={this.rendermode} />)
 
@@ -235,19 +257,33 @@ class _Home extends Component {
           <LayersControl position="topleft" collapsed={true} >
             {this.addBaseTileLayers()}
           </LayersControl>
-          {/* <LayersControl position="topright" collapsed={false}>
-            <LayersControl.BaseLayer name='No Coverage'>
+
+          <LayersControl position="topleft" collapsed={false}>
+            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_NONE} name='None'>
               <FeatureGroup />
             </LayersControl.BaseLayer>
-
-            <LayersControl.BaseLayer name='Alpha Shapes'>
-              <AlphaCoverage />
+            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_GRID} name='Grid'>
+              <TileLayer
+                url="https://ttnmapper.org/tms/index.php?tile={z}/{x}/{y}"
+                ext='png'
+                minZoom="0"
+                maxZoom="20"
+                fadeAnimation={false}
+                opacity="0.5"
+                zIndex="105"
+              />
             </LayersControl.BaseLayer>
-
-            <LayersControl.BaseLayer name='Radar Coverage'>
+            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_RADAR} name='Radar'>
               <RadarCoverage />
             </LayersControl.BaseLayer>
-          </LayersControl> */}
+            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_COLOR_RADAR} name='Color Radar'>
+              <RadarCoverage />
+            </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_ALPHA} name='Alpha Shapes'>
+              <AlphaCoverage />
+            </LayersControl.BaseLayer>
+          </LayersControl>
+          
           { Gateways }
         </Map>
         <AlertPopup />
