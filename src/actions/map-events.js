@@ -73,6 +73,24 @@ export function setSingleGateway(gatewayID, mode) {
   }
 }
 
+export function updateMapLayer(newLayer) {
+  return {
+    type: mapConstants.CHANGE_MAP_LAYER,
+    payload: {
+      newLayer: newLayer
+    }
+  }
+}
+
+export function updateGwCoverage(newCoverage) {
+  return {
+    type: mapConstants.CHANGE_MAP_COVERAGE,
+    payload: {
+      newLayer: newCoverage
+    }
+  }
+}
+
 /*
 // KW - Deprecate multiple single
 export function addSingleGateway(gatewayID, mode) {

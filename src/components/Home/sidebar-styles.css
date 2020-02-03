@@ -9,7 +9,7 @@
 .sbOption {
     padding: 0.5em 1em;
 }
-.sbOption a {
+.sbOption button {
     height:auto;
     padding:0;
     margin:0;
@@ -19,20 +19,20 @@
 }
 
 /* Hovering over the option : Give it a shadow, slightly change the color*/
-.sbOption a {
+.sbOption button {
     color: var(--header-link-inactive-color);
 }
-.sbOption a:hover {
+.sbOption button:hover {
     box-shadow: 0px 0px 10px #333;
     color: var(--header-link-hover-color);
 }
 
 /*When the option is active, give it a solid border and shadow, but don't react to mouse moves*/
-.sbOption.active a {
+.sbOption.active button {
     border: 2px solid var(--dark-blue-bg-color);
     box-shadow: 0px 0px 20px #ccc;
 }
-.sbOption.active a:hover {
+.sbOption.active button:hover {
     color: var(--header-link-inactive-color);
     box-shadow: 0px 0px 20px #ccc;
 }

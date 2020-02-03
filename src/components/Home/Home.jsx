@@ -107,6 +107,8 @@ class _Home extends Component {
     }
   }
 
+  componentWillUpdate(object nextProps, object nextState)
+
   /**
    * Helper function for creating the map. Returns a list of leaflet Layers
    */

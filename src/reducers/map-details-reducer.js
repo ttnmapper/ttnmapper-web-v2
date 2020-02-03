@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux'
 import { UPDATE_MAP_POSITION } from '../constants'
 import { mapConstants} from '../constants'
+import { map } from 'leaflet';
 
 
 
@@ -20,10 +21,28 @@ export function currentPosition(state, action) {
 
 export function renderingMode(state, action) {
   if (typeof state == 'undefined') {
-		return {mode: mapConstants.RENDER_GRID, active_gws: []}
+		return {mode: mapConstants.RENDER_MODE_GRID, active_gws: []}
   }
 
-  return state;
+  switch (action.type) {
+    case mapConstants.CHANGE_MAP_COVERAGE:
+      return {mode: action.payload.newCoverage}
+    default:
+      return state
+  }
+}
+
+export function mapLayer(state, action) {
+  if (typeof state == 'undefined') {
+    return {layer: mapConstants.LAYER_TONERLITE}
+  }
+
+  switch (action.type) {
+    case mapConstants.CHANGE_MAP_LAYER:
+      return {layer: action.payload.newLayer}
+    default:
+      return state
+  }
 }
 
 export function gatewayDetails(state, action) {
@@ -131,6 +150,7 @@ function packetsData(state,action) {
 export const mapDetails = combineReducers({
   currentPosition: currentPosition,
   renderingMode: renderingMode,
+  mapLayer: mapLayer,
   gatewayDetails: gatewayDetails,
   visibleGateways: visibleGateways,
   gatewayRadarCover: gatewayRadarCover,
