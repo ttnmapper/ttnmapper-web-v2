@@ -243,26 +243,24 @@ class _Home extends Component {
       
         <MapSettingsSidebar />
         
-        <Map 
-          className="sidebar-map" 
-          center={position} 
-          zoom={zoom} 
-          onMoveend={this.mapMovedEventHandler} 
-          zoomend={this.mapMovedEventHandler} 
-          ref={(ref) => { this.map = ref; }} 
-          maxZoom={18} 
+        <Map
+          className="sidebar-map"
+          center={position}
+          zoom={zoom}
+          onMoveend={this.mapMovedEventHandler}
+          zoomend={this.mapMovedEventHandler}
+          ref={(ref) => { this.map = ref; }}
+          maxZoom={18}
           minZoom={2}
-          >
-          
+        >
+
           <LayersControl position="topleft" collapsed={true} >
             {this.addBaseTileLayers()}
-          </LayersControl>
 
-          <LayersControl position="topleft" collapsed={false}>
-            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_NONE} name='None'>
+            <LayersControl.Overlay checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_NONE} name='None'>
               <FeatureGroup />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_GRID} name='Grid'>
+            </LayersControl.Overlay>
+            <LayersControl.Overlay checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_GRID} name='Grid'>
               <TileLayer
                 url="https://ttnmapper.org/tms/index.php?tile={z}/{x}/{y}"
                 ext='png'
@@ -270,18 +268,18 @@ class _Home extends Component {
                 maxZoom="20"
                 fadeAnimation={false}
                 opacity="0.5"
-                zIndex="105"
+                zIndex="5000"
               />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_RADAR} name='Radar'>
+            </LayersControl.Overlay>
+            <LayersControl.Overlay checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_RADAR} name='Radar'>
               <RadarCoverage />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_COLOR_RADAR} name='Color Radar'>
+            </LayersControl.Overlay>
+            <LayersControl.Overlay checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_COLOR_RADAR} name='Color Radar'>
               <RadarCoverage />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_ALPHA} name='Alpha Shapes'>
+            </LayersControl.Overlay>
+            <LayersControl.Overlay checked={mapDetails.renderingMode.mode === mapConstants.RENDER_MODE_ALPHA} name='Alpha Shapes'>
               <AlphaCoverage />
-            </LayersControl.BaseLayer>
+            </LayersControl.Overlay>
           </LayersControl>
           
           { Gateways }
