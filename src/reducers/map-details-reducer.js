@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
-import { UPDATE_MAP_POSITION } from '../constants'
-import { mapConstants} from '../constants'
+import gatewayMode from './gatewaymode-reducer'
+import { UPDATE_MAP_POSITION, mapConstants} from '../constants'
 
 
 /*
@@ -109,49 +109,7 @@ export function visibleGateways(state, action) {
   }
 }
 
-function renderSingle(state, action) {
-  if (typeof state == 'undefined') {
-		return []
-  }
-  switch (action.type) {
-    case mapConstants.SET_SINGLE_GATEWAY:
-      return [{gatewayID: action.payload.gatewayID, mode: action.payload.mode}]
-    case mapConstants.ADD_SINGLE_GATEWAY:
-      return [...state, {gatewayID: action.payload.gatewayID, mode: action.payload.mode}]
-    case mapConstants.CLEAR_SINGLE_GATEWAY:
-      return [];
-    default:
-      return state;
-  }
-}
 
-/*
-function packetsQuery(state, action) {
-  if (typeof state == 'undefined') {
-    return {}
-  }
-
-  switch (action.type) {
-    case mapConstants.RECEIVE_PACKETS_DETAILS:
-      return action.payload.packetRequest
-    default:
-
-      return state
-  }
-}
-
-function packetsData(state,action) {
-  if (typeof state == 'undefined') {
-		return []
-  }
-
-  switch (action.type) {
-    case mapConstants.RECEIVE_PACKETS_DETAILS:
-      return action.payload.packetData
-    default:
-      return state
-  }
-}*/
 
 export const mapDetails = combineReducers({
   currentPosition: currentPosition,
@@ -161,8 +119,5 @@ export const mapDetails = combineReducers({
   visibleGateways: visibleGateways,
   gatewayRadarCover: gatewayRadarCover,
   gatewayAlphaShapes: gatewayAlphaShapes,
-  renderSingle: renderSingle,
-  // packets: combineReducers({
-  //   packetsQuery, packetsData
-  //  })
+  gatewayMode: gatewayMode,
 })

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { Sidebar, Tab } from 'react-leaflet-sidebarv2';
+import GatewayModesidebar from './Sidebar Widgets/GatewayModeSidebar'
 
 import { updateMapLayer, updateGwCoverage } from '../../actions/map-events'
 
@@ -112,67 +113,9 @@ class _MapSettingsSidebar extends Component {
             )}
           </ul>
         </Tab>
-
+          
         <Tab id="gateways-tab" header="Gateways" icon={<span className="oi" data-glyph="map-marker" />}>
-          <ul className="sbOptionList">
-            {/* <li className="sbOption">
-              <div className="sbComplex">
-                <span className="sbOptionName">All Gateways</span>
-                <div className="inputGroup"> 
-                  <button type="button">Enable</button>
-                </div>
-              </div>
-            </li> */}
-            <li className="sbComplex"> 
-              <span className="sbOptionName">Selected gateways - Coverage</span>
-              
-              <div className="sbTextExplanation">Show coverage only for the gateways in the list. Use coverage selection menu to choose coverage option. Add gateways by adding their eui below, or selecting from the map.</div>
-              <div className="input-group"> 
-                <button type="button">Enable</button>
-              </div>
-
-              <div className="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text oi sbInputInvalid" data-glyph="ban" />
-                </div>
-                <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" />
-                <div className="input-group-append">
-                  <span className="input-group-text">+</span>
-                </div>
-              </div>
-                
-            </li>
-            <li className="sbComplex active">
-              <span className="sbOptionName">Aggregated data for gateway</span>
-              <div className="inputGroup"> 
-                <button type="button">Enable</button>
-              </div>
-              <div className="sbTextExplanation">Show data received by a single gateway over a timespan</div>
-              <div className="inputGroup">
-                <input className="form-control" type="text" id="agg-gateways-gateway-id" name="gateway[]" placeholder="eui-0123456789abcdef" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
-              </div>
-              <div className="inputGroup">
-                <input className="form-control" type="text" placeholder="from date" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
-              </div>
-              <div className="inputGroup">
-                <input className="form-control" type="text" placeholder="to date" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
-              </div>
-              <div className="inputGroup"> 
-                <label htmlFor="gatewayGateways" id="">
-                  <input type="checkbox" id="gatewayGateways" name="gateways" checked />
-                  Show marker for gateway
-                </label>
-                <label htmlFor="gatewayLines">
-                  <input type="checkbox" id="gatewayLines" name="lines" checked />
-                  Draw lines to measurement
-                </label>
-                <label htmlFor="gatewayCircles">
-                  <input type="checkbox" id="gatewayCircles" name="circles" checked />
-                  Draw circle at measurement location
-                </label>
-              </div>
-            </li>
-          </ul>
+          <GatewayModesidebar />
         </Tab>
       </Sidebar>
     );

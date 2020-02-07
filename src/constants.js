@@ -68,6 +68,25 @@ export const mapConstants = {
   RENDER_COLLECTION_LIST: 'RENDER_COLLECTION_LIST'
 }
 
+export const gatewayModeConstants = {
+  SPECIAL_MODE_NORMAL: 'SPECIAL_MODE_NORMAL',
+  SPECIAL_MODE_LIST: 'SPECIAL_MODE_LIST',
+  SPECIAL_MODE_AGGREGATED: 'SPECIAL_MODE_AGGREGATED',
+
+  // Dispatched by button to enable state
+  ACTIVATE_SPECIAL_MODE: 'ACTIVATE_SPECIAL_MODE',
+
+  // Disaptched by plus sign to verify entered gateway
+  REQUEST_ADD_GW_TO_LIST: 'ADD_GW_TO_LIST',
+  // Dispatched by remove sign to remove gw
+  REQUEST_REMOVE_GW_FROM_LIST : 'REQUEST_REMOVE_GW_FROM_LIST',
+
+  GW_EDITING: 'GW_EDITING',
+  GW_VERIFYING: 'GW_VERIFYING',
+  GW_DENIED: 'GW_DENIED',
+  GW_ACCEPTED: 'GW_ACCEPTED'
+}
+
 export const loginConstants = {
   SEND_CODE_TO_BACKEND: 'SEND_CODE_TO_BACKEND',
   RECEIVE_LOGIN_TICKET: 'RECEIVE_LOGIN_TICKET',
