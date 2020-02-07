@@ -55,9 +55,9 @@ def get_gateway_color_radar():
 
 @api.route('/v2/api/coverage/alpha', methods=['POST'])
 def get_gateway_alpha ():
-	gateways = request.args.get('gateways')
+	gateways = json.loads(request.data)['gateways']
 	result = {}
-	for key in gateways.split(','):
+	for key in gateways:
 		result[key] = alpha_coverage[key]  
 		
 	return json.dumps(result) , 201

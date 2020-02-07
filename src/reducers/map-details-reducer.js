@@ -1,10 +1,11 @@
 import {combineReducers} from 'redux'
 import { UPDATE_MAP_POSITION } from '../constants'
 import { mapConstants} from '../constants'
-import { map } from 'leaflet';
 
 
-
+/*
+ * Update the position after the map was moved. This is later written to url and localstorage
+*/
 export function currentPosition(state, action) {
 	if (typeof state == 'undefined') {
     //Demo position for now
@@ -19,6 +20,11 @@ export function currentPosition(state, action) {
   }
 }
 
+/*
+ * Set which coverage is rendered.
+ *
+ * Todo: Unify the naming to coverage
+*/
 export function renderingMode(state, action) {
   if (typeof state == 'undefined') {
 		return {mode: mapConstants.RENDER_MODE_GRID, active_gws: []}
@@ -26,9 +32,7 @@ export function renderingMode(state, action) {
 
   switch (action.type) {
     case mapConstants.CHANGE_MAP_COVERAGE:
-      console.log(action.payload.newCoverage)
       return {mode: action.payload.newCoverage, active_gws: state.active_gws}
-      break;
     default:
       return state
   }
@@ -75,6 +79,20 @@ export function gatewayRadarCover(state, action) {
   }
 }
 
+function gatewayAlphaShapes(state, action) {
+  if (typeof state == 'undefined') {
+		return {}
+  }
+
+  switch (action.type) {
+    // We might need to make a new entry in the list
+    case mapConstants.RECEIVE_MAP_GW_ALPHA:
+      return Object.assign({}, state, action.payload.listOfGateways)
+    default:
+      return state;
+  }
+}
+
 export function visibleGateways(state, action) {
   if (typeof state == 'undefined') {
 		return []
@@ -102,20 +120,6 @@ function renderSingle(state, action) {
       return [...state, {gatewayID: action.payload.gatewayID, mode: action.payload.mode}]
     case mapConstants.CLEAR_SINGLE_GATEWAY:
       return [];
-    default:
-      return state;
-  }
-}
-
-function gatewayAlphaShapes(state, action) {
-  if (typeof state == 'undefined') {
-		return {}
-  }
-
-  switch (action.type) {
-    // We might need to make a new entry in the list
-    case mapConstants.RECEIVE_MAP_GW_ALPHA:
-      return Object.assign({}, state, {[action.payload.gatewayID]: action.payload.geoJson})
     default:
       return state;
   }

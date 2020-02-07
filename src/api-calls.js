@@ -27,36 +27,13 @@ export const fetchGWRadarsList = (listOfGateways) => {
   })
 }
 
-// Todo: Deprecate
-/*
-export const fetchGWCirclesList = (listOfGateways) => {
-  return fetch(host +"/old_api/gwcirclelist.php", {
+export const fetchGWAlphaShapeList = (listOfGateways) => {
+  return fetch(host +"/v2/api/coverage/alpha", {
     method: "POST",
     //headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({"gateways": listOfGateways})
   })
 }
-*/
-
-export const fetchGWAlphaShape = (gatewayID) => {
-  return fetch(host +"/v2/api/coverage/alpha"+gatewayID+"/alphashape.geojson", {
-    method: "GET"
-  })
-}
-
-export const fetchGWDetails = (gatewayID) => {
-  return fetch(host + '/old_api/gwdetails.php?gwaddr=' + gatewayID)
-}
-
-//TODO: This is the old method, update this
-export const fetchGWCircles = (gatewayID) => {
-  return fetch(host + '/old_api/geojson/'+gatewayID+'/circle-single.geojson')
-}
-
-export const fetchGWRadars = (gatewayID) => {
-  return fetch(host + '/old_api/geojson/'+gatewayID+'/radar-single.geojson')
-}
-
 
 
 

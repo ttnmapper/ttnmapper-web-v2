@@ -120,14 +120,13 @@ Call the API endpoint to find alpha coverage
 */
 function* requestGatewayAlpha(action) {
   try {
-    const response = yield call(Api.fetchGWAlphaShape, action.payload.gatewayID);
+    const response = yield call(Api.fetchGWAlphaShapeList, action.payload.list);
     const json = yield response.json();
 
     yield put({
       type: mapConstants.RECEIVE_MAP_GW_ALPHA,
       payload: {
-        gatewayID: action.payload.gatewayID,
-        geoJson: json
+        listOfGateways: json
       }
     });
   } catch (e) {

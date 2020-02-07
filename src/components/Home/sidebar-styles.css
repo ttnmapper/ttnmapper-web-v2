@@ -51,3 +51,86 @@
     max-width: 100%;
     max-height: 100%;
 }
+
+.sbGrouping {
+    padding: 1em;
+}
+
+
+.sbComplex {
+    height:auto;
+    margin: 0.5em 1em;
+    padding-bottom: 2em;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+
+    display: inline-block;
+    position:relative;
+    font-size: 0.8em;
+    color: #333;
+    font-weight: 100;
+}
+
+/* When the option is active, give it a solid border and shadow, but don't 
+   react to mouse moves. MAke the header text slightly lighter */
+.sbComplex.active,
+.sbComplex.active:hover {
+    border: 2px solid var(--dark-blue-bg-color);
+    box-shadow: 0px 0px 10px #333;
+}
+
+.sbComplex.active .sbOptionName {
+    color: var(--header-link-hover-color);
+}
+
+
+
+/* Set the header bar position and colors*/
+.sbComplex .sbOptionName {
+    line-height: 40px;
+    color: var(--header-link-inactive-color);
+    font-size: 1em;
+    display:block;
+
+    position:relative;
+    width:100%;
+    padding: 0.1em;
+    text-align:center;
+    background-color: var(--dark-blue-bg-color);
+}
+
+.sbComplex button {
+    color:#000;
+    height:auto;
+    padding:0;
+    margin:0;
+    width:40%;
+    display: inline-block;
+}
+
+/* On hover, change the text to the lighter color*/
+.sbOption .sbComplex:hover .sbOptionName {
+    color: var(--header-link-hover-color);
+}
+
+.sbTextExplanation {
+    padding-top:1.5em;
+    padding-left:2em;
+    padding-right:2em;
+    font-size: 0.8em;
+    color: #333;
+    font-weight: 100;
+}
+
+.sbComplex .input-group{
+    padding:0.5em 2em 0.5em 2em;
+}
+
+.sbComplex .sbInputValid {
+    background-color: #a3e3a8;
+    color:#235227;
+}
+
+.sbComplex .sbInputInvalid {
+    background-color: #e3a098;
+    color:#750e00;
+}

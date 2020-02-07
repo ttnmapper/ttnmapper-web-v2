@@ -91,25 +91,6 @@ export function updateGwCoverage(newCoverage) {
   }
 }
 
-/*
-// KW - Deprecate multiple single
-export function addSingleGateway(gatewayID, mode) {
-  return {
-    type: mapConstants.ADD_SINGLE_GATEWAY,
-    payload: {
-      gatewayID: gatewayID,
-      mode: mode
-    }
-  }
-}
-
-export function clearSingleGateway(){
-  return {
-    type: mapConstants.CLEAR_SINGLE_GATEWAY,
-
-  }
-}
-*/
 
 export function fetchPacketData(deviceID, fromDate, toDate) {
   return {

@@ -29,6 +29,7 @@ class _Home extends Component {
     const {mapDetails, location} = this.props;
 
     this.mapMovedEventHandler = this.mapMovedEventHandler.bind(this)
+    this.gatewayClickedEventHandler = this.gatewayClickedEventHandler.bind(this)
     /*
     Bit of trickery here: When the map is created it gets coordinates, but is never re-rendered.
     Then the map is moved the event listener gets coordinates which don't exactly match.
@@ -221,6 +222,8 @@ class _Home extends Component {
           knownCoverage = mapDetails.gatewayAlphaCover; break;
       }
 
+      console.log("Known coverage: " + knownCoverage)
+
       fetchNewMapData(currentExtent,
         newCoords.zoom, 
         this.gwCoverageMode,
@@ -228,6 +231,10 @@ class _Home extends Component {
         Object.keys(knownCoverage)
       )
     }
+  }
+
+  gatewayClickedEventHandler(event) {
+    console.log(event)
   }
 
 
@@ -249,6 +256,7 @@ class _Home extends Component {
           zoom={zoom}
           onMoveend={this.mapMovedEventHandler}
           zoomend={this.mapMovedEventHandler}
+          onPopupopen={this.gatewayClickedEventHandler}
           ref={(ref) => { this.map = ref; }}
           maxZoom={18}
           minZoom={2}
