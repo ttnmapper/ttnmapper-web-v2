@@ -24,6 +24,38 @@ import { gatewayModeConstants } from '../../../constants'
 
 import {changeGatewayMode} from '../../../actions/gatewaymode-actions'
 
+
+const icoLookup = {
+  GW_EDITING: {
+    inlineIcon: "",
+    inlineIconClass: "editing",
+    postPendIcon: "plus", 
+    postPendButtonClass: "btn-success", 
+    postPendButtoncallback: ""
+  },
+  GW_VERIFYING: {
+    inlineIcon: "cog",
+    inlineIconClass: "verifying",
+    postPendIcon: "minus",
+    postPendButtonClass: "btn-secondary",
+    postPendButtoncallback: ""
+  },
+  GW_ACCEPTED: {
+    inlineIcon: "check",
+    inlineIconClass: "accepted",
+    postPendIcon: "minus",
+    postPendButtonClass: "btn-danger",
+    postPendButtoncallback: ""
+  },
+  GW_DENIED: {
+    inlineIcon: "ban",
+    inlineIconClass: "denied",
+    postPendIcon: "minus",
+    postPendButtonClass: "btn-danger", 
+    postPendButtoncallback: ""
+  }
+}
+
 class _GatewayModeSidebar extends Component {
 
   constructor(props) {
@@ -39,7 +71,8 @@ class _GatewayModeSidebar extends Component {
   }
 
   render() {
-    const {specialMode} = this.props
+    const {specialMode, } = this.props
+    const {specialModeList: {listOfGW}} = this.props
 
     return (
       <ul className="sbOptionList">
@@ -51,16 +84,28 @@ class _GatewayModeSidebar extends Component {
           <div className="input-group">
             <button type="button" onClick={(e) => this.changeGatewayMode(e, gatewayModeConstants.SPECIAL_MODE_LIST)}>Enable</button>
           </div>
-
-          <div className="input-group">
-            <div className="input-group-prepend">
-              <span className="input-group-text oi sbInputInvalid" data-glyph="ban" />
-            </div>
-            <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" />
-            <div className="input-group-append">
-              <span className="input-group-text">+</span>
-            </div>
-          </div>
+          {listOfGW.map(function(gw,index){
+            let lookup = gw.gwState            
+            
+            return (
+              <div className="input-group" key={index}>
+                <div className="form-control">
+                  <input type="text" style={{border:0, width:"95%"}} aria-label="" />
+                  <span className={"oi inlineIcon " + icoLookup[lookup].inlineIconClass} data-glyph={icoLookup[lookup].inlineIcon} />
+                </div>
+                <div className="input-group-append">
+                  <button className={"btn " + icoLookup[lookup].postPendButtonClass} type="button" id="button-addon2" style={{width:"2.5em", color:"#eee"}}>
+                    <span className="oi" data-glyph={icoLookup[lookup].postPendIcon} />
+                  </button>
+                </div>
+              </div>
+              )
+            })
+          }
+          
+            
+            
+            
 
         </li>
         <li className={"sbComplex " + (specialMode == gatewayModeConstants.SPECIAL_MODE_AGGREGATED ? "active": "")}>

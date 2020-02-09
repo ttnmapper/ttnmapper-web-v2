@@ -26,7 +26,7 @@ const specialModeList = combineReducers({
 
 function listOfGW(state, action) {
   if (typeof state == 'undefined') {
-    return []
+    return [{gwID: "gw_a", gwState: gatewayModeConstants.GW_EDITING},{gwID: "gw_b", gwState: gatewayModeConstants.GW_VERIFYING},{gwID: "gw_c", gwState: gatewayModeConstants.GW_DENIED},{gwID: "gw_d", gwState: gatewayModeConstants.GW_ACCEPTED}]
   }
 
   return state

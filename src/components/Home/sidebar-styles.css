@@ -134,3 +134,21 @@
     background-color: #e3a098;
     color:#750e00;
 }
+
+.sbComplex .inlineIcon {
+    position: absolute;
+    padding-top: 2px;
+}
+.sbComplex .inlineIcon.verifying {
+    -webkit-animation: rotation 2s infinite linear;
+}
+
+.sbComplex .inlineIcon.accepted {
+    color:#2c6831;
+    text-shadow: 0 0 2px #7ba065;
+}
+
+.sbComplex .inlineIcon.denied {
+    text-shadow: 0 0 2px #e3a098;
+    color:#750e00;
+}
