@@ -25,7 +25,6 @@ const specialModeList = combineReducers({
 })
 
 function selectedGW(state, action) {
-  console.log("Reduce action: "+ action.type)
   if (typeof state == 'undefined') {
     return {gwState: gatewayModeConstants.GW_NEW}
   }  
@@ -59,7 +58,6 @@ function listOfGW(state, action) {
       // Create new GW item, and add it
       return [ ...state, selectedGW({}, action)]
     case gatewayModeConstants.SMGW_REMOVE_EXISTING:
-      console.log("Slicing from " + action.payload.index)
       return [...state.slice(0, action.payload.index), ...state.slice(action.payload.index + 1)];
     
     // apply reducer to child elements
