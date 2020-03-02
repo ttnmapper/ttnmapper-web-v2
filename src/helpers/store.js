@@ -9,6 +9,7 @@ import * as reducers from '../reducers'
 import {mapDataSagas } from '../sagas/map-data-sagas'
 import {loginSagas} from '../sagas/login-sagas'
 import {dataSagas} from '../sagas/data-sagas'
+import {spgwSagas} from '../sagas/gatewaymode-sagas'
 
 const rootReducer = combineReducers({
   ...reducers,
@@ -33,3 +34,4 @@ export const store = createStore(
 sagaMiddleware.run(mapDataSagas)
 sagaMiddleware.run(loginSagas)
 sagaMiddleware.run(dataSagas)
+sagaMiddleware.run(spgwSagas)

@@ -22,36 +22,44 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { gatewayModeConstants } from '../../../constants'
 
-import {changeGatewayMode} from '../../../actions/gatewaymode-actions'
+import {changeGatewayMode, addSMGWClicked, verifySMGWClicked, removeSMGWClicked} from '../../../actions/gatewaymode-actions'
 
 
-const icoLookup = {
-  GW_EDITING: {
+let icoLookup = {
+  SMGW_NEW: {
     inlineIcon: "",
     inlineIconClass: "editing",
     postPendIcon: "plus", 
     postPendButtonClass: "btn-success", 
     postPendButtoncallback: ""
   },
-  GW_VERIFYING: {
+  SMGW_EDITING: {
+    inlineIcon: "",
+    inlineIconClass: "editing",
+    postPendIcon: "plus", 
+    postPendButtonClass: "btn-success", 
+    postPendButtoncallback: ""
+  },
+  SMGW_VERIFYING: {
     inlineIcon: "cog",
     inlineIconClass: "verifying",
     postPendIcon: "minus",
     postPendButtonClass: "btn-secondary",
-    postPendButtoncallback: ""
+    postPendButtoncallback: "",
+    inputReadonly: true
   },
-  GW_ACCEPTED: {
-    inlineIcon: "check",
-    inlineIconClass: "accepted",
-    postPendIcon: "minus",
-    postPendButtonClass: "btn-danger",
-    postPendButtoncallback: ""
-  },
-  GW_DENIED: {
+  SMGW_DENIED: {
     inlineIcon: "ban",
     inlineIconClass: "denied",
     postPendIcon: "minus",
     postPendButtonClass: "btn-danger", 
+    postPendButtoncallback: ""
+  },
+  SMGW_ACCEPTED: {
+    inlineIcon: "check",
+    inlineIconClass: "accepted",
+    postPendIcon: "minus",
+    postPendButtonClass: "btn-danger",
     postPendButtoncallback: ""
   }
 }
@@ -62,17 +70,75 @@ class _GatewayModeSidebar extends Component {
     super(props);
 
     this.changeGatewayMode = this.changeGatewayMode.bind(this)
+    this.addGateway = this.addGateway.bind(this)
+    this.updateGateway = this.updateGateway.bind(this)
+    this.removeGateway = this.removeGateway.bind(this)
+
+    icoLookup.SMGW_NEW.function = this.addGateway
+    icoLookup.SMGW_EDITING.function = this.updateGateway
+    icoLookup.SMGW_VERIFYING.function = null
+    icoLookup.SMGW_DENIED.function = this.removeGateway
+    icoLookup.SMGW_ACCEPTED.function = this.removeGateway
+
+    this.selectedGWValue = []
   }
 
-  changeGatewayMode(e, newlayer) {
-    const {changeGatewayMode} = this.props;
-    e.preventDefault()
-    changeGatewayMode(newlayer)
+  // Called when the + button is clicked to add a gateway. The elementId 
+  // parameter is only included for compatibility with the other functions
+  addGateway(event) {
+    const {addSMGWClicked} = this.props
+    let index = event.currentTarget.value
+    let value = this.selectedGWValue[index].value
+
+    if (!(value === "")) {
+      addSMGWClicked(index, this.selectedGWValue[index].value)
+    }
+  }
+
+  // Called when a gateway is edited and the user clicks the update button
+  // This lets us know to re-verify the gwID
+  updateGateway(event) {
+    const {verifySMGWClicked} = this.props
+    let index = event.currentTarget.value
+    verifySMGWClicked(index, this.selectedGWValue[index].value)
+  }
+
+  // Called when the - button is clicked to remove a gateway
+  removeGateway(event) {
+    const {removeSMGWClicked} = this.props
+    let index = event.currentTarget.value
+    removeSMGWClicked(index, this.selectedGWValue[index].value)
+  }
+
+  changeGatewayMode(event, newMode){
+    const {changeGatewayMode} = this.props
+    changeGatewayMode(newMode)
+  }
+
+  renderSelectGWElement(lookup, index, inputValue) {
+    return (
+      <div className="input-group" key={index}>
+        <div className="form-control">
+          <input type="text" style={{border:0, width:"95%"}} aria-label="" defaultValue={inputValue} ref={(input) => this.selectedGWValue[index] = input} readOnly={icoLookup[lookup].inputReadonly} />
+          <span className={"oi inlineIcon " + icoLookup[lookup].inlineIconClass} data-glyph={icoLookup[lookup].inlineIcon} />
+        </div>
+        <div className="input-group-append">
+          <button className={"btn " + icoLookup[lookup].postPendButtonClass} value={index} type="button" id="button-addon2" onClick={icoLookup[lookup].function} style={{width:"2.5em", color:"#eee"}}>
+            <span className="oi" data-glyph={icoLookup[lookup].postPendIcon} />
+          </button>
+        </div>
+      </div>
+      ) 
   }
 
   render() {
     const {specialMode, } = this.props
     const {specialModeList: {listOfGW}} = this.props
+
+    let listOfSelectedGWs = []
+    for (var i = 0; i < listOfGW.length; i++) {
+      listOfSelectedGWs.push(this.renderSelectGWElement(listOfGW[i].gwState, i, listOfGW[i].gwID))
+    }
 
     return (
       <ul className="sbOptionList">
@@ -84,29 +150,9 @@ class _GatewayModeSidebar extends Component {
           <div className="input-group">
             <button type="button" onClick={(e) => this.changeGatewayMode(e, gatewayModeConstants.SPECIAL_MODE_LIST)}>Enable</button>
           </div>
-          {listOfGW.map(function(gw,index){
-            let lookup = gw.gwState            
-            
-            return (
-              <div className="input-group" key={index}>
-                <div className="form-control">
-                  <input type="text" style={{border:0, width:"95%"}} aria-label="" />
-                  <span className={"oi inlineIcon " + icoLookup[lookup].inlineIconClass} data-glyph={icoLookup[lookup].inlineIcon} />
-                </div>
-                <div className="input-group-append">
-                  <button className={"btn " + icoLookup[lookup].postPendButtonClass} type="button" id="button-addon2" style={{width:"2.5em", color:"#eee"}}>
-                    <span className="oi" data-glyph={icoLookup[lookup].postPendIcon} />
-                  </button>
-                </div>
-              </div>
-              )
-            })
-          }
           
-            
-            
-            
-
+          { listOfSelectedGWs }
+          { this.renderSelectGWElement('SMGW_NEW', listOfGW.length, "")} 
         </li>
         <li className={"sbComplex " + (specialMode == gatewayModeConstants.SPECIAL_MODE_AGGREGATED ? "active": "")}>
           <span className="sbOptionName">Aggregated data for gateway</span>
@@ -158,6 +204,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
   changeGatewayMode: (newLayer) => dispatch(changeGatewayMode(newLayer)),
+  addSMGWClicked: (selectedGwID, newValue) => dispatch(addSMGWClicked(selectedGwID, newValue)),
+  verifySMGWClicked: (selectedGwID, newValue) => dispatch(verifySMGWClicked(selectedGwID, newValue)),
+  removeSMGWClicked: (selectedGwID, newValue) => dispatch(removeSMGWClicked(selectedGwID, newValue)),
 })
 
 const GatewayModeSidebar = connect(mapStateToProps, mapDispatchToProps)(_GatewayModeSidebar)
