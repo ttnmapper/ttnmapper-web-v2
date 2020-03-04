@@ -1,9 +1,10 @@
 import json
+import math
 import copy
 from flask import Flask, request
 
 gateways = {"gateways":["60C5A8FFFE76146A", "B827EBFFFE31B91A"],"error":False}
-
+gateways_for_searching = ["60C5A8FFFE76146A", "60C5A8FFFE7662E5", "60C5A8FFFE74D225", "607FDAFFFE007A1E", "60C5A8FFFE761472"]
 
 gateway_details = {"60C5A8FFFE76146A":{"description":"Three Sprints - Kanonberg","lat":"-33.8604584","lon":"18.5895252","last_heard":"1580557113","channels":"8"}, "B827EBFFFE31B91A":{"description":"Green Point ","lat":"-33.9127770","lon":"18.4109860","last_heard":"1580552491","channels":"8"}}
 
@@ -62,7 +63,31 @@ def get_gateway_alpha ():
 		
 	return json.dumps(result) , 201
 
+@api.route('/v2/api/gateways/search', methods=['POST'])
+def search_gateways ():
+	request_data = json.loads(request.data)
+	gw_string = request_data["s"]
+	print(request_data)
+	if "page" in request_data:
+		page = int(request_data["page"])
+	else:
+		page = 0
 
+	resultGWs = []
+
+	#Loop through list, return first 3 that match 
+	for gw in gateways_for_searching:
+		if gw.startswith(gw_string):
+			resultGWs.append(gw)
+
+	pages = math.ceil(len(resultGWs)/3)
+	if page > pages:
+		page = pages
+
+	print (f"Page {page} of {pages}")
+
+	return json.dumps({"options": resultGWs[page*3:(page+1)*3], "page": page, "pages": pages})
+	#return json.dumps({"options": resultGWs})
 
 if __name__ == '__main__':
 	api.run(port=8400)

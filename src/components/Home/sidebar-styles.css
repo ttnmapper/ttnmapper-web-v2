@@ -113,17 +113,16 @@
 }
 
 .sbTextExplanation {
-    padding-top:1.5em;
-    padding-left:2em;
-    padding-right:2em;
     font-size: 0.8em;
     color: #333;
     font-weight: 100;
 }
 
+
 .sbComplex .input-group{
     padding:0.5em 2em 0.5em 2em;
 }
+/*
 
 .sbComplex .sbInputValid {
     background-color: #a3e3a8;
@@ -151,4 +150,29 @@
 .sbComplex .inlineIcon.denied {
     text-shadow: 0 0 2px #e3a098;
     color:#750e00;
+}
+*/
+
+.sbComplex .rbt {
+    padding-top:1em;
+    padding-left:2em;
+    padding-right:2em;
+}
+
+.smgwItem {
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1em;
+    padding-top:0.1em;
+    padding-bottom:0.1em;
+}
+
+
+.sbComplex .input-group.smgwList {
+    padding-top:1em;
+    padding-bottom:1em;
+    border-top: 1px;
+    border-bottom: 1px;
+    border: #000;
 }

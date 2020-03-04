@@ -36,6 +36,27 @@ export const fetchGWAlphaShapeList = (listOfGateways) => {
 }
 
 
+// Used by first style of special mdoe gateway
+// export const verifyGw = (gwId) => {
+//   let p = promiseTimeout(500, gwId)
+//   p.then(function(val){
+//     return {gwExists: val.length % 2}
+//   })
+//   return p
+// }
+
+export async function searchGateways(search_term, page){
+  const response = await fetch(host + "/v2/api/gateways/search", {
+    method: "POST",
+    //headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({"s": search_term, "page": page})
+  })
+
+  return await response.json();
+}
+
+
+
 
 
 // These functions are provided by the login server, to aid in logging in
@@ -66,6 +87,7 @@ export const checkTicket = (ticket) => {
     body: JSON.stringify({"ticket": ticket})
   })
 }
+
 
 
 
@@ -103,3 +125,13 @@ export const fetchPacketData = (deviceId, dateRange) => {
     body: JSON.stringify({"deviceID": deviceId, "dateRange": ""})
   })
 }
+
+
+function promiseTimeout (time, arg) {
+  return new Promise(function(resolve, reject){
+    setTimeout(function(){
+      resolve(arg);
+    },time);
+  });
+};
+

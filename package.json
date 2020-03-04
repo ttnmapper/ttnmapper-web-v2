@@ -26,6 +26,7 @@
     "react": "^16.4.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-bootstrap": "^0.32.4",
+    "react-bootstrap-typeahead": "^4.0.0",
     "react-dom": "^16.4.2",
     "react-leaflet": "^2.1.0",
     "react-leaflet-markercluster": "^2.0.0-rc3",

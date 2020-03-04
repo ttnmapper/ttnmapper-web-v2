@@ -22,9 +22,9 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { gatewayModeConstants } from '../../../constants'
 
-import {changeGatewayMode} from '../../../actions/gatewaymode-actions'
-import {SMGWEntry} from './SMGWEntry';
-
+import {changeGatewayMode, addSMGW, removeSMGW} from '../../../actions/gatewaymode-actions'
+import {GatewaySearchBar} from './GatewaySearchBar';
+import {searchGateways} from '../../../api-calls'
 
 class _GatewayModeSidebar extends Component {
 
@@ -54,15 +54,26 @@ class _GatewayModeSidebar extends Component {
         <li className={'sbComplex ' + (specialMode == gatewayModeConstants.SPECIAL_MODE_LIST ? "active": "")}>
           <span className="sbOptionName">Selected gateways - Coverage</span>
 
-          <div className="sbTextExplanation">Show coverage only for the gateways in the list. Use coverage selection menu to choose coverage option. Add gateways by adding their eui below, or selecting from the map.</div>
+          <div className="sbTextExplanation input-group">Show coverage only for the gateways in the list. Use coverage selection menu to choose coverage option. Add gateways by adding their eui below, or selecting from the map.</div>
           <div className="input-group">
             <button type="button" onClick={(e) => this.changeGatewayMode(e, gatewayModeConstants.SPECIAL_MODE_LIST)}>Enable</button>
           </div>
+
+          <GatewaySearchBar makeAndHandleRequest={searchGateways} />
+
+          <ul className="smgwList input-group">
+            <li className="smgwItem">
+              <span className="name">68c0f1111939991</span>
+              <button className="btn btn-outline-danger btn-xs" type="button" style={{width:"2em"}}><span className="oi" data-glyph="x" /></button>
+            </li>
+            <li className="smgwItem">
+              <span className="name">68c0f1111939991</span>
+              <button className="btn btn-outline-danger btn-xs" type="button" style={{width:"2em"}}><span className="oi" data-glyph="x" /></button>
+            </li>
+          </ul>
           
-          { listOfSelectedGWs }
-          <SMGWEntry entryIndex={listOfGW.length} entryState="SMGW_NEW" entryGw="" />
         </li>
-        <li className={"sbComplex " + (specialMode == gatewayModeConstants.SPECIAL_MODE_AGGREGATED ? "active": "")}>
+        {/* <li className={"sbComplex " + (specialMode == gatewayModeConstants.SPECIAL_MODE_AGGREGATED ? "active": "")}>
           <span className="sbOptionName">Aggregated data for gateway</span>
           <div className="sbTextExplanation">Show data received by a single gateway over a timespan</div>
           <div className="input-group">
@@ -91,7 +102,7 @@ class _GatewayModeSidebar extends Component {
               Draw circle at measurement location
             </label>
           </div>
-        </li>
+        </li> */}
       </ul>
     )
   }
@@ -101,7 +112,9 @@ class _GatewayModeSidebar extends Component {
 _GatewayModeSidebar.propTypes = {
   specialMode: PropTypes.string.isRequired,
   specialModeList: PropTypes.object.isRequired,
-  changeGatewayMode: PropTypes.func.isRequired
+  changeGatewayMode: PropTypes.func.isRequired,
+  addSMGW: PropTypes.func.isRequired,
+  removeSMGW: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => {
@@ -112,7 +125,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  changeGatewayMode: (newLayer) => dispatch(changeGatewayMode(newLayer))
+  changeGatewayMode: (newLayer) => dispatch(changeGatewayMode(newLayer)),
+  addSMGW: (gwid) => dispatch(addSMGW(gwid)),
+  removeSMGW: (index) => removeSMGW(addSMGW(index))
 })
 
 const GatewayModeSidebar = connect(mapStateToProps, mapDispatchToProps)(_GatewayModeSidebar)

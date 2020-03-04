@@ -7,6 +7,8 @@ import { gatewayModeConstants } from '../constants'
 import { push } from 'react-router-redux';
 
 
+import * as Api from '../api-calls'
+
 /**
  * When the add button is clicked, add the new item,
  * @param {} action 
@@ -18,14 +20,24 @@ function* addSMGW(action) {
       payload: action.payload
     });
 
-    yield(verifySMGW(action))
+    yield(doVerifyStep(action))
 }
 
 function* verifySMGW(action) {
-    // Call api to verify the gw
-    let successful = Math.random() > 0.5;
+  yield put({
+    type: gatewayModeConstants.SMGW_CHANGE_TO_VERIFYING,
+    payload: action.payload
+  });
 
-    if (successful) {
+  yield(doVerifyStep(action))
+}
+
+function* doVerifyStep(action) {
+    // Call api to verify the gw
+    const json = yield call(Api.verifyGw, action.payload.newValue);
+    console.log(json)
+
+    if (Math.random() > 0.5) {
       yield put({
         type: gatewayModeConstants.SMGW_CHANGE_TO_CONFIRMED,
         payload: action.payload

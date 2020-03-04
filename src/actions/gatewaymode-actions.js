@@ -14,28 +14,10 @@ export function changeGatewayMode(newMode) {
  * @param {*} selectedGwID 
  * @param {*} newValue 
  */
-export function addSMGWClicked(selectedGwID, newValue) {
+export function addSMGW(gwid) {
   return {
-    type: gatewayModeConstants.SMGW_ADD_CLICKED,
-    payload: {
-      index: parseInt(selectedGwID),
-      newValue: newValue,
-    }
-  }
-}
-
-/**
- *  Dispatched when the user blicks the 'check' button in the UI
- * @param {*} selectedGwID 
- * @param {*} newValue 
- */
-export function verifySMGWClicked(selectedGwID, newValue) {
-  return {
-    type: gatewayModeConstants.SMGW_VERIFY_CLICKED,
-    payload: {
-      index: parseInt(selectedGwID),
-      newValue: newValue
-    }
+    type: gatewayModeConstants.SMGW_ADD,
+    payload: {gwid: gwid }
   }
 }
 
@@ -44,12 +26,9 @@ export function verifySMGWClicked(selectedGwID, newValue) {
  * @param {*} selectedGwID 
  * @param {*} newValue 
  */
-export function removeSMGWClicked(selectedGwID, newValue) {
+export function removeSMGW(index) {
   return {
-    type: gatewayModeConstants.SMGW_REMOVE_CLICKED,
-    payload: {
-      index: parseInt(selectedGwID),
-      newValue: newValue
-    }
+    type: gatewayModeConstants.SMGW_REMOVE,
+    payload: {index:index}
   }
 }

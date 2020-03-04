@@ -55,6 +55,7 @@ module.exports = merge(common, {
       { from: 'node_modules/open-iconic/font/css/open-iconic.css', to: 'css' },
       { from: 'node_modules/leaflet/dist/leaflet.css', to: 'css' },
       { from: 'node_modules/leaflet/dist/images', to: 'css' },
+      { from: 'node_modules/react-bootstrap-typeahead/css/Typeahead.min.css', to: 'css' },
       { from: 'static/.', to: '' },
       { from: 'node_modules/open-iconic/font/fonts/open-iconic.otf', to: 'fonts' },
       { from: 'node_modules/open-iconic/font/fonts/open-iconic.ttf', to: 'fonts' },
