@@ -26,10 +26,13 @@ function listOfGW(state, action) {
   }
   
   switch (action.type) {
-    case gatewayModeConstants.SMGW_ADD_NEW:
+    case gatewayModeConstants.SMGW_ADD:
       // Create new GW item, and add it
       return [ ...state, action.payload.gwid]
     case gatewayModeConstants.SMGW_REMOVE:
+      if (typeof action.payload.index == 'undefined') {
+        return state
+      }
       return [...state.slice(0, action.payload.index), ...state.slice(action.payload.index + 1)];
     default:
       return state;

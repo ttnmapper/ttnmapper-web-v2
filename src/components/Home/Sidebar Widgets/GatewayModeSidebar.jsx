@@ -31,6 +31,7 @@ class _GatewayModeSidebar extends Component {
   constructor(props) {
     super(props);
     this.changeGatewayMode = this.changeGatewayMode.bind(this)
+    //this.removeButtonClicked = this.removeButtonClicked.bind(this)
   }
 
   changeGatewayMode(event, newMode){
@@ -38,15 +39,21 @@ class _GatewayModeSidebar extends Component {
     changeGatewayMode(newMode)
   }
 
+  removeButtonClicked(event) {
+    console.log("Event: ")
+    console.log
+    const {target: {dataset : {index}}} = event
+    console.log(event.target.dataset)
+    console.log("Index is " + index)
+    const {removeSMGW} = this.props
+    removeSMGW(index)
+  }
+
 
   render() {
-    const {specialMode, } = this.props
+    const {specialMode,addSMGW } = this.props
     const {specialModeList: {listOfGW}} = this.props
 
-    let listOfSelectedGWs = []
-    for (var i = 0; i < listOfGW.length; i++) {
-      listOfSelectedGWs.push( (<SMGWEntry key={i} entryIndex={i} entryState={listOfGW[i].gwState} entryGw={listOfGW[i].gwID} />) )
-    }
 
     return (
       <ul className="sbOptionList">
@@ -59,17 +66,21 @@ class _GatewayModeSidebar extends Component {
             <button type="button" onClick={(e) => this.changeGatewayMode(e, gatewayModeConstants.SPECIAL_MODE_LIST)}>Enable</button>
           </div>
 
-          <GatewaySearchBar makeAndHandleRequest={searchGateways} />
+          <GatewaySearchBar makeAndHandleRequest={searchGateways} addEntry={addSMGW} filterExisting={listOfGW} />
 
           <ul className="smgwList input-group">
-            <li className="smgwItem">
-              <span className="name">68c0f1111939991</span>
-              <button className="btn btn-outline-danger btn-xs" type="button" style={{width:"2em"}}><span className="oi" data-glyph="x" /></button>
-            </li>
-            <li className="smgwItem">
-              <span className="name">68c0f1111939991</span>
-              <button className="btn btn-outline-danger btn-xs" type="button" style={{width:"2em"}}><span className="oi" data-glyph="x" /></button>
-            </li>
+            {listOfGW.map((entry, index) => {
+              console.log("Rendering entry with index " + index)
+              return(
+              
+              <li className="smgwItem" key={"list_item_" + index}>
+                <span className="name">{entry}</span>
+                <button className="btn btn-outline-danger btn-xs" type="button" style={{width:"2em"}} onClick={this.removeButtonClicked.bind(this)}><span className="oi" data-glyph="x" data-index={index} /></button>
+              </li>
+            )}
+            
+            )}
+            
           </ul>
           
         </li>
@@ -127,7 +138,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
   changeGatewayMode: (newLayer) => dispatch(changeGatewayMode(newLayer)),
   addSMGW: (gwid) => dispatch(addSMGW(gwid)),
-  removeSMGW: (index) => removeSMGW(addSMGW(index))
+  removeSMGW: (index) => dispatch(removeSMGW(index))
 })
 
 const GatewayModeSidebar = connect(mapStateToProps, mapDispatchToProps)(_GatewayModeSidebar)

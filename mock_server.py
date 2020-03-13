@@ -4,7 +4,17 @@ import copy
 from flask import Flask, request
 
 gateways = {"gateways":["60C5A8FFFE76146A", "B827EBFFFE31B91A"],"error":False}
-gateways_for_searching = ["60C5A8FFFE76146A", "60C5A8FFFE7662E5", "60C5A8FFFE74D225", "607FDAFFFE007A1E", "60C5A8FFFE761472"]
+#gateways_for_searching = ["60C5A8FFFE76146A", "60C5A8FFFE7662E5", "60C5A8FFFE74D225", "67FDAFFFE007A1E", "60C5A8FFFE761472"]
+gateways_for_searching= ["60 A",
+"60 B",
+"60 C",
+"60 D",
+"60 E",
+"60 F",
+"60 G",
+"60 H",
+"60 I",
+"60 J"]
 
 gateway_details = {"60C5A8FFFE76146A":{"description":"Three Sprints - Kanonberg","lat":"-33.8604584","lon":"18.5895252","last_heard":"1580557113","channels":"8"}, "B827EBFFFE31B91A":{"description":"Green Point ","lat":"-33.9127770","lon":"18.4109860","last_heard":"1580552491","channels":"8"}}
 
@@ -80,13 +90,14 @@ def search_gateways ():
 		if gw.startswith(gw_string):
 			resultGWs.append(gw)
 
-	pages = math.ceil(len(resultGWs)/3)
+	countPerPage = 10
+	pages = math.ceil(len(resultGWs)/countPerPage)
 	if page > pages:
 		page = pages
 
 	print (f"Page {page} of {pages}")
 
-	return json.dumps({"options": resultGWs[page*3:(page+1)*3], "page": page, "pages": pages})
+	return json.dumps({"options": resultGWs[page*countPerPage:(page+1)*countPerPage], "page": page, "pages": pages})
 	#return json.dumps({"options": resultGWs})
 
 if __name__ == '__main__':
